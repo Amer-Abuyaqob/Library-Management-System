@@ -8,14 +8,12 @@ from magazine import Magazine
 from dvd import DVD
 
 class Library:
-    """Simple container for library items and users stored in JSON files."""
-
-    def __init__(self, items_file: str = os.path.join("data", "items.json"), users_file: str = os.path.join("data", "users.json")) -> None:
-        self.items_file = items_file
-        self.users_file = users_file
-        self.items: list[LibraryItem] = []
-        self.users: list = []
-        # Automatically load data if files exist
+    def __init__(self):
+        self.items_file = os.path.join("data", "items.json")
+        self.users_file = os.path.join("data", "users.json")
+        self.items = []
+        self.users = []
+        
         self.load_data()
 
     def load_data(self) -> None:
