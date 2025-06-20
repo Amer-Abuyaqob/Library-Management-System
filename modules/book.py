@@ -16,6 +16,12 @@ class Book(LibraryItem, Reservable):
     def genre(self, genre):
         self.__genre = genre
 
+    def display_info(self):
+        return f"Item type: Book \n{super().display_info()} \nGenre: {self.__genre}"
+    
+    def check_availability(self):
+        return self.__available
+
     def reserve(self, user: User):
         """
         Reserve the book for a specific user.
