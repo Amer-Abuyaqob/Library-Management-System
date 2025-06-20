@@ -29,18 +29,22 @@ class Library:
         if os.path.exists(self.items_file):
             with open(self.items_file, "r", encoding="utf-8") as f:
                 items_data = json.load(f)
+
             for item in items_data:
                 item_type = item.get("type")
+
                 if item_type == "Book":
                     obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+
                 elif item_type == "Magazine":
                     obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+
                 elif item_type == "DVD":
                     obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+                    
                 else:
                     continue
-                if "id" in item:
-                    obj._id = item["id"]
+
                 self.items.append(obj)
 
         # Load users (kept as dictionaries since User class is not implemented)
