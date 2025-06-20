@@ -13,7 +13,7 @@ class Library:
         self.users_file = os.path.join("data", "users.json")
         self.items = []
         self.users = []
-        
+
         self.load_data()
 
     def load_data(self) -> None:
@@ -22,7 +22,14 @@ class Library:
         Reads items.json and users.json to populate the library's items and users.
         Raises FileNotFoundError if files don't exist.
         """
-        # Load items
+        self._load_items()
+        self._load_users()
+
+    def _load_items(self) -> None:
+        """
+        Load items from JSON file.
+        Reads items.json to populate the library's items list.
+        """
         self.items = []
         if os.path.exists(self.items_file):
             with open(self.items_file, "r", encoding="utf-8") as f:
@@ -45,12 +52,28 @@ class Library:
 
                 self.items.append(obj)
 
-        # Load users (kept as dictionaries since User class is not implemented)
+    def _load_users(self) -> None:
+        """
+        Load users from JSON file.
+        Reads users.json to populate the library's users list.
+        """
+        self.users = []
         if os.path.exists(self.users_file):
             with open(self.users_file, "r", encoding="utf-8") as f:
-                self.users = json.load(f)
-        else:
-            self.users = []
+                users_data = json.load(f)
+
+            for user in users_data:
+                user_obj = User(
+                    user_id=user["id"],
+                    first_name=user["first_name"],
+                    last_name=user["last_name"]
+                )
+                # Load borrowed items if they exist
+                if "borrowed_items" in user:
+                    for item_id in user["borrowed_items"]:
+                        user_obj.borrow_item(item_id)
+                
+                self.users.append(user_obj)
 
     def save_data(self) -> None:
         """
