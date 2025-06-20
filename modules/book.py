@@ -54,7 +54,3 @@ class Book(LibraryItem, Reservable):
         Sets the __reserved attribute to the given user, indicating that the book is reserved by this user.
         """
         self.__reserved = user
-
-if __name__ == "__main__":
-    book = Book("seso", "aMer", 2010, True, "Fiction")
-    print(book.id)
