@@ -17,10 +17,17 @@ class DVD(LibraryItem, Reservable):
         self.__duration = duration
 
     def display_info(self):
-        return f"Item type: DVD \n{super().display_info()} \nDuration: {self.__duration} minutes"
+        return f'''
+        Item type: DVD
+        Title: {self.title}
+        Author: {self.author}
+        Year: {self.year}
+        Available: {self.available}
+        Duration: {self.duration} minutes 
+        '''
     
     def check_availability(self):
-        return self.__available
+        return self.available
     
     def reserve(self, user: User):
         """

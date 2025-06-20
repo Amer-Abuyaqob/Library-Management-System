@@ -15,7 +15,14 @@ class Magazine(LibraryItem):
         self.__genre = genre
 
     def display_info(self):
-        return f"Item type: Magazine \n{super().display_info()} \nGenre: {self.__genre}"
+        return f'''
+        Item type: Magazine
+        Title: {self.title}
+        Author: {self.author}
+        Year: {self.year}
+        Available: {self.available}
+        Genre: {self.genre}
+        '''
     
     def check_availability(self):
-        return self.__available
+        return self.available
