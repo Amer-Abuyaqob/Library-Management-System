@@ -4,13 +4,14 @@ from reservable import Reservable
 
 class DVD(LibraryItem, Reservable):
     counter = 0
+
     def __init__(self, title, author, year, available, duration):
         super().__init__(title, author, year, available)
-        self.__duration = int(duration) # duration of the dvd content in minutes
-        self.__reserved = None
+        self.__duration = int(duration)  # duration of the dvd content in minutes
+        self.__reserved: User | None = None
         DVD.counter += 1
         self.__dvd_num = DVD.counter
-        self._id = self._item_id()  # Initialize auto generated ID 
+        self._id = self._item_id()  # Initialize auto generated ID
 
     def _item_id(self):
         """
@@ -43,14 +44,11 @@ class DVD(LibraryItem, Reservable):
     
     def check_availability(self):
         return self.available
-    
-    def reserve(self, user: User):
-        """
-        Reserve the DVD for a specific user.
 
-        Args:
-            user (User): The user who is reserving the DVD.
+    @property
+    def reserved_by(self) -> User | None:
+        return self.__reserved
 
-        Sets the __reserved attribute to the given user, indicating that the DVD is reserved by this user.
-        """
+    def reserve(self, user: User) -> None:
+        """Mark the DVD as reserved by ``user``."""
         self.__reserved = user
