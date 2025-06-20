@@ -8,7 +8,7 @@ class Magazine(LibraryItem):
         self.__reserved = None
         Magazine.counter += 1
         self.__magazine_num = Magazine.counter
-        self.__id = self._item_id()  # Initialize auto generated ID 
+        self._id = self._item_id()  # Initialize auto generated ID 
 
     def _item_id(self):
         """

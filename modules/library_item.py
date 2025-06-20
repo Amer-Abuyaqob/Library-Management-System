@@ -7,6 +7,7 @@ class LibraryItem(ABC):
         self.__author = author
         self.__year = int(year)
         self.__available = bool(available)
+        self._id = ""
 
     @property
     def title(self):
@@ -26,7 +27,7 @@ class LibraryItem(ABC):
 
     @property
     def id(self):
-        return self.__id
+        return self._id
 
     @title.setter
     def title(self, title):

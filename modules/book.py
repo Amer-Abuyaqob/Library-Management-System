@@ -10,7 +10,7 @@ class Book(LibraryItem, Reservable):
         self.__reserved = None
         Book.counter += 1
         self.__book_num = Book.counter
-        self.__id = self._item_id()  # Initialize auto generated ID 
+        self._id = self._item_id()  # Changed from __id to _id
 
     def _item_id(self):
         """
@@ -57,4 +57,4 @@ class Book(LibraryItem, Reservable):
 
 if __name__ == "__main__":
     book = Book("seso", "aMer", 2010, True, "Fiction")
-    print(book.item_id())
+    print(book.id)

@@ -10,7 +10,7 @@ class DVD(LibraryItem, Reservable):
         self.__reserved = None
         DVD.counter += 1
         self.__dvd_num = DVD.counter
-        self.__id = self._item_id()  # Initialize auto generated ID 
+        self._id = self._item_id()  # Initialize auto generated ID 
 
     def _item_id(self):
         """
