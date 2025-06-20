@@ -24,6 +24,10 @@ class LibraryItem(ABC):
     def available(self):
         return self.__available
 
+    @property
+    def id(self):
+        return self.__id
+
     @title.setter
     def title(self, title):
         self.__title = title
@@ -55,3 +59,18 @@ class LibraryItem(ABC):
         Should be implemented by subclasses.
         """
         pass
+
+    def _item_id(self):
+        """
+        Auto generation of item IDs bassed on the item's type
+        Format: T.AA.YYYY.N
+            T: Item's type -> {B: book, D: DVD, M: Magazine}
+            AA: Author's first name initials
+            YYYY: Publish year
+            N: Item number
+        """
+        return f"{self.__author_initials()}-{self.__year}"
+    
+    def __author_initials(self):
+        # FIXME: add exeption handling for names with less than 2 chars
+        return f"{self.__author[0].upper()}{self.__author[1].lower()}"

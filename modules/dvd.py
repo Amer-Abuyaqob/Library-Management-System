@@ -1,12 +1,27 @@
 from library_item import LibraryItem
-from modules.user import User
+from user import User
 from reservabale import Reservable
 
 class DVD(LibraryItem, Reservable):
+    counter = 0
     def __init__(self, title, author, year, available, duration):
         super().__init__(title, author, year, available)
         self.__duration = int(duration) # duration of the dvd content in minutes
         self.__reserved = None
+        DVD.counter += 1
+        self.__dvd_num = DVD.counter
+        self.__id = self._item_id()  # Initialize auto generated ID 
+
+    def _item_id(self):
+        """
+        Auto generation of item IDs bassed on the item's type
+        Format: T-AA-YYYY-N
+            T: Item's type -> D: DVD
+            AA: Author's first name initials
+            YYYY: Publish year
+            N: Item number
+        """
+        return f"D-{super()._item_id()}-{self.__dvd_num}"
 
     @property
     def duration(self):

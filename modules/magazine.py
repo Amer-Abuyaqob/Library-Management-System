@@ -1,10 +1,25 @@
 from library_item import LibraryItem
 
 class Magazine(LibraryItem):
+    counter = 0
     def __init__(self, title, author, year, available, genre):
         super().__init__(title, author, year, available)
         self.__genre = genre
         self.__reserved = None
+        Magazine.counter += 1
+        self.__magazine_num = Magazine.counter
+        self.__id = self._item_id()  # Initialize auto generated ID 
+
+    def _item_id(self):
+        """
+        Auto generation of item IDs bassed on the item's type
+        Format: T-AA-YYYY-N
+            T: Item's type -> M: magazine
+            AA: Author's first name initials
+            YYYY: Publish year
+            N: Item number
+        """
+        return f"M-{super()._item_id()}-{self.__magazine_num}"
 
     @property
     def genre(self):
