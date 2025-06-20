@@ -3,11 +3,12 @@ from user import User
 from reservable import Reservable
 
 class Book(LibraryItem, Reservable):
-    counter = 0 # counts every object created from this class
+    counter = 0  # counts every object created from this class
+
     def __init__(self, title, author, year, available, genre):
         super().__init__(title, author, year, available)
         self.__genre = genre
-        self.__reserved = None
+        self.__reserved: User | None = None
         Book.counter += 1
         self.__book_num = Book.counter
         self._id = self._item_id()  # Changed from __id to _id
@@ -44,13 +45,10 @@ class Book(LibraryItem, Reservable):
     def check_availability(self):
         return self.available
 
-    def reserve(self, user: User):
-        """
-        Reserve the book for a specific user.
+    @property
+    def reserved_by(self) -> User | None:
+        return self.__reserved
 
-        Args:
-            user (User): The user who is reserving the book.
-
-        Sets the __reserved attribute to the given user, indicating that the book is reserved by this user.
-        """
+    def reserve(self, user: User) -> None:
+        """Mark the book as reserved by ``user``."""
         self.__reserved = user
