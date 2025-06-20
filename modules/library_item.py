@@ -24,6 +24,22 @@ class LibraryItem(ABC):
     def available(self):
         return self.__available
 
+    @title.setter
+    def title(self, title):
+        self.__title = title
+
+    @author.setter
+    def author(self, author):
+        self.__author = author
+
+    @year.setter
+    def year(self, year):
+        self.__year = int(year)
+
+    @available.setter
+    def available(self, available):
+        self.__available = bool(available)
+        
     @abstractmethod
     def display_info(self):
         pass
