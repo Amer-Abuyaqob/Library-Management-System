@@ -1,6 +1,6 @@
 from library_item import LibraryItem
 from user import User
-from reservabale import Reservable
+from reservable import Reservable
 
 class DVD(LibraryItem, Reservable):
     counter = 0
