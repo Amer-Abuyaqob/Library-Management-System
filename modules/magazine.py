@@ -1,7 +1,6 @@
 from library_item import LibraryItem
-from reservabale import Reservable
 
-class Magazine(LibraryItem, Reservable):
+class Magazine(LibraryItem):
     def __init__(self, title, author, year, available, genre):
         super().__init__(title, author, year, available)
         self.__genre = genre
