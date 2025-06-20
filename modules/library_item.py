@@ -42,8 +42,16 @@ class LibraryItem(ABC):
         
     @abstractmethod
     def display_info(self):
+        """
+        Display information about the library item.
+        Should be implemented by subclasses.
+        """
         pass
 
     @abstractmethod
     def check_availability(self):
+        """
+        Check if the item is available.
+        Should be implemented by subclasses.
+        """
         pass
