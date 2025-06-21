@@ -33,7 +33,7 @@ class Library:
         Raises:
             ValueError: If item with same ID already exists
         """
-        # FIXME: exeption handling
+        # FIXME: exception handling
         self.items.append(item)
 
     def update_item(self, item, new_item):
@@ -47,7 +47,7 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # FIXME: exeption handling
+        # FIXME: exception handling
         index = self.items.index(item)
         self.items[index] = new_item
 
@@ -61,7 +61,7 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # FIXME: exeption handling
+        # FIXME: exception handling
         self.items.remove(item)
 
     def add_user(self, user):
@@ -74,7 +74,7 @@ class Library:
         Raises:
             ValueError: If user with same ID already exists
         """
-        # FIXME: exeption handling
+        # FIXME: exception handling
         self.users.append(user)
     
     def remove_user(self, user):
@@ -87,7 +87,7 @@ class Library:
         Raises:
             UserNotFoundError: If user doesn't exist
         """
-        # FIXME: exeption handling
+        # FIXME: exception handling
         self.users.remove(user)
         pass
 
@@ -102,7 +102,7 @@ class Library:
         Raises:
             UserNotFoundError: If user doesn't exist
         """
-        # FIXME: exeption handling
+        # FIXME: exception handling
         index = self.users.index(user)
         self.users[index] = new_user
 
@@ -122,7 +122,7 @@ class Library:
         Reads items.json to populate the library's items list.
         """
         self.__items = []  # Clearing the items list to avoid duplicates
-        # FIXME: exeption handling for file and data
+        # FIXME: exception handling for file and data
         if os.path.exists(self.__items_file):
             with open(self.__items_file, "r", encoding="utf-8") as f:
                 items_data = json.load(f)
@@ -138,7 +138,7 @@ class Library:
         """
         self.__users = []  # Clearing the items list to avoid duplicates
 
-        # FIXME: exeption handling for file and data
+        # FIXME: exception handling for file and data
         if os.path.exists(self.__users_file):
             with open(self.__users_file, "r", encoding="utf-8") as f:
                 users_data = json.load(f)
@@ -147,7 +147,7 @@ class Library:
                 user_obj = User(user["id"], user["first_name"], user["last_name"])
 
                 # FIXME: currently causes error 
-                # FIXME: insure compatibility with User class
+                # FIXME: ensure compatibility with User class
                 # Load borrowed items if they exist
                 if "borrowed_items" in user:
                     for item_id in user["borrowed_items"]:
@@ -195,7 +195,7 @@ class Library:
             entry = self.__item_entry(item)
             items_data.append(entry)
 
-        # FIXME: add better exeption handling for files and data
+        # FIXME: add better exception handling for files and data
         try:
             with open(self.__items_file, "w", encoding="utf-8") as f:
                 json.dump(items_data, f, indent=2)
@@ -208,7 +208,7 @@ class Library:
             entry = self.__user_entry(user)
             users_data.append(entry)
 
-        # FIXME: add better exeption handling for files and data
+        # FIXME: add better exception handling for files and data
         try:
             with open(self.__users_file, "w", encoding="utf-8") as f:
                 json.dump(users_data, f, indent=2)

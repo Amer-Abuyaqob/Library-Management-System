@@ -63,7 +63,7 @@ class LibraryItem(ABC):
 
     def _item_id(self):
         """
-        Auto generation of item IDs bassed on the item's type
+        Auto generation of item IDs based on the item's type
         Format: T.AA.YYYY.N
             T: Item's type -> {B: book, D: DVD, M: Magazine}
             AA: Author's first name initials
