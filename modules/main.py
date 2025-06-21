@@ -170,6 +170,7 @@ class Main:
             case "DVD": 
                 # FIXME: exeption handling for user input
                 duration = int(input(f"{type} duration in minutes: "))
+                item = DVD(title, author, year, available, duration)
 
             case "Magazine":
                 # FIXME: exeption handling for user input
@@ -196,9 +197,25 @@ class Main:
         item = self.get_item(item_id)
         if item:
             self.library.remove_item(item)
-            print(f"Item '{item.title}' has been removed successfully.")
+            print(f"Item '{item_id}' has been removed successfully.")
         else:
             print(f"No item found with ID: {item_id}")
+
+    def items_update_menu(self):
+        print("Updating an Item")
+        # FIXME: exeption handling for user's input (id's format)
+        item_id = input("Item id: ")
+        item = self.get_item(item_id)
+        if item:
+            print(f"Current item '{item_id}' info:-")
+            item.display_info()
+            print("Input the updated item data:-")
+            new_item = self.create_item()
+            self.library.update_item(item, new_item)
+        else:
+            print(f"No item found with ID: {item_id}") 
+
+
 
     def items_options(self):
         # FIXME: exeption handling for user's option
@@ -211,7 +228,7 @@ class Main:
             case 3:
                 self.items_remove_menu()
             case 4:
-                pass # TODO: self.items_update_menu()
+                self.items_update_menu()
             case 5:
                 pass # TODO: BACK
 
