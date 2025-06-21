@@ -7,6 +7,13 @@ class Main:
     def __init__(self):
         self.library = Library()
     
+    def items_summary(self, books, dvds, magazines):
+        print("SUMMARY:")
+        print(f"   Books: {len(books)}")
+        print(f"   Magazines: {len(magazines)}")
+        print(f"   DVDs: {len(dvds)}")
+        print(f"   Total: {len(self.library.items)}")
+        
     def view_all_books(self, books):
         for book in books:
             print(book.display_info())
@@ -35,6 +42,7 @@ class Main:
         self.view_all_books(books)
         self.view_all_dvds(dvds)
         self.view_all_magazines(magazines)
+        self.items_summary(books, dvds, magazines)
 
     def items_view_options(self):
         # FIXME: exeption handling for user's option
