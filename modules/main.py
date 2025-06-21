@@ -139,6 +139,9 @@ class Main:
                 self.items_view_id()
             case 6:
                 pass # TODO: BACK
+            case _:
+                print("Invalid choice. Please try again.")
+                self.items_view_options()
 
     def items_view_menu(self):
         print("Items Viewing Menu")
@@ -312,6 +315,9 @@ class Main:
                 self.users_view_id()
             case 5:
                 pass # TODO: BACK
+            case _:
+                print("Invalid choice. Please try again.")
+                self.users_view_options()
 
     def users_view_menu(self):
         print("Users Viewing Menu")
@@ -336,6 +342,9 @@ class Main:
                 self.items_update_menu()
             case 5:
                 pass # TODO: BACK
+            case _:
+                print("Invalid choice. Please try again.")
+                self.items_options()
 
     def items_menu(self):
         print("Items Menu")
@@ -360,6 +369,9 @@ class Main:
                 self.users_update_menu()
             case 5:
                 pass # TODO: BACK
+            case _:
+                print("Invalid choice. Please try again.")
+                self.users_options()
 
     def users_menu(self):
         print("Users Menu")
@@ -414,6 +426,9 @@ class Main:
                 pass
             case 3:
                 pass # TODO: BACK
+            case _:
+                print("Invalid choice. Please try again.")
+                self.borrow_return_options()
 
     def borrow_return_menu(self):
         print("Borrow/Return Menu")
@@ -434,6 +449,9 @@ class Main:
                 self.borrow_return_menu()
             case 4:
                 pass # TODO: self.end()
+            case _:
+                print("Invalid choice. Please try again.")
+                self.main_options()
 
     def main_menu(self):
         print("Main Menu")
