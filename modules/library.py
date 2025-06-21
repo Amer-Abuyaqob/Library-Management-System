@@ -224,7 +224,7 @@ class Library:
         self.__save_items()
         self.__save_users()
 
-    def borrow_item(self, user_id: str, item_id: str) -> bool:
+    def borrow_item(self, user, item):
         """
         Borrow an item for a user.
         Args:
@@ -240,7 +240,7 @@ class Library:
         # TODO: Implement item borrowing with all necessary checks
         pass
 
-    def return_item(self, user_id: str, item_id: str) -> bool:
+    def return_item(self, user, item):
         """
         Return an item from a user.
         Args:
