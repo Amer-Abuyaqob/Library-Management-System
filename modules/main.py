@@ -1,8 +1,8 @@
 from library import Library
 from book import Book
-from modules.dvd import DVD
-from modules.magazine import Magazine
-from modules.user import User
+from dvd import DVD
+from magazine import Magazine
+from user import User
 
 
 def parse_bool_input(prompt: str) -> bool:
