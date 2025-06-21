@@ -26,7 +26,7 @@ class Main:
         for magazine in magazines:
             print(magazine.display_info())
             
-    def group_by_type(self, books, dvds, magazines):
+    def group_by_type(self, books = [], dvds = [], magazines = []):
         for item in self.library.items:
             if isinstance(item, Book):
                 books.append(item)
@@ -44,6 +44,28 @@ class Main:
         self.view_all_magazines(magazines)
         self.items_summary(books, dvds, magazines)
 
+    def items_view_type(self):
+        # FIXME: exeption handling for user's input (Book, DVD, Magazine)
+        type = input("View all items of type: ")
+        match type:
+            case "Book":
+                print("📚 BOOKS")
+                for item in self.library.items:
+                    if isinstance(item, Book):
+                        print(item.display_info())
+            case "DVD":
+                print("📀 DVDS")
+                for item in self.library.items:
+                    if isinstance(item, DVD):
+                        print(item.display_info())
+            case "Magazine":
+                print("📰 MAGAZINES")
+                for item in self.library.items:
+                    if isinstance(item, Magazine):
+                        print(item.display_info())
+                        
+
+
     def items_view_options(self):
         # FIXME: exeption handling for user's option
         items_view_option = int(input("Your Choice is: "))
@@ -51,7 +73,7 @@ class Main:
             case 1:
                 self.items_view_all()
             case 2:
-                pass # TODO: self.items_view_type()
+                self.items_view_type()
             case 3:
                 pass # TODO: self.items_view_author()
             case 4:
