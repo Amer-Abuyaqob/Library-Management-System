@@ -4,6 +4,8 @@ class Main:
     def __init__(self):
         library = Library()
     
+
+
     def item_menu(self):
         print("Items Menu")
         print("1- View items")
@@ -19,11 +21,11 @@ class Main:
             case 1:
                 self.items_menu()
             case 2:
-                self.users_menu()
+                pass # TODO: self.users_menu()
             case 3:
-                self.borrow_return_menu()
+                pass # TODO: self.borrow_return_menu()
             case 4:
-                self.end()
+                pass # TODO: self.end()
 
     def main_menu(self):
         print("Main Menu")
