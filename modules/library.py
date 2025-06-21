@@ -95,6 +95,15 @@ class Library:
             entry["duration"] = item.duration
         return entry
     
+    def __user_entry(self, user):
+        entry = {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "borrowed_items": user.borrowed_items
+        }
+        return entry
+    
     def __save_items(self):
         items_data = []
         for item in self.__items:
@@ -108,6 +117,19 @@ class Library:
         except OSError as exc:
             raise IOError("Failed to save data") from exc
 
+    def __save_users(self):
+        users_data = []
+        for user in self.__users:
+            entry = self.__user_entry(user)
+            users_data.append(entry)
+
+        # FIXME: add better exeption handling for files and data
+        try:
+            with open(self.__users_file, "w", encoding="utf-8") as f:
+                json.dump(users_data, f, indent=2)
+        except OSError as exc:
+            raise IOError("Failed to save data") from exc
+
     def save_data(self):
         """
         Saves library data to JSON files.
@@ -115,13 +137,7 @@ class Library:
         Raises IOError if writing to files fails.
         """
         self.__save_items()
-        # TODO: self.__save_users() 
-
-        try:
-            with open(self.__users_file, "w", encoding="utf-8") as f:
-                json.dump(self.__users, f, indent=2)
-        except OSError as exc:
-            raise IOError("Failed to save data") from exc
+        self.__save_users()
 
 
     def display_all_items(self) -> None:
