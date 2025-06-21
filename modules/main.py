@@ -431,7 +431,7 @@ class Main:
             case 2:
                 self.users_menu()
             case 3:
-                pass # TODO: self.borrow_return_menu()
+                self.borrow_return_menu()
             case 4:
                 pass # TODO: self.end()
 
