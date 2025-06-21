@@ -4,6 +4,22 @@ class Main:
     def __init__(self):
         library = Library()
     
+    def items_view_options(self):
+        # FIXME: exeption handling for user's option
+        items_view_option = int(input("Your Choice is: "))
+        match items_view_option:
+            case 1:
+                pass # TODO: self.items_view_all()
+            case 2:
+                pass # TODO: self.items_view_type()
+            case 3:
+                pass # TODO: self.items_view_author()
+            case 4:
+                pass # TODO: self.items_view_title()
+            case 5:
+                pass # TODO: self.items_view_id()
+            case 6:
+                pass # TODO: BACK
 
     def items_view_menu(self):
         print("Items Viewing Menu")
