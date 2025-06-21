@@ -1,5 +1,6 @@
 class User:
     def __init__(self, user_id, first_name, last_name):
+        # TODO: auto generated user_id (U-FfLl-N)
         self._id = user_id
         self.__first_name = first_name
         self.__last_name = last_name
