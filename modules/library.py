@@ -1,7 +1,6 @@
 import json
 import os
 
-from library_item import LibraryItem
 from user import User
 from book import Book
 from magazine import Magazine
@@ -89,7 +88,6 @@ class Library:
         """
         # FIXME: exception handling
         self.users.remove(user)
-        pass
 
     def update_user(self, user, new_user):
         """
@@ -144,15 +142,7 @@ class Library:
                 users_data = json.load(f)
 
             for user in users_data:
-                user_obj = User(user["id"], user["first_name"], user["last_name"])
-
-                # FIXME: currently causes error 
-                # FIXME: ensure compatibility with User class
-                # Load borrowed items if they exist
-                if "borrowed_items" in user:
-                    for item_id in user["borrowed_items"]:
-                        user_obj.borrow_item(item_id)
-                
+                user_obj = User(user["id"], user["first_name"], user["last_name"], user["borrowed_items"])
                 self.add_user(user_obj)
 
     def load_data(self):
