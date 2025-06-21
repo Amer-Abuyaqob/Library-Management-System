@@ -34,7 +34,7 @@ class Library:
             ValueError: If item with same ID already exists
         """
         # FIXME: exeption handling
-        self.__item.append(item)
+        self.items.append(item)
 
     def update_item(self, item, new_item):
         """
@@ -74,7 +74,7 @@ class Library:
             ValueError: If user with same ID already exists
         """
         # FIXME: exeption handling
-        self.__users.append(user)
+        self.users.append(user)
     
     def remove_user(self, user):
         """
@@ -144,6 +144,7 @@ class Library:
             for user in users_data:
                 user_obj = User(user["id"], user["first_name"], user["last_name"])
 
+                # FIXME: currently causes error 
                 # FIXME: insure compatibility with User class
                 # Load borrowed items if they exist
                 if "borrowed_items" in user:
