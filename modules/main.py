@@ -4,6 +4,14 @@ class Main:
     def __init__(self):
         library = Library()
     
+    def item_menu(self):
+        print("Items Menu")
+        print("1- View items")
+        print("2- Add items")
+        print("3- Remove items")
+        print("4- Update items")
+        print("5- Back")
+
     def main_option(self):
         # FIXME: exeption handling for user's option
         main_option = int(input("Your Choice is: "))
