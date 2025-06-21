@@ -6,7 +6,11 @@ from modules.magazine import Magazine
 class Main:
     def __init__(self):
         self.library = Library()
-
+    
+    def view_all_books(self, books):
+        for book in books:
+            book.display_info()
+            
     def group_by_type(self, books, dvds, magazines):
         for item in self.library.items:
             if isinstance(item, Book):
