@@ -150,6 +150,13 @@ class Main:
         print("6- Back")
         self.items_view_options()
 
+
+            
+    def items_add_menu(self):
+        print("Adding an Item")
+        # TODO: item = self.create_item()
+        # TODO: self.library.add_item(item)   
+
     def items_options(self):
         # FIXME: exeption handling for user's option
         items_option = int(input("Your Choice is: "))
@@ -157,7 +164,7 @@ class Main:
             case 1:
                 self.items_view_menu()
             case 2:
-                pass # TODO: self.items_add_menu()
+                self.items_add_menu()
             case 3:
                 pass # TODO: self.items_remove_menu()
             case 4:
