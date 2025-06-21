@@ -16,11 +16,74 @@ class Library:
         self.load_data()
 
     def add_item(self, item):
+        """
+        Add a new item to the library.
+        Args:
+            item: LibraryItem object to add
+        Returns:
+            bool: True if item was added successfully, False otherwise
+        Raises:
+            ValueError: If item with same ID already exists
+        """
+        # FIXME: duplicate item_id check
+        # FIXME: exeption handling
         self.__item.append(item)
 
+    def update_item(self, item_id: str, **kwargs) -> bool:
+        """
+        Update an item's attributes.
+        Args:
+            item_id: ID of the item to update
+            **kwargs: Key-value pairs of attributes to update
+        Returns:
+            bool: True if update was successful, False otherwise
+        Raises:
+            ItemNotFoundError: If item doesn't exist
+        """
+        # TODO: Implement item attribute updates
+        pass
+
     def add_user(self, user):
-        self.__user.append(user)
+        """
+        Add a new user to the library.
+        Args:
+            user: User object to add
+        Returns:
+            bool: True if user was added successfully, False otherwise
+        Raises:
+            ValueError: If user with same ID already exists
+        """
+        # FIXME: duplicate user_id check
+        # FIXME: exeption handling
+        self.__users.append(user)
     
+    def remove_user(self, user_id: str) -> bool:
+        """
+        Remove a user from the library.
+        Args:
+            user_id: ID of the user to remove
+        Returns:
+            bool: True if user was removed successfully, False otherwise
+        Raises:
+            UserNotFoundError: If user doesn't exist
+        """
+        # TODO: Implement user removal with existence check
+        pass
+
+    def update_user(self, user_id: str, **kwargs) -> bool:
+        """
+        Update a user's attributes.
+        Args:
+            user_id: ID of the user to update
+            **kwargs: Key-value pairs of attributes to update
+        Returns:
+            bool: True if update was successful, False otherwise
+        Raises:
+            UserNotFoundError: If user doesn't exist
+        """
+        # TODO: Implement user attribute updates
+        pass
+
     def __create_item(self, item):
         item_type = item.get("type")
         if item_type == "Book":
@@ -145,20 +208,8 @@ class Library:
         Display all items in the library.
         Prints formatted information about each item including availability status.
         """
+        # FIXME: might be moved to Main class
         # TODO: Implement formatted display of all items
-        pass
-
-    def add_item(self, item: LibraryItem) -> bool:
-        """
-        Add a new item to the library.
-        Args:
-            item: LibraryItem object to add
-        Returns:
-            bool: True if item was added successfully, False otherwise
-        Raises:
-            ValueError: If item with same ID already exists
-        """
-        # TODO: Implement item addition with duplicate ID check
         pass
 
     def remove_item(self, item_id: str) -> bool:
@@ -172,20 +223,6 @@ class Library:
             ItemNotFoundError: If item doesn't exist
         """
         # TODO: Implement item removal with existence check
-        pass
-
-    def update_item(self, item_id: str, **kwargs) -> bool:
-        """
-        Update an item's attributes.
-        Args:
-            item_id: ID of the item to update
-            **kwargs: Key-value pairs of attributes to update
-        Returns:
-            bool: True if update was successful, False otherwise
-        Raises:
-            ItemNotFoundError: If item doesn't exist
-        """
-        # TODO: Implement item attribute updates
         pass
 
     def search_item_by_id(self, item_id: str) -> LibraryItem:
@@ -239,47 +276,8 @@ class Library:
         Display all users in the library.
         Prints formatted information about each user including their borrowed items.
         """
+        # FIXME: might be moved to Main class
         # TODO: Implement formatted display of all users
-        pass
-
-    def add_user(self, user: User) -> bool:
-        """
-        Add a new user to the library.
-        Args:
-            user: User object to add
-        Returns:
-            bool: True if user was added successfully, False otherwise
-        Raises:
-            ValueError: If user with same ID already exists
-        """
-        # TODO: Implement user addition with duplicate ID check
-        pass
-
-    def remove_user(self, user_id: str) -> bool:
-        """
-        Remove a user from the library.
-        Args:
-            user_id: ID of the user to remove
-        Returns:
-            bool: True if user was removed successfully, False otherwise
-        Raises:
-            UserNotFoundError: If user doesn't exist
-        """
-        # TODO: Implement user removal with existence check
-        pass
-
-    def update_user(self, user_id: str, **kwargs) -> bool:
-        """
-        Update a user's attributes.
-        Args:
-            user_id: ID of the user to update
-            **kwargs: Key-value pairs of attributes to update
-        Returns:
-            bool: True if update was successful, False otherwise
-        Raises:
-            UserNotFoundError: If user doesn't exist
-        """
-        # TODO: Implement user attribute updates
         pass
 
     def search_user_by_id(self, user_id: str) -> User:
