@@ -36,7 +36,7 @@ class Library:
         # FIXME: exeption handling
         self.__item.append(item)
 
-    def update_item(self, item_id: str, **kwargs) -> bool:
+    def update_item(self, item, new_item):
         """
         Update an item's attributes.
         Args:
@@ -76,7 +76,7 @@ class Library:
         # FIXME: exeption handling
         self.__users.append(user)
     
-    def remove_user(self, user_id: str) -> bool:
+    def remove_user(self, user):
         """
         Remove a user from the library.
         Args:
@@ -86,10 +86,11 @@ class Library:
         Raises:
             UserNotFoundError: If user doesn't exist
         """
-        # TODO: Implement user removal with existence check
+        # FIXME: exeption handling
+        self.users.remove(user)
         pass
 
-    def update_user(self, user_id: str, **kwargs) -> bool:
+    def update_user(self, user, new_user):
         """
         Update a user's attributes.
         Args:
