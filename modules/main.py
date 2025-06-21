@@ -4,6 +4,17 @@ from modules.dvd import DVD
 from modules.magazine import Magazine
 from modules.user import User
 
+
+def parse_bool_input(prompt: str) -> bool:
+    """Prompt the user for a boolean value until a valid entry is provided."""
+    while True:
+        value = input(prompt).strip().lower()
+        if value in {"true", "t", "yes", "y", "1"}:
+            return True
+        if value in {"false", "f", "no", "n", "0"}:
+            return False
+        print("Please enter 'yes' or 'no'.")
+
 class Main:
     def __init__(self):
         self.library = Library()
@@ -156,11 +167,11 @@ class Main:
         title = input(f"{type} title: ")
         author = input(f"{type} author: ")
         year = int(input(f"{type} publish year: "))
-        available = bool(input(f"{type} available (True/False): "))
-        return type, title, author, year, available
+        return type, title, author, year
 
     def create_item(self):
-        type, title, author, year, available = self.get_item_data()
+        type, title, author, year = self.get_item_data()
+        available = parse_bool_input(f"{type} available (True/False or Yes/No): ")
         match type:
             case "Book":
                 # FIXME: exeption handling for user input
