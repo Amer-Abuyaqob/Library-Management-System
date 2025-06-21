@@ -9,7 +9,15 @@ class Main:
     
     def view_all_books(self, books):
         for book in books:
-            book.display_info()
+            print(book.display_info())
+    
+    def view_all_dvds(self, dvds):
+        for dvd in dvds:
+            print(dvd.display_info())
+    
+    def view_all_magazines(self, magazines):
+        for magazine in magazines:
+            print(magazine.display_info())
             
     def group_by_type(self, books, dvds, magazines):
         for item in self.library.items:
@@ -25,8 +33,8 @@ class Main:
         books = [], dvds = [], magazines = [] 
         self.group_by_type(books, dvds, magazines)
         self.view_all_books(books)
-        # TODO: self.view_all_dvds(dvds)
-        # TODO: self.view_all_magazines(magazines)
+        self.view_all_dvds(dvds)
+        self.view_all_magazines(magazines)
 
     def items_view_options(self):
         # FIXME: exeption handling for user's option
