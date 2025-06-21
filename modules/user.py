@@ -23,6 +23,8 @@ class User:
         return self.__borrowed_items
 
 # FIXME: use exception handling instead of true/false
+# FIXME: check item availability
+# FIXME: change item availability
     def borrow_item(self, item_id):
         """Register ``item_id`` as borrowed by the user."""
         if item_id in self.__borrowed_items:
