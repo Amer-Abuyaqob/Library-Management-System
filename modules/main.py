@@ -184,23 +184,21 @@ class Main:
 
     def get_item(self, item_id):
         # FIXME: exeption handling for user's input (id's format)
-        temp = None
         for item in self.library.items:
             if item.id == item_id:
-                temp = item
-                break
-        # FIXME: replace with exeption handling for the item not found and temp == None
-        if temp:
-            return temp
-        else:
-            print(f"No item with the id:{item_id} was found")
+                return item
+        return None
 
     def items_remove_menu(self):
         print("Removing an Item")
         # FIXME: exeption handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
-        # TODO: self.library.remove_item(item)
+        if item:
+            self.library.remove_item(item)
+            print(f"Item '{item.title}' has been removed successfully.")
+        else:
+            print(f"No item found with ID: {item_id}")
 
     def items_options(self):
         # FIXME: exeption handling for user's option
