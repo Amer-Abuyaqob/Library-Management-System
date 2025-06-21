@@ -2,12 +2,11 @@ from library_item import LibraryItem
 from user import User
 from reservable import Reservable
 
-class Magazine(LibraryItem, Reservable):
+class Magazine(LibraryItem):
     counter = 0
     def __init__(self, title, author, year, available, genre):
         super().__init__(title, author, year, available)
         self.__genre = genre
-        self.__reserved: User | None = None
         Magazine.counter += 1
         self.__magazine_num = Magazine.counter
         self._id = self._item_id()  # Initialize auto generated ID 
@@ -43,11 +42,3 @@ class Magazine(LibraryItem, Reservable):
 
     def check_availability(self):
         return self.available
-
-    @property
-    def reserved_by(self) -> User | None:
-        return self.__reserved
-
-    def reserve(self, user: User) -> None:
-        """Mark the magazine as reserved by ``user``."""
-        self.__reserved = user

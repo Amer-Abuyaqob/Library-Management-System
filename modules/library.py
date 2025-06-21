@@ -228,30 +228,60 @@ class Library:
         """
         Borrow an item for a user.
         Args:
-            user_id: ID of the user borrowing the item
-            item_id: ID of the item to borrow
+            user: User object borrowing the item
+            item: LibraryItem object to borrow
         Returns:
             bool: True if item was borrowed successfully, False otherwise
         Raises:
-            UserNotFoundError: If user doesn't exist
-            ItemNotFoundError: If item doesn't exist
-            ItemNotAvailableError: If item is not available
+            ValueError: If user doesn't exist, item doesn't exist, or item is not available
         """
-        # TODO: Implement item borrowing with all necessary checks
-        pass
+        # Check if user exists in the library
+        if user not in self.users:
+            raise ValueError(f"User '{user.id}' not found in the library")
+        
+        # Check if item exists in the library
+        if item not in self.items:
+            raise ValueError(f"Item '{item.id}' not found in the library")
+        
+        # Check if item is available
+        if not item.available:
+            raise ValueError(f"Item '{item.id}' is not available for borrowing")
+        
+        # Add item to user's borrowed items
+        user.add_borrowed_item(item)
+        
+        # Mark item as unavailable
+        item.available = False
+        
+        return True
 
     def return_item(self, user, item):
         """
         Return an item from a user.
         Args:
-            user_id: ID of the user returning the item
-            item_id: ID of the item to return
+            user: User object returning the item
+            item: LibraryItem object to return
         Returns:
             bool: True if item was returned successfully, False otherwise
         Raises:
-            UserNotFoundError: If user doesn't exist
-            ItemNotFoundError: If item doesn't exist
-            ValueError: If user hasn't borrowed the item
+            ValueError: If user doesn't exist, item doesn't exist, or user hasn't borrowed the item
         """
-        # TODO: Implement item return with all necessary checks
-        pass
+        # Check if user exists in the library
+        if user not in self.users:
+            raise ValueError(f"User '{user.id}' not found in the library")
+        
+        # Check if item exists in the library
+        if item not in self.items:
+            raise ValueError(f"Item '{item.id}' not found in the library")
+        
+        # Check if user has borrowed the item
+        if item not in user.borrowed_items:
+            raise ValueError(f"User '{user.id}' has not borrowed item '{item.id}'")
+        
+        # Remove item from user's borrowed items
+        user.remove_borrowed_item(item)
+        
+        # Mark item as available
+        item.available = True
+        
+        return True
