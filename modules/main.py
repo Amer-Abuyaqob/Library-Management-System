@@ -114,14 +114,14 @@ class Main:
 
     def items_view_id(self):
         # FIXME: exeption handling for user's input (id's format)
-        id = input("View all item of id: ")
+        item_id = input("View all item of id: ")
         found = False
         for item in self.library.items:
-            if item.id == id:
+            if item.id == item_id:
                 print(item.display_info())
                 found = True
         if not found:
-            print(f"No item found with ID: {id}")
+            print(f"No item found with ID: {item_id}")
 
     def items_view_options(self):
         # FIXME: exeption handling for user's option
@@ -370,15 +370,47 @@ class Main:
         print("5- Back")
         self.users_options()
 
+    def borrow_item_menu(self):
+        print("Borrowing Menu")
+        # FIXME: exeption handling for user's input (id's format)
+        item_id = input("Item id: ")
+        item = self.get_item(item_id)
+        user_id = input("User ID: ")
+        user = self.get_user(user_id)
+        
+        if not user:
+            print(f"No user found with ID: {user_id}")
+        elif not item:
+            print(f"No item found with ID: {item_id}")
+        else:
+            self.library.borrow_item(user, item)
+            print(f"User '{user_id}' borrowed Item '{item_id}' successfully")
+
+    def return_item_menu(self):
+        print("Returning Menu")
+        # FIXME: exeption handling for user's input (id's format)
+        item_id = input("Item id: ")
+        item = self.get_item(item_id)
+        user_id = input("User ID: ")
+        user = self.get_user(user_id)
+        
+        if not user:
+            print(f"No user found with ID: {user_id}")
+        elif not item:
+            print(f"No item found with ID: {item_id}")
+        else:
+            self.library.return_item(user, item)
+            print(f"User '{user_id}' returned Item '{item_id}' successfully")
+
     def borrow_return_options(self):
         # FIXME: exeption handling for user's option
         borrow_return_option = int(input("Your Choice is: "))
         match borrow_return_option:
             case 1:
-                # TODO: self.borrow_item_menu()
+                self.borrow_item_menu()
                 pass
             case 2:
-                # TODO: self.return_item_menu()
+                self.return_item_menu()
                 pass
             case 3:
                 pass # TODO: BACK
