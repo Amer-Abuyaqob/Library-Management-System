@@ -6,13 +6,20 @@ from modules.magazine import Magazine
 class Main:
     def __init__(self):
         self.library = Library()
-    
 
+    def group_by_type(self, books, dvds, magazines):
+        for item in self.library.items:
+            if isinstance(item, Book):
+                books.append(item)
+            elif isinstance(item, DVD):
+                dvds.append(item)
+            elif isinstance(item, Magazine):
+                magazines.append(item)   
 
     def items_view_all(self):
         print("Viewing all library items")
         books = [], dvds = [], magazines = [] 
-        # TODO: grouped_items = self.group_by_type(books, dvds, magazines)
+        self.group_by_type(books, dvds, magazines)
         self.view_all_books(books)
         # TODO: self.view_all_dvds(dvds)
         # TODO: self.view_all_magazines(magazines)
