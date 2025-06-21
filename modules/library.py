@@ -9,81 +9,79 @@ from dvd import DVD
 
 class Library:
     def __init__(self):
-        self.items_file = os.path.join("data", "items.json")
-        self.users_file = os.path.join("data", "users.json")
-        self.items = []
-        self.users = []
-
+        self.__items_file = os.path.join("data", "items.json")
+        self.__users_file = os.path.join("data", "users.json")
+        self.__items = []
+        self.__users = []
         self.load_data()
 
-    def load_data(self) -> None:
-        """
-        Load library data from JSON files.
-        Reads items.json and users.json to populate the library's items and users.
-        Raises FileNotFoundError if files don't exist.
-        """
-        self._load_items()
-        self._load_users()
+    def add_item(self, item):
+        self.__item.append(item)
 
-    def _load_items(self) -> None:
+    def add_user(self, user):
+        self.__user.append(user)
+    
+    def __create_item(self, item):
+        item_type = item.get("type")
+        if item_type == "Book":
+            item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+        elif item_type == "Magazine":
+            item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+        elif item_type == "DVD":
+            item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+        return item_obj
+    
+    def __load_items(self):
         """
         Load items from JSON file.
         Reads items.json to populate the library's items list.
         """
-        self.items = []
-        if os.path.exists(self.items_file):
-            with open(self.items_file, "r", encoding="utf-8") as f:
+        self.__items = []  # Clearing the items list to avoid duplicates
+
+        # FIXME: exeption handling for file and data
+        if os.path.exists(self.__items_file):
+            with open(self.__items_file, "r", encoding="utf-8") as f:
                 items_data = json.load(f)
 
             for item in items_data:
-                item_type = item.get("type")
+                item_obj = self.__create_item(item)
+                self.add_item(item_obj)
 
-                if item_type == "Book":
-                    obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
-
-                elif item_type == "Magazine":
-                    obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
-
-                elif item_type == "DVD":
-                    obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
-                    
-                else:
-                    continue
-
-                self.items.append(obj)
-
-    def _load_users(self) -> None:
+    def __load_users(self):
         """
-        Load users from JSON file.
+        Loads users from JSON file.
         Reads users.json to populate the library's users list.
         """
-        self.users = []
-        if os.path.exists(self.users_file):
-            with open(self.users_file, "r", encoding="utf-8") as f:
+        self.__users = []  # Clearing the items list to avoid duplicates
+
+        # FIXME: exeption handling for file and data
+        if os.path.exists(self.__users_file):
+            with open(self.__users_file, "r", encoding="utf-8") as f:
                 users_data = json.load(f)
 
             for user in users_data:
-                user_obj = User(
-                    user_id=user["id"],
-                    first_name=user["first_name"],
-                    last_name=user["last_name"]
-                )
+                user_obj = User(user["id"], user["first_name"], user["last_name"])
+
+                # FIXME: insure compatibility with User class
                 # Load borrowed items if they exist
                 if "borrowed_items" in user:
                     for item_id in user["borrowed_items"]:
                         user_obj.borrow_item(item_id)
                 
-                self.users.append(user_obj)
+                self.add_user(user_obj)
 
-    def save_data(self) -> None:
+    def load_data(self):
         """
-        Save library data to JSON files.
-        Writes current items and users to items.json and users.json respectively.
-        Raises IOError if writing to files fails.
+        Load library data from JSON files.
+        Reads items.json and users.json to populate the library's items and users.
+        Raises FileNotFoundError if files don't exist.
         """
-        items_data = []
-        for item in self.items:
-            entry = {
+        self.__load_items()
+        self.__load_users()
+
+
+    def __item_entry(self, item):
+        entry = {
                 "type": item.__class__.__name__,
                 "title": item.title,
                 "author": item.author,
@@ -91,19 +89,40 @@ class Library:
                 "available": item.available,
                 "id": item.id,
             }
-            if isinstance(item, (Book, Magazine)):
-                entry["genre"] = item.genre
-            if isinstance(item, DVD):
-                entry["duration"] = item.duration
+        if isinstance(item, (Book, Magazine)):
+            entry["genre"] = item.genre
+        if isinstance(item, DVD):
+            entry["duration"] = item.duration
+        return entry
+    
+    def __save_items(self):
+        items_data = []
+        for item in self.__items:
+            entry = self.__item_entry(item)
             items_data.append(entry)
 
+        # FIXME: add better exeption handling for files and data
         try:
-            with open(self.items_file, "w", encoding="utf-8") as f:
+            with open(self.__items_file, "w", encoding="utf-8") as f:
                 json.dump(items_data, f, indent=2)
-            with open(self.users_file, "w", encoding="utf-8") as f:
-                json.dump(self.users, f, indent=2)
         except OSError as exc:
             raise IOError("Failed to save data") from exc
+
+    def save_data(self):
+        """
+        Saves library data to JSON files.
+        Writes current items and users to items.json and users.json respectively.
+        Raises IOError if writing to files fails.
+        """
+        self.__save_items()
+        # TODO: self.__save_users() 
+
+        try:
+            with open(self.__users_file, "w", encoding="utf-8") as f:
+                json.dump(self.__users, f, indent=2)
+        except OSError as exc:
+            raise IOError("Failed to save data") from exc
+
 
     def display_all_items(self) -> None:
         """
