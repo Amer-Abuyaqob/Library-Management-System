@@ -25,7 +25,6 @@ class Library:
         Raises:
             ValueError: If item with same ID already exists
         """
-        # FIXME: duplicate item_id check
         # FIXME: exeption handling
         self.__item.append(item)
 
@@ -66,7 +65,6 @@ class Library:
         Raises:
             ValueError: If user with same ID already exists
         """
-        # FIXME: duplicate user_id check
         # FIXME: exeption handling
         self.__users.append(user)
     
@@ -113,7 +111,6 @@ class Library:
         Reads items.json to populate the library's items list.
         """
         self.__items = []  # Clearing the items list to avoid duplicates
-
         # FIXME: exeption handling for file and data
         if os.path.exists(self.__items_file):
             with open(self.__items_file, "r", encoding="utf-8") as f:
