@@ -40,70 +40,88 @@ class Main:
         for magazine in magazines:
             print(magazine.display_info())
             
-    def group_by_type(self, books = [], dvds = [], magazines = []):
+    def group_by_type(self):
+        books = []
+        dvds = []
+        magazines = []
         for item in self.library.items:
             if isinstance(item, Book):
                 books.append(item)
             elif isinstance(item, DVD):
                 dvds.append(item)
             elif isinstance(item, Magazine):
-                magazines.append(item)   
+                magazines.append(item)
+        return books, dvds, magazines
 
     def items_view_all(self):
         print("Viewing all library items")
-        books = [], dvds = [], magazines = [] 
-        self.group_by_type(books, dvds, magazines)
-        # FIXME: print a message if there's no info to be displayed
+        if not self.library.items:
+            print("No items found in the library.")
+            return
+        books, dvds, magazines = self.group_by_type()
         self.view_all_books(books)
         self.view_all_dvds(dvds)
         self.view_all_magazines(magazines)
-        # FIXME: shouldn't be called if there's no info to be displayed
         self.items_summary(books, dvds, magazines)
 
     def items_view_type(self):
         # FIXME: exeption handling for user's input (Book, DVD, Magazine)
         type = input("View all items of type: ")
-        # FIXME: print a message if there's no info to be displayed
+        found = False
         match type:
             case "Book":
                 print("📚 BOOKS")
                 for item in self.library.items:
                     if isinstance(item, Book):
                         print(item.display_info())
+                        found = True
             case "DVD":
                 print("📀 DVDS")
                 for item in self.library.items:
                     if isinstance(item, DVD):
                         print(item.display_info())
+                        found = True
             case "Magazine":
                 print("📰 MAGAZINES")
                 for item in self.library.items:
                     if isinstance(item, Magazine):
                         print(item.display_info())
+                        found = True
+        if not found:
+            print(f"No items found of type: {type}")
                         
     def items_view_author(self):
         # FIXME: exeption handling for user's input (author's format)
         author = input("View all items of author: ")
-        # FIXME: print a message if there's no info to be displayed
+        found = False
         for item in self.library.items:
             if item.author == author:
                 print(item.display_info())
+                found = True
+        if not found:
+            print(f"No items found by author: {author}")
 
     def items_view_title(self):
         # FIXME: exeption handling for user's input (title's format)
         title = input("View all items of title: ")
-        # FIXME: print a message if there's no info to be displayed
+        found = False
         for item in self.library.items:
             if item.title == title:
                 print(item.display_info())
+                found = True
+        if not found:
+            print(f"No items found with title: {title}")
 
     def items_view_id(self):
         # FIXME: exeption handling for user's input (id's format)
         id = input("View all item of id: ")
-        # FIXME: print a message if there's no info to be displayed
+        found = False
         for item in self.library.items:
             if item.id == id:
                 print(item.display_info())
+                found = True
+        if not found:
+            print(f"No item found with ID: {id}")
 
     def items_view_options(self):
         # FIXME: exeption handling for user's option
@@ -159,7 +177,6 @@ class Main:
     def users_view_first_name(self):
         # FIXME: exeption handling for user's input (first name's format)
         first_name = input("View all users with first name: ")
-        # FIXME: print a message if there's no info to be displayed
         found = False
         for user in self.library.users:
             if user.first_name == first_name:
@@ -171,7 +188,6 @@ class Main:
     def users_view_last_name(self):
         # FIXME: exeption handling for user's input (last name's format)
         last_name = input("View all users with last name: ")
-        # FIXME: print a message if there's no info to be displayed
         found = False
         for user in self.library.users:
             if user.last_name == last_name:
@@ -183,7 +199,6 @@ class Main:
     def users_view_id(self):
         # FIXME: exeption handling for user's input (id's format)
         user_id = input("View user with ID: ")
-        # FIXME: print a message if there's no info to be displayed
         found = False
         for user in self.library.users:
             if user.id == user_id:
