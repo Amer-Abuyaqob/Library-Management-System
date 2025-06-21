@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 class LibraryItem(ABC):
-    def __init__(self, title, author, year, available=True):
+    def __init__(self, title, author, year, available):
         super().__init__()
         self.__title = title
         self.__author = author
