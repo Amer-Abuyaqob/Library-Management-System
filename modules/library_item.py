@@ -73,5 +73,4 @@ class LibraryItem(ABC):
         return f"{self.__author_initials()}-{self.__year}"
     
     def __author_initials(self):
-        # FIXME: add exeption handling for names with less than 2 chars
         return f"{self.__author[0].upper()}{self.__author[1].lower()}"
