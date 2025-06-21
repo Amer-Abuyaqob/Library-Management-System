@@ -352,19 +352,20 @@ class Main:
             case 4:
                 self.items_update_menu()
             case 5:
-                pass # TODO: BACK
-            case _:
-                print("Invalid choice. Please try again.")
-                self.items_options()
+                return True
+        return False
+
 
     def items_menu(self):
-        print("Items Menu")
-        print("1- View items")
-        print("2- Add items")
-        print("3- Remove items")
-        print("4- Update items")
-        print("5- Back")
-        self.items_options()
+        while True:
+            print("Items Menu")
+            print("1- View items")
+            print("2- Add items")
+            print("3- Remove items")
+            print("4- Update items")
+            print("5- Back")
+            if self.items_options():
+                break
 
     def users_options(self):
         # FIXME: exeption handling for user's option
@@ -379,19 +380,20 @@ class Main:
             case 4:
                 self.users_update_menu()
             case 5:
-                pass # TODO: BACK
-            case _:
-                print("Invalid choice. Please try again.")
-                self.users_options()
+                return True
+        return False
+
 
     def users_menu(self):
-        print("Users Menu")
-        print("1- View users")
-        print("2- Add users")
-        print("3- Remove users")
-        print("4- Update users")
-        print("5- Back")
-        self.users_options()
+        while True:
+            print("Users Menu")
+            print("1- View users")
+            print("2- Add users")
+            print("3- Remove users")
+            print("4- Update users")
+            print("5- Back")
+            if self.users_options():
+                break
 
     def borrow_item_menu(self):
         print("Borrowing Menu")
@@ -436,17 +438,19 @@ class Main:
                 self.return_item_menu()
                 pass
             case 3:
-                pass # TODO: BACK
-            case _:
-                print("Invalid choice. Please try again.")
-                self.borrow_return_options()
+
+                return True
+        return False
+
 
     def borrow_return_menu(self):
-        print("Borrow/Return Menu")
-        print("1- Borrow an Item")
-        print("2- Return an Item")
-        print("3- Back")
-        self.borrow_return_options()
+        while True:
+            print("Borrow/Return Menu")
+            print("1- Borrow an Item")
+            print("2- Return an Item")
+            print("3- Back")
+            if self.borrow_return_options():
+                break
 
     def main_options(self):
         # FIXME: exeption handling for user's option
@@ -459,18 +463,18 @@ class Main:
             case 3:
                 self.borrow_return_menu()
             case 4:
-                pass # TODO: self.end()
-            case _:
-                print("Invalid choice. Please try again.")
-                self.main_options()
+                return True
+        return False
 
     def main_menu(self):
-        print("Main Menu")
-        print("1- Items Menu")
-        print("2- Users Menu")
-        print("3- Borrow/Return Menu")
-        print("4- Save and Exit")
-        self.main_options()
+        while True:
+            print("Main Menu")
+            print("1- Items Menu")
+            print("2- Users Menu")
+            print("3- Borrow/Return Menu")
+            print("4- Save and Exit")
+            if self.main_options():
+                break
 
     def run(self):
         print("Welcome to LMS")
