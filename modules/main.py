@@ -1,14 +1,21 @@
 from library import Library
+from book import Book
+from modules.dvd import DVD
+from modules.magazine import Magazine
 
 class Main:
     def __init__(self):
-        library = Library()
+        self.library = Library()
     
+
+
     def items_view_all(self):
         print("Viewing all library items")
-        # TODO: self.view_all_books()
-        # TODO: self.view_all_dvds()
-        # TODO: self.view_all_magazines()
+        books = [], dvds = [], magazines = [] 
+        # TODO: grouped_items = self.group_by_type(books, dvds, magazines)
+        self.view_all_books(books)
+        # TODO: self.view_all_dvds(dvds)
+        # TODO: self.view_all_magazines(magazines)
 
     def items_view_options(self):
         # FIXME: exeption handling for user's option
