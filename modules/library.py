@@ -138,8 +138,6 @@ class Library:
         """
         self.__users = []  # Clearing the items list to avoid duplicates
 
-<<<<<<< HEAD
-=======
         # FIXME: exeption handling for file and data
         if os.path.exists(self.__users_file):
             with open(self.__users_file, "r", encoding="utf-8") as f:
@@ -226,7 +224,6 @@ class Library:
         self.__save_items()
         self.__save_users()
 
->>>>>>> bb67d8d7bbdd252cf36c7dd5e96820884624b83f
     def borrow_item(self, user, item):
         """
         Borrow an item for a user.
