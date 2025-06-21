@@ -370,6 +370,13 @@ class Main:
         print("5- Back")
         self.users_options()
 
+    def borrow_return_menu(self):
+        print("Borrow/Return Menu")
+        print("1- Borrow an Item")
+        print("2- Return an Item")
+        print("3- Back")
+        # TODO: borrow_return_options()
+
     def main_options(self):
         # FIXME: exeption handling for user's option
         main_option = int(input("Your Choice is: "))
