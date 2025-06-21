@@ -8,91 +8,22 @@ from magazine import Magazine
 from dvd import DVD
 
 class Library:
-    """Simple container for library items and users stored in JSON files."""
-
-    def __init__(self, items_file: str = os.path.join("data", "items.json"), users_file: str = os.path.join("data", "users.json")) -> None:
-        self.items_file = items_file
-        self.users_file = users_file
-        self.items: list[LibraryItem] = []
-        self.users: list = []
-        # Automatically load data if files exist
+    def __init__(self):
+        self.__items_file = os.path.join("data", "items.json")
+        self.__users_file = os.path.join("data", "users.json")
+        self.__items = []
+        self.__users = []
         self.load_data()
 
-    def load_data(self) -> None:
-        """
-        Load library data from JSON files.
-        Reads items.json and users.json to populate the library's items and users.
-        Raises FileNotFoundError if files don't exist.
-        """
-        # Load items
-        self.items = []
-        if os.path.exists(self.items_file):
-            with open(self.items_file, "r", encoding="utf-8") as f:
-                items_data = json.load(f)
+    @property
+    def items(self):
+        return self.__items
+    
+    @property
+    def users(self):
+        return self.__users
 
-            for item in items_data:
-                item_type = item.get("type")
-
-                if item_type == "Book":
-                    obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
-
-                elif item_type == "Magazine":
-                    obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
-
-                elif item_type == "DVD":
-                    obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
-                    
-                else:
-                    continue
-
-                self.items.append(obj)
-
-        # Load users (kept as dictionaries since User class is not implemented)
-        if os.path.exists(self.users_file):
-            with open(self.users_file, "r", encoding="utf-8") as f:
-                self.users = json.load(f)
-        else:
-            self.users = []
-
-    def save_data(self) -> None:
-        """
-        Save library data to JSON files.
-        Writes current items and users to items.json and users.json respectively.
-        Raises IOError if writing to files fails.
-        """
-        items_data = []
-        for item in self.items:
-            entry = {
-                "type": item.__class__.__name__,
-                "title": item.title,
-                "author": item.author,
-                "year": item.year,
-                "available": item.available,
-                "id": item.id,
-            }
-            if isinstance(item, (Book, Magazine)):
-                entry["genre"] = item.genre
-            if isinstance(item, DVD):
-                entry["duration"] = item.duration
-            items_data.append(entry)
-
-        try:
-            with open(self.items_file, "w", encoding="utf-8") as f:
-                json.dump(items_data, f, indent=2)
-            with open(self.users_file, "w", encoding="utf-8") as f:
-                json.dump(self.users, f, indent=2)
-        except OSError as exc:
-            raise IOError("Failed to save data") from exc
-
-    def display_all_items(self) -> None:
-        """
-        Display all items in the library.
-        Prints formatted information about each item including availability status.
-        """
-        # TODO: Implement formatted display of all items
-        pass
-
-    def add_item(self, item: LibraryItem) -> bool:
+    def add_item(self, item):
         """
         Add a new item to the library.
         Args:
@@ -102,23 +33,10 @@ class Library:
         Raises:
             ValueError: If item with same ID already exists
         """
-        # TODO: Implement item addition with duplicate ID check
-        pass
+        # FIXME: exeption handling
+        self.__item.append(item)
 
-    def remove_item(self, item_id: str) -> bool:
-        """
-        Remove an item from the library.
-        Args:
-            item_id: ID of the item to remove
-        Returns:
-            bool: True if item was removed successfully, False otherwise
-        Raises:
-            ItemNotFoundError: If item doesn't exist
-        """
-        # TODO: Implement item removal with existence check
-        pass
-
-    def update_item(self, item_id: str, **kwargs) -> bool:
+    def update_item(self, item, new_item):
         """
         Update an item's attributes.
         Args:
@@ -132,61 +50,20 @@ class Library:
         # TODO: Implement item attribute updates
         pass
 
-    def search_item_by_id(self, item_id: str) -> LibraryItem:
+    def remove_item(self, item):
         """
-        Search for an item by its ID.
+        Remove an item from the library.
         Args:
-            item_id: ID of the item to find
+            item_id: ID of the item to remove
         Returns:
-            LibraryItem: The found item
+            bool: True if item was removed successfully, False otherwise
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # TODO: Implement item search by ID
-        pass
+        # FIXME: exeption handling
+        self.items.remove(item)
 
-    def search_item_by_title(self, title: str) -> list[LibraryItem]:
-        """
-        Search for items by title.
-        Args:
-            title: Title to search for
-        Returns:
-            list[LibraryItem]: List of items matching the title
-        """
-        # TODO: Implement case-insensitive title search
-        pass
-
-    def search_item_by_author(self, author: str) -> list[LibraryItem]:
-        """
-        Search for items by author.
-        Args:
-            author: Author name to search for
-        Returns:
-            list[LibraryItem]: List of items by the author
-        """
-        # TODO: Implement case-insensitive author search
-        pass
-
-    def search_item_by_type(self, item_type: str) -> list[LibraryItem]:
-        """
-        Search for items by type (Book, Magazine, DVD).
-        Args:
-            item_type: Type of item to search for
-        Returns:
-            list[LibraryItem]: List of items of the specified type
-        """
-        # TODO: Implement type-based item filtering
-        pass
-
-    def display_all_users(self) -> None:
-        """
-        Display all users in the library.
-        Prints formatted information about each user including their borrowed items.
-        """
-        # TODO: Implement formatted display of all users
-        pass
-
-    def add_user(self, user: User) -> bool:
+    def add_user(self, user):
         """
         Add a new user to the library.
         Args:
@@ -196,10 +73,10 @@ class Library:
         Raises:
             ValueError: If user with same ID already exists
         """
-        # TODO: Implement user addition with duplicate ID check
-        pass
-
-    def remove_user(self, user_id: str) -> bool:
+        # FIXME: exeption handling
+        self.__users.append(user)
+    
+    def remove_user(self, user):
         """
         Remove a user from the library.
         Args:
@@ -209,10 +86,11 @@ class Library:
         Raises:
             UserNotFoundError: If user doesn't exist
         """
-        # TODO: Implement user removal with existence check
+        # FIXME: exeption handling
+        self.users.remove(user)
         pass
 
-    def update_user(self, user_id: str, **kwargs) -> bool:
+    def update_user(self, user, new_user):
         """
         Update a user's attributes.
         Args:
@@ -226,40 +104,122 @@ class Library:
         # TODO: Implement user attribute updates
         pass
 
-    def search_user_by_id(self, user_id: str) -> User:
+    def __create_item(self, item):
+        item_type = item.get("type")
+        if item_type == "Book":
+            item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+        elif item_type == "Magazine":
+            item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+        elif item_type == "DVD":
+            item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+        return item_obj
+    
+    def __load_items(self):
         """
-        Search for a user by their ID.
-        Args:
-            user_id: ID of the user to find
-        Returns:
-            User: The found user
-        Raises:
-            UserNotFoundError: If user doesn't exist
+        Load items from JSON file.
+        Reads items.json to populate the library's items list.
         """
-        # TODO: Implement user search by ID
-        pass
+        self.__items = []  # Clearing the items list to avoid duplicates
+        # FIXME: exeption handling for file and data
+        if os.path.exists(self.__items_file):
+            with open(self.__items_file, "r", encoding="utf-8") as f:
+                items_data = json.load(f)
 
-    def search_user_by_first_name(self, first_name: str) -> list[User]:
-        """
-        Search for users by first name.
-        Args:
-            first_name: First name to search for
-        Returns:
-            list[User]: List of users with matching first name
-        """
-        # TODO: Implement case-insensitive first name search
-        pass
+            for item in items_data:
+                item_obj = self.__create_item(item)
+                self.add_item(item_obj)
 
-    def search_user_by_last_name(self, last_name: str) -> list[User]:
+    def __load_users(self):
         """
-        Search for users by last name.
-        Args:
-            last_name: Last name to search for
-        Returns:
-            list[User]: List of users with matching last name
+        Loads users from JSON file.
+        Reads users.json to populate the library's users list.
         """
-        # TODO: Implement case-insensitive last name search
-        pass
+        self.__users = []  # Clearing the items list to avoid duplicates
+
+        # FIXME: exeption handling for file and data
+        if os.path.exists(self.__users_file):
+            with open(self.__users_file, "r", encoding="utf-8") as f:
+                users_data = json.load(f)
+
+            for user in users_data:
+                user_obj = User(user["id"], user["first_name"], user["last_name"])
+
+                # FIXME: insure compatibility with User class
+                # Load borrowed items if they exist
+                if "borrowed_items" in user:
+                    for item_id in user["borrowed_items"]:
+                        user_obj.borrow_item(item_id)
+                
+                self.add_user(user_obj)
+
+    def load_data(self):
+        """
+        Load library data from JSON files.
+        Reads items.json and users.json to populate the library's items and users.
+        Raises FileNotFoundError if files don't exist.
+        """
+        self.__load_items()
+        self.__load_users()
+
+
+    def __item_entry(self, item):
+        entry = {
+                "type": item.__class__.__name__,
+                "title": item.title,
+                "author": item.author,
+                "year": item.year,
+                "available": item.available,
+                "id": item.id,
+            }
+        if isinstance(item, (Book, Magazine)):
+            entry["genre"] = item.genre
+        if isinstance(item, DVD):
+            entry["duration"] = item.duration
+        return entry
+    
+    def __user_entry(self, user):
+        entry = {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "borrowed_items": user.borrowed_items
+        }
+        return entry
+    
+    def __save_items(self):
+        items_data = []
+        for item in self.__items:
+            entry = self.__item_entry(item)
+            items_data.append(entry)
+
+        # FIXME: add better exeption handling for files and data
+        try:
+            with open(self.__items_file, "w", encoding="utf-8") as f:
+                json.dump(items_data, f, indent=2)
+        except OSError as exc:
+            raise IOError("Failed to save data") from exc
+
+    def __save_users(self):
+        users_data = []
+        for user in self.__users:
+            entry = self.__user_entry(user)
+            users_data.append(entry)
+
+        # FIXME: add better exeption handling for files and data
+        try:
+            with open(self.__users_file, "w", encoding="utf-8") as f:
+                json.dump(users_data, f, indent=2)
+        except OSError as exc:
+            raise IOError("Failed to save data") from exc
+
+    def save_data(self):
+        """
+        Saves library data to JSON files.
+        Writes current items and users to items.json and users.json respectively.
+        Raises IOError if writing to files fails.
+        """
+        self.__save_items()
+        self.__save_users()
 
     def borrow_item(self, user_id: str, item_id: str) -> bool:
         """
