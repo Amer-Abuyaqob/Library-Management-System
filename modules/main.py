@@ -4,10 +4,21 @@ class Main:
     def __init__(self):
         library = Library()
     
+
+    def items_view_menu(self):
+        print("Items Viewing Menu")
+        print("1- View all items")
+        print("2- View by type")
+        print("3- View by author")
+        print("4- View by title")
+        print("5- View by item_id")
+        print("6- Back")
+        # TODO: self.items_view_options()
+
     def items_options(self):
         # FIXME: exeption handling for user's option
-        main_option = int(input("Your Choice is: "))
-        match main_option:
+        items_option = int(input("Your Choice is: "))
+        match items_option:
             case 1:
                 pass # TODO: self.items_view_menu()
             case 2:
@@ -26,9 +37,9 @@ class Main:
         print("3- Remove items")
         print("4- Update items")
         print("5- Back")
-        self.items_option()
+        self.items_options()
 
-    def main_option(self):
+    def main_options(self):
         # FIXME: exeption handling for user's option
         main_option = int(input("Your Choice is: "))
         match main_option:
@@ -47,7 +58,7 @@ class Main:
         print("2- Users Menu")
         print("3- Borrow/Return Menu")
         print("4- Save and Exit")
-        self.main_option()
+        self.main_options()
 
     def run(self):
         print("Welcome to LMS")
