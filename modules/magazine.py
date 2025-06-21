@@ -11,7 +11,7 @@ class Magazine(LibraryItem):
 
     def _item_id(self):
         """
-        Auto generation of item IDs bassed on the item's type
+        Auto generation of item IDs based on the item's type
         Format: T-AA-YYYY-N
             T: Item's type -> M: magazine
             AA: Author's first name initials

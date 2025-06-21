@@ -76,7 +76,7 @@ class Main:
         self.items_summary(books, dvds, magazines)
 
     def items_view_type(self):
-        # FIXME: exeption handling for user's input (Book, DVD, Magazine)
+        # FIXME: exception handling for user's input (Book, DVD, Magazine)
         type = input("View all items of type: ")
         found = False
         match type:
@@ -102,7 +102,7 @@ class Main:
             print(f"No items found of type: {type}")
                         
     def items_view_author(self):
-        # FIXME: exeption handling for user's input (author's format)
+        # FIXME: exception handling for user's input (author's format)
         author = input("View all items of author: ")
         found = False
         for item in self.library.items:
@@ -113,7 +113,7 @@ class Main:
             print(f"No items found by author: {author}")
 
     def items_view_title(self):
-        # FIXME: exeption handling for user's input (title's format)
+        # FIXME: exception handling for user's input (title's format)
         title = input("View all items of title: ")
         found = False
         for item in self.library.items:
@@ -124,7 +124,7 @@ class Main:
             print(f"No items found with title: {title}")
 
     def items_view_id(self):
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         item_id = input("View all item of id: ")
         found = False
         for item in self.library.items:
@@ -135,7 +135,7 @@ class Main:
             print(f"No item found with ID: {item_id}")
 
     def items_view_options(self):
-        # FIXME: exeption handling for user's option
+        # FIXME: exception handling for user's option
         items_view_option = int(input("Your Choice is: "))
         match items_view_option:
             case 1:
@@ -165,7 +165,7 @@ class Main:
         self.items_view_options()
 
     def get_item_data(self):
-        # FIXME: exeption handling for user's input (Book, DVD, Magazine)
+        # FIXME: exception handling for user's input (Book, DVD, Magazine)
         type = input("Item type: ")
         title = input(f"{type} title: ")
         author = input(f"{type} author: ")
@@ -177,17 +177,17 @@ class Main:
         available = parse_bool_input(f"{type} available (True/False or Yes/No): ")
         match type:
             case "Book":
-                # FIXME: exeption handling for user input
+                # FIXME: exception handling for user input
                 genre = input(f"{type} genre: ")
                 item = Book(title, author, year, available, genre)
 
             case "DVD": 
-                # FIXME: exeption handling for user input
+                # FIXME: exception handling for user input
                 duration = int(input(f"{type} duration in minutes: "))
                 item = DVD(title, author, year, available, duration)
 
             case "Magazine":
-                # FIXME: exeption handling for user input
+                # FIXME: exception handling for user input
                 genre = input(f"{type} genre: ")
                 item = Magazine(title, author, year, available, genre)
         return item
@@ -198,7 +198,7 @@ class Main:
         self.library.add_item(item)   
 
     def get_item(self, item_id):
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         for item in self.library.items:
             if item.id == item_id:
                 return item
@@ -206,7 +206,7 @@ class Main:
 
     def items_remove_menu(self):
         print("Removing an Item")
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
         if item:
@@ -217,7 +217,7 @@ class Main:
 
     def items_update_menu(self):
         print("Updating an Item")
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
         if item:
@@ -230,14 +230,14 @@ class Main:
             print(f"No item found with ID: {item_id}") 
 
     def get_user(self, user_id):
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         for user in self.library.users:
             if user.id == user_id:
                 return user
         return None
 
     def get_user_data(self):
-        # FIXME: exeption handling for user's input
+        # FIXME: exception handling for user's input
         user_id = input("User ID: ")
         first_name = input("First name: ")
         last_name = input("Last name: ")
@@ -255,7 +255,7 @@ class Main:
 
     def users_remove_menu(self):
         print("Removing a User")
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         user_id = input("User ID: ")
         user = self.get_user(user_id)
         if user:
@@ -266,7 +266,7 @@ class Main:
 
     def users_update_menu(self):
         print("Updating a User")
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         user_id = input("User ID: ")
         user = self.get_user(user_id)
         if user:
@@ -280,7 +280,7 @@ class Main:
             print(f"No user found with ID: {user_id}")
 
     def users_view_first_name(self):
-        # FIXME: exeption handling for user's input (first name's format)
+        # FIXME: exception handling for user's input (first name's format)
         first_name = input("View all users with first name: ")
         found = False
         for user in self.library.users:
@@ -291,7 +291,7 @@ class Main:
             print(f"No users found with first name: {first_name}")
 
     def users_view_last_name(self):
-        # FIXME: exeption handling for user's input (last name's format)
+        # FIXME: exception handling for user's input (last name's format)
         last_name = input("View all users with last name: ")
         found = False
         for user in self.library.users:
@@ -302,7 +302,7 @@ class Main:
             print(f"No users found with last name: {last_name}")
 
     def users_view_id(self):
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         user_id = input("View user with ID: ")
         found = False
         for user in self.library.users:
@@ -313,7 +313,7 @@ class Main:
             print(f"No user found with ID: {user_id}")
 
     def users_view_options(self):
-        # FIXME: exeption handling for user's option
+        # FIXME: exception handling for user's option
         users_view_option = int(input("Your Choice is: "))
         match users_view_option:
             case 1:
@@ -340,7 +340,7 @@ class Main:
         self.users_view_options()
 
     def items_options(self):
-        # FIXME: exeption handling for user's option
+        # FIXME: exception handling for user's option
         items_option = int(input("Your Choice is: "))
         match items_option:
             case 1:
@@ -368,7 +368,7 @@ class Main:
                 break
 
     def users_options(self):
-        # FIXME: exeption handling for user's option
+        # FIXME: exception handling for user's option
         users_option = int(input("Your Choice is: "))
         match users_option:
             case 1:
@@ -397,7 +397,7 @@ class Main:
 
     def borrow_item_menu(self):
         print("Borrowing Menu")
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
         user_id = input("User ID: ")
@@ -413,7 +413,7 @@ class Main:
 
     def return_item_menu(self):
         print("Returning Menu")
-        # FIXME: exeption handling for user's input (id's format)
+        # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
         user_id = input("User ID: ")
@@ -428,7 +428,7 @@ class Main:
             print(f"User '{user_id}' returned Item '{item_id}' successfully")
 
     def borrow_return_options(self):
-        # FIXME: exeption handling for user's option
+        # FIXME: exception handling for user's option
         borrow_return_option = int(input("Your Choice is: "))
         match borrow_return_option:
             case 1:
@@ -453,7 +453,7 @@ class Main:
                 break
 
     def main_options(self):
-        # FIXME: exeption handling for user's option
+        # FIXME: exception handling for user's option
         main_option = int(input("Your Choice is: "))
         match main_option:
             case 1:
