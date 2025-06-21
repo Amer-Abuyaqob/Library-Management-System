@@ -1,6 +1,4 @@
 from library_item import LibraryItem
-from user import User
-from reservable import Reservable
 
 class Magazine(LibraryItem):
     counter = 0
