@@ -179,8 +179,8 @@ class Main:
             
     def items_add_menu(self):
         print("Adding an Item")
-        # TODO: item = self.create_item()
-        # TODO: self.library.add_item(item)   
+        item = self.create_item()
+        self.library.add_item(item)   
 
     def items_options(self):
         # FIXME: exeption handling for user's option
