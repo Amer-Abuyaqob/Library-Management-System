@@ -21,3 +21,11 @@ class User:
     @property
     def borrowed_items(self):
         return self.__borrowed_items
+
+    def display_info(self):
+        return f'''
+        User ID: {self.id}
+        First Name: {self.first_name}
+        Last Name: {self.last_name}
+        Borrowed Items: {len(self.borrowed_items)} items
+        '''
