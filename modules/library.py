@@ -50,7 +50,7 @@ class Library:
         # TODO: Implement item attribute updates
         pass
 
-    def remove_item(self, item_id: str) -> bool:
+    def remove_item(self, item):
         """
         Remove an item from the library.
         Args:
@@ -60,8 +60,8 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # TODO: Implement item removal with existence check
-        pass
+        # FIXME: exeption handling
+        self.items.remove(item)
 
     def add_user(self, user):
         """
