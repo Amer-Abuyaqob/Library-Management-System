@@ -4,12 +4,18 @@ class Main:
     def __init__(self):
         library = Library()
     
+    def items_view_all(self):
+        print("Viewing all library items")
+        # TODO: self.view_all_books()
+        # TODO: self.view_all_dvds()
+        # TODO: self.view_all_magazines()
+
     def items_view_options(self):
         # FIXME: exeption handling for user's option
         items_view_option = int(input("Your Choice is: "))
         match items_view_option:
             case 1:
-                pass # TODO: self.items_view_all()
+                self.items_view_all()
             case 2:
                 pass # TODO: self.items_view_type()
             case 3:
@@ -29,14 +35,14 @@ class Main:
         print("4- View by title")
         print("5- View by item_id")
         print("6- Back")
-        # TODO: self.items_view_options()
+        self.items_view_options()
 
     def items_options(self):
         # FIXME: exeption handling for user's option
         items_option = int(input("Your Choice is: "))
         match items_option:
             case 1:
-                pass # TODO: self.items_view_menu()
+                self.items_view_menu()
             case 2:
                 pass # TODO: self.items_add_menu()
             case 3:
