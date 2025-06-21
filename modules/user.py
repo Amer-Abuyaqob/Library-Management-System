@@ -29,3 +29,13 @@ class User:
         Last Name: {self.last_name}
         Borrowed Items: {len(self.borrowed_items)} items
         '''
+    
+    def add_borrowed_item(self, item):
+        """Add an item to the user's borrowed items list."""
+        if item not in self.__borrowed_items:
+            self.__borrowed_items.append(item)
+
+    def remove_borrowed_item(self, item):
+        """Remove an item from the user's borrowed items list."""
+        if item in self.__borrowed_items:
+            self.__borrowed_items.remove(item)
