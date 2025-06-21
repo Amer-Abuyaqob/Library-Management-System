@@ -34,7 +34,7 @@ class Library:
             ValueError: If item with same ID already exists
         """
         # FIXME: exeption handling
-        self.__item.append(item)
+        self.items.append(item)
 
     def update_item(self, item, new_item):
         """
@@ -47,8 +47,9 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # TODO: Implement item attribute updates
-        pass
+        # FIXME: exeption handling
+        index = self.items.index(item)
+        self.items[index] = new_item
 
     def remove_item(self, item):
         """
@@ -74,7 +75,7 @@ class Library:
             ValueError: If user with same ID already exists
         """
         # FIXME: exeption handling
-        self.__users.append(user)
+        self.users.append(user)
     
     def remove_user(self, user):
         """
@@ -101,8 +102,9 @@ class Library:
         Raises:
             UserNotFoundError: If user doesn't exist
         """
-        # TODO: Implement user attribute updates
-        pass
+        # FIXME: exeption handling
+        index = self.users.index(user)
+        self.users[index] = new_user
 
     def __create_item(self, item):
         item_type = item.get("type")
@@ -144,6 +146,7 @@ class Library:
             for user in users_data:
                 user_obj = User(user["id"], user["first_name"], user["last_name"])
 
+                # FIXME: currently causes error 
                 # FIXME: insure compatibility with User class
                 # Load borrowed items if they exist
                 if "borrowed_items" in user:
@@ -221,7 +224,7 @@ class Library:
         self.__save_items()
         self.__save_users()
 
-    def borrow_item(self, user_id: str, item_id: str) -> bool:
+    def borrow_item(self, user, item):
         """
         Borrow an item for a user.
         Args:
@@ -237,7 +240,7 @@ class Library:
         # TODO: Implement item borrowing with all necessary checks
         pass
 
-    def return_item(self, user_id: str, item_id: str) -> bool:
+    def return_item(self, user, item):
         """
         Return an item from a user.
         Args:
