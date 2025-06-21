@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 class LibraryItem(ABC):
-    def __init__(self, title, author, year, available):
+    def __init__(self, title, author, year, available=True):
         super().__init__()
         self.__title = title
         self.__author = author
@@ -68,10 +68,9 @@ class LibraryItem(ABC):
             T: Item's type -> {B: book, D: DVD, M: Magazine}
             AA: Author's first name initials
             YYYY: Publish year
-            N: Item number
+            N: Item number (implemented by subclasses)
         """
         return f"{self.__author_initials()}-{self.__year}"
     
     def __author_initials(self):
-        # FIXME: add exeption handling for names with less than 2 chars
         return f"{self.__author[0].upper()}{self.__author[1].lower()}"
