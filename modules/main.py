@@ -182,6 +182,11 @@ class Main:
         item = self.create_item()
         self.library.add_item(item)   
 
+    def items_remove_menu(self):
+        print("Removing an Item")
+        item_id = input("Item id: ")
+        # TODO: self.library.remove_item(item_id)
+
     def items_options(self):
         # FIXME: exeption handling for user's option
         items_option = int(input("Your Choice is: "))
@@ -191,7 +196,7 @@ class Main:
             case 2:
                 self.items_add_menu()
             case 3:
-                pass # TODO: self.items_remove_menu()
+                self.items_remove_menu()
             case 4:
                 pass # TODO: self.items_update_menu()
             case 5:
