@@ -47,8 +47,9 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # TODO: Implement item attribute updates
-        pass
+        # FIXME: exeption handling
+        index = self.items.index(item)
+        self.items[index] = new_item
 
     def remove_item(self, item):
         """
@@ -101,8 +102,9 @@ class Library:
         Raises:
             UserNotFoundError: If user doesn't exist
         """
-        # TODO: Implement user attribute updates
-        pass
+        # FIXME: exeption handling
+        index = self.users.index(user)
+        self.users[index] = new_user
 
     def __create_item(self, item):
         item_type = item.get("type")
