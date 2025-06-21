@@ -479,3 +479,6 @@ class Main:
     def run(self):
         print("Welcome to LMS")
         self.main_menu()
+        # Persist any changes made during the session
+        self.library.save_data()
+
