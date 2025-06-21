@@ -43,6 +43,19 @@ class Library:
         # TODO: Implement item attribute updates
         pass
 
+    def remove_item(self, item_id: str) -> bool:
+        """
+        Remove an item from the library.
+        Args:
+            item_id: ID of the item to remove
+        Returns:
+            bool: True if item was removed successfully, False otherwise
+        Raises:
+            ItemNotFoundError: If item doesn't exist
+        """
+        # TODO: Implement item removal with existence check
+        pass
+
     def add_user(self, user):
         """
         Add a new user to the library.
@@ -202,7 +215,6 @@ class Library:
         self.__save_items()
         self.__save_users()
 
-
     def display_all_items(self) -> None:
         """
         Display all items in the library.
@@ -210,19 +222,6 @@ class Library:
         """
         # FIXME: might be moved to Main class
         # TODO: Implement formatted display of all items
-        pass
-
-    def remove_item(self, item_id: str) -> bool:
-        """
-        Remove an item from the library.
-        Args:
-            item_id: ID of the item to remove
-        Returns:
-            bool: True if item was removed successfully, False otherwise
-        Raises:
-            ItemNotFoundError: If item doesn't exist
-        """
-        # TODO: Implement item removal with existence check
         pass
 
     def search_item_by_id(self, item_id: str) -> LibraryItem:
