@@ -159,6 +159,23 @@ class Main:
         available = bool(input(f"{type} available (True/False): "))
         return type, title, author, year, available
 
+    def create_item(self):
+        type, title, author, year, available = self.get_item_data()
+        match type:
+            case "Book":
+                # FIXME: exeption handling for user input
+                genre = input(f"{type} genre: ")
+                item = Book(title, author, year, available, genre)
+
+            case "DVD": 
+                # FIXME: exeption handling for user input
+                duration = int(input(f"{type} duration in minutes: "))
+
+            case "Magazine":
+                # FIXME: exeption handling for user input
+                genre = input(f"{type} genre: ")
+                item = Magazine(title, author, year, available, genre)
+        return item
             
     def items_add_menu(self):
         print("Adding an Item")
