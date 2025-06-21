@@ -13,8 +13,9 @@ class Reservable(ABC):
     @abstractmethod
     def reserved_by(self) -> Optional[User]:
         """Return the user who reserved this item, if any."""
+        pass
 
     @abstractmethod
     def reserve(self, user: User) -> None:
         """Reserve the item for ``user``."""
-
+        pass
