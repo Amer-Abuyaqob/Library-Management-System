@@ -150,6 +150,14 @@ class Main:
         print("6- Back")
         self.items_view_options()
 
+    def get_item_data(self):
+        # FIXME: exeption handling for user's input (Book, DVD, Magazine)
+        type = input("Item type: ")
+        title = input(f"{type} title: ")
+        author = input(f"{type} author: ")
+        year = int(input(f"{type} publish year: "))
+        available = bool(input(f"{type} available (True/False): "))
+        return type, title, author, year, available
 
             
     def items_add_menu(self):
