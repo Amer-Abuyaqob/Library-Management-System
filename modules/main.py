@@ -39,14 +39,17 @@ class Main:
         print("Viewing all library items")
         books = [], dvds = [], magazines = [] 
         self.group_by_type(books, dvds, magazines)
+        # FIXME: print a message if there's no info to be displayed
         self.view_all_books(books)
         self.view_all_dvds(dvds)
         self.view_all_magazines(magazines)
+        # FIXME: shouldn't be called if there's no info to be displayed
         self.items_summary(books, dvds, magazines)
 
     def items_view_type(self):
         # FIXME: exeption handling for user's input (Book, DVD, Magazine)
         type = input("View all items of type: ")
+        # FIXME: print a message if there's no info to be displayed
         match type:
             case "Book":
                 print("📚 BOOKS")
@@ -64,7 +67,13 @@ class Main:
                     if isinstance(item, Magazine):
                         print(item.display_info())
                         
-
+    def items_view_author(self):
+        # FIXME: exeption handling for user's input (author's format)
+        author = input("View all items of author: ")
+        # FIXME: print a message if there's no info to be displayed
+        for item in self.library.items:
+            if item.author == author:
+                print(item.display_info())
 
     def items_view_options(self):
         # FIXME: exeption handling for user's option
@@ -75,7 +84,7 @@ class Main:
             case 2:
                 self.items_view_type()
             case 3:
-                pass # TODO: self.items_view_author()
+                self.items_view_author()
             case 4:
                 pass # TODO: self.items_view_title()
             case 5:
