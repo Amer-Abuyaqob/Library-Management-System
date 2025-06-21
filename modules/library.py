@@ -15,6 +15,14 @@ class Library:
         self.__users = []
         self.load_data()
 
+    @property
+    def items(self):
+        return self.__items
+    
+    @property
+    def users(self):
+        return self.__users
+
     def add_item(self, item):
         """
         Add a new item to the library.
