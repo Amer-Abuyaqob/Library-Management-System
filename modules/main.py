@@ -215,31 +215,55 @@ class Main:
         else:
             print(f"No item found with ID: {item_id}") 
 
+    def get_user(self, user_id):
+        # FIXME: exeption handling for user's input (id's format)
+        for user in self.library.users:
+            if user.id == user_id:
+                return user
+        return None
 
+    def get_user_data(self):
+        # FIXME: exeption handling for user's input
+        user_id = input("User ID: ")
+        first_name = input("First name: ")
+        last_name = input("Last name: ")
+        return user_id, first_name, last_name
 
-    def items_options(self):
-        # FIXME: exeption handling for user's option
-        items_option = int(input("Your Choice is: "))
-        match items_option:
-            case 1:
-                self.items_view_menu()
-            case 2:
-                self.items_add_menu()
-            case 3:
-                self.items_remove_menu()
-            case 4:
-                self.items_update_menu()
-            case 5:
-                pass # TODO: BACK
+    def create_user(self):
+        user_id, first_name, last_name = self.get_user_data()
+        return User(user_id, first_name, last_name)
 
-    def items_menu(self):
-        print("Items Menu")
-        print("1- View items")
-        print("2- Add items")
-        print("3- Remove items")
-        print("4- Update items")
-        print("5- Back")
-        self.items_options()
+    def users_add_menu(self):
+        print("Adding a User")
+        user = self.create_user()
+        self.library.add_user(user)
+        print(f"User '{user.first_name} {user.last_name}' has been added successfully.")
+
+    def users_remove_menu(self):
+        print("Removing a User")
+        # FIXME: exeption handling for user's input (id's format)
+        user_id = input("User ID: ")
+        user = self.get_user(user_id)
+        if user:
+            self.library.remove_user(user)
+            print(f"User '{user_id}' has been removed successfully.")
+        else:
+            print(f"No user found with ID: {user_id}")
+
+    def users_update_menu(self):
+        print("Updating a User")
+        # FIXME: exeption handling for user's input (id's format)
+        user_id = input("User ID: ")
+        user = self.get_user(user_id)
+        if user:
+            print(f"Current user '{user_id}' info:-")
+            print(user.display_info())
+            print("Input the updated user data:-")
+            new_user = self.create_user()
+            self.library.update_user(user, new_user)
+            print(f"User '{user_id}' has been updated successfully.")
+        else:
+            print(f"No user found with ID: {user_id}")
 
     def users_view_first_name(self):
         # FIXME: exeption handling for user's input (first name's format)
@@ -298,6 +322,30 @@ class Main:
         print("5- Back")
         self.users_view_options()
 
+    def items_options(self):
+        # FIXME: exeption handling for user's option
+        items_option = int(input("Your Choice is: "))
+        match items_option:
+            case 1:
+                self.items_view_menu()
+            case 2:
+                self.items_add_menu()
+            case 3:
+                self.items_remove_menu()
+            case 4:
+                self.items_update_menu()
+            case 5:
+                pass # TODO: BACK
+
+    def items_menu(self):
+        print("Items Menu")
+        print("1- View items")
+        print("2- Add items")
+        print("3- Remove items")
+        print("4- Update items")
+        print("5- Back")
+        self.items_options()
+
     def users_options(self):
         # FIXME: exeption handling for user's option
         users_option = int(input("Your Choice is: "))
@@ -305,11 +353,11 @@ class Main:
             case 1:
                 self.users_view_menu()
             case 2:
-                pass # TODO: self.users_add_menu()
+                self.users_add_menu()
             case 3:
-                pass # TODO: self.users_remove_menu()
+                self.users_remove_menu()
             case 4:
-                pass # TODO: self.users_update_menu()
+                self.users_update_menu()
             case 5:
                 pass # TODO: BACK
 
