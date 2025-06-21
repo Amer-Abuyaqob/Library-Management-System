@@ -88,7 +88,6 @@ class Library:
         """
         # FIXME: exeption handling
         self.users.remove(user)
-        pass
 
     def update_user(self, user, new_user):
         """
