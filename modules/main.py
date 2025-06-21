@@ -75,6 +75,14 @@ class Main:
             if item.author == author:
                 print(item.display_info())
 
+    def items_view_title(self):
+        # FIXME: exeption handling for user's input (title's format)
+        title = input("View all items of title: ")
+        # FIXME: print a message if there's no info to be displayed
+        for item in self.library.items:
+            if item.title == title:
+                print(item.display_info())
+
     def items_view_options(self):
         # FIXME: exeption handling for user's option
         items_view_option = int(input("Your Choice is: "))
@@ -86,7 +94,7 @@ class Main:
             case 3:
                 self.items_view_author()
             case 4:
-                pass # TODO: self.items_view_title()
+                self.items_view_title()
             case 5:
                 pass # TODO: self.items_view_id()
             case 6:
