@@ -1,7 +1,6 @@
 import json
 import os
 
-from library_item import LibraryItem
 from user import User
 from book import Book
 from magazine import Magazine
