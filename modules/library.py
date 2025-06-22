@@ -121,13 +121,12 @@ class Library:
         """
         self.__items = []  # Clearing the items list to avoid duplicates
         # FIXME: exception handling for file and data
-        if os.path.exists(self.__items_file):
-            with open(self.__items_file, "r", encoding="utf-8") as f:
-                items_data = json.load(f)
+        with open(self.__items_file, "r", encoding="utf-8") as f:
+            items_data = json.load(f)
 
-            for item in items_data:
-                item_obj = self.__create_item(item)
-                self.add_item(item_obj)
+        for item in items_data:
+            item_obj = self.__create_item(item)
+            self.add_item(item_obj)
 
     def __load_users(self):
         """
@@ -137,13 +136,12 @@ class Library:
         self.__users = []  # Clearing the items list to avoid duplicates
 
         # FIXME: exception handling for file and data
-        if os.path.exists(self.__users_file):
-            with open(self.__users_file, "r", encoding="utf-8") as f:
-                users_data = json.load(f)
+        with open(self.__users_file, "r", encoding="utf-8") as f:
+            users_data = json.load(f)
 
-            for user in users_data:
-                user_obj = User(user["id"], user["first_name"], user["last_name"], user["borrowed_items"])
-                self.add_user(user_obj)
+        for user in users_data:
+            user_obj = User(user["id"], user["first_name"], user["last_name"], user["borrowed_items"])
+            self.add_user(user_obj)
 
     def load_data(self):
         """
@@ -151,8 +149,11 @@ class Library:
         Reads items.json and users.json to populate the library's items and users.
         Raises FileNotFoundError if files don't exist.
         """
-        self.__load_items()
-        self.__load_users()
+        try:
+            self.__load_items()
+            self.__load_users()
+        except FileNotFoundError as exc:
+            raise FileNotFoundError("Data files not found") from exc
 
 
     def __item_entry(self, item):
@@ -187,6 +188,7 @@ class Library:
 
         # FIXME: add better exception handling for files and data
         try:
+            os.makedirs(os.path.dirname(self.__items_file), exist_ok=True)
             with open(self.__items_file, "w", encoding="utf-8") as f:
                 json.dump(items_data, f, indent=2)
         except OSError as exc:
@@ -200,6 +202,7 @@ class Library:
 
         # FIXME: add better exception handling for files and data
         try:
+            os.makedirs(os.path.dirname(self.__users_file), exist_ok=True)
             with open(self.__users_file, "w", encoding="utf-8") as f:
                 json.dump(users_data, f, indent=2)
         except OSError as exc:
