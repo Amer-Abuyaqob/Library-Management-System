@@ -240,6 +240,8 @@ class Library:
             self.__load_users()
         except FileNotFoundError as exc:
             raise FileNotFoundError("Data files not found") from exc
+        finally:
+            print("Finished loading data")
 
 
     def __item_entry(self, item):
@@ -279,6 +281,8 @@ class Library:
                 json.dump(items_data, f, indent=2)
         except OSError as exc:
             raise IOError("Failed to save data") from exc
+        finally:
+            print("Finished saving items")
 
     def __save_users(self):
         users_data = []
@@ -293,6 +297,8 @@ class Library:
                 json.dump(users_data, f, indent=2)
         except OSError as exc:
             raise IOError("Failed to save data") from exc
+        finally:
+            print("Finished saving users")
 
     def save_data(self):
         """
