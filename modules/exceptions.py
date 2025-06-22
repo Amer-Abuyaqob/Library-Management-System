@@ -1,3 +1,4 @@
+
 class LibraryError(Exception):
     """Base class for library related exceptions."""
     pass
