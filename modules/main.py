@@ -185,7 +185,15 @@ class Main:
         type = input("Item type: ")
         title = input(f"{type} title: ")
         author = input(f"{type} author: ")
-        year = int(input(f"{type} publish year: "))
+        while True:
+            try:
+                year = int(input(f"{type} publish year: "))
+            except ValueError:
+                print("Publish year must be a number. Please try again.")
+                continue
+            finally:
+                pass
+            break
         return type, title, author, year
 
     def create_item(self):
@@ -197,9 +205,17 @@ class Main:
                 genre = input(f"{type} genre: ")
                 item = Book(title, author, year, available, genre)
 
-            case "DVD": 
+            case "DVD":
                 # FIXME: exception handling for user input
-                duration = int(input(f"{type} duration in minutes: "))
+                while True:
+                    try:
+                        duration = int(input(f"{type} duration in minutes: "))
+                    except ValueError:
+                        print("Duration must be a number. Please try again.")
+                        continue
+                    finally:
+                        pass
+                    break
                 item = DVD(title, author, year, available, duration)
 
             case "Magazine":
