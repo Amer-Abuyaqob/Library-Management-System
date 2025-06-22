@@ -126,13 +126,78 @@ class Library:
         self.users[index] = new_user
 
     def __create_item(self, item):
-        item_type = item.get("type")
+        """Create a ``LibraryItem`` from a raw dictionary.
+
+        The method validates that ``item`` contains the required keys with
+        values of the correct type before instantiating the appropriate class.
+
+        Parameters
+        ----------
+        item: dict
+            Dictionary describing the item as read from the JSON file.
+
+        Returns
+        -------
+        LibraryItem
+
+        Raises
+        ------
+        ValueError
+            If the dictionary is missing fields or if a field has an invalid
+            type or value.
+        """
+
+        if not isinstance(item, dict):
+            raise ValueError("Item entry must be a dictionary")
+
+        # Common mandatory fields for all items
+        required_fields = {
+            "type": str,
+            "title": str,
+            "author": str,
+            "year": int,
+            "available": bool,
+        }
+
+        for field, expected_type in required_fields.items():
+            if field not in item:
+                raise ValueError(f"Missing required field '{field}' in item entry")
+            if not isinstance(item[field], expected_type):
+                raise ValueError(
+                    f"Field '{field}' must be of type {expected_type.__name__}"
+                )
+
+        # Optional validation for reserved or borrowed_items fields
+        if "reserved" in item and not isinstance(item["reserved"], bool):
+            raise ValueError("'reserved' must be a boolean if provided")
+        if "borrowed_items" in item:
+            borrowed = item["borrowed_items"]
+            if not isinstance(borrowed, list) or not all(isinstance(i, str) for i in borrowed):
+                raise ValueError("'borrowed_items' must be a list of strings")
+
+        item_type = item["type"]
+
         if item_type == "Book":
-            item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+            if "genre" not in item or not isinstance(item["genre"], str):
+                raise ValueError("Book entry must have a 'genre' string field")
+            item_obj = Book(
+                item["title"], item["author"], item["year"], item["available"], item["genre"]
+            )
         elif item_type == "Magazine":
-            item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+            if "genre" not in item or not isinstance(item["genre"], str):
+                raise ValueError("Magazine entry must have a 'genre' string field")
+            item_obj = Magazine(
+                item["title"], item["author"], item["year"], item["available"], item["genre"]
+            )
         elif item_type == "DVD":
-            item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+            if "duration" not in item or not isinstance(item["duration"], int):
+                raise ValueError("DVD entry must have a numeric 'duration' field")
+            item_obj = DVD(
+                item["title"], item["author"], item["year"], item["available"], item["duration"]
+            )
+        else:
+            raise ValueError(f"Unknown item type '{item_type}'")
+
         return item_obj
     
     def __load_items(self):
