@@ -1,6 +1,7 @@
 from library_item import LibraryItem
 from user import User
 from reservable import Reservable
+from errors import ItemNotAvailableError
 
 class DVD(LibraryItem, Reservable):
     counter = 0
@@ -51,4 +52,13 @@ class DVD(LibraryItem, Reservable):
 
     def reserve(self, user: User) -> None:
         """Mark the DVD as reserved by ``user``."""
+        if user is None or not isinstance(user, User):
+            raise TypeError("user must be a non-null User instance")
+        if self.__reserved is not None:
+            raise ItemNotAvailableError(
+                f"DVD '{self.id}' is already reserved")
         self.__reserved = user
+
+    def cancel_reservation(self) -> None:
+        """Cancel any existing reservation."""
+        self.__reserved = None

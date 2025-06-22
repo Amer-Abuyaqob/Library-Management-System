@@ -19,3 +19,8 @@ class Reservable(ABC):
     def reserve(self, user: User) -> None:
         """Reserve the item for ``user``."""
         pass
+
+    @abstractmethod
+    def cancel_reservation(self) -> None:
+        """Cancel any existing reservation on the item."""
+        pass

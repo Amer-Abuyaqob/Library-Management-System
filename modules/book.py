@@ -1,6 +1,7 @@
 from library_item import LibraryItem
 from user import User
 from reservable import Reservable
+from errors import ItemNotAvailableError
 
 class Book(LibraryItem, Reservable):
     counter = 0  # counts every object created from this class
@@ -51,4 +52,13 @@ class Book(LibraryItem, Reservable):
 
     def reserve(self, user: User) -> None:
         """Mark the book as reserved by ``user``."""
+        if user is None or not isinstance(user, User):
+            raise TypeError("user must be a non-null User instance")
+        if self.__reserved is not None:
+            raise ItemNotAvailableError(
+                f"Book '{self.id}' is already reserved")
         self.__reserved = user
+
+    def cancel_reservation(self) -> None:
+        """Cancel any existing reservation."""
+        self.__reserved = None
