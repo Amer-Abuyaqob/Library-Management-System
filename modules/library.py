@@ -226,7 +226,18 @@ class Library:
             users_data = json.load(f)
 
         for user in users_data:
-            user_obj = User(user["id"], user["first_name"], user["last_name"], user["borrowed_items"])
+            user_obj = User(user["id"], user["first_name"], user["last_name"])
+
+            # Add borrowed items by matching IDs with already loaded items
+            for item_id in user.get("borrowed_items", []):
+                # Find the corresponding item in the library
+                for item in self.items:
+                    if item.id == item_id:
+                        user_obj.add_borrowed_item(item)
+                        # Keep the item's availability in sync with the user
+                        item.available = False
+                        break
+
             self.add_user(user_obj)
 
     def load_data(self):
