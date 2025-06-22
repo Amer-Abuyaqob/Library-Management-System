@@ -7,6 +7,10 @@ class Book(LibraryItem, Reservable):
 
     def __init__(self, title, author, year, available, genre):
         super().__init__(title, author, year, available)
+
+        if not isinstance(genre, str) or not genre.strip():
+            raise ValueError("genre must be a non-empty string")
+
         self.__genre = genre
         self.__reserved: User | None = None
         Book.counter += 1

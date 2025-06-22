@@ -5,7 +5,13 @@ from user import User
 from book import Book
 from magazine import Magazine
 from dvd import DVD
-from exceptions import ItemNotFoundError, UserNotFoundError
+
+from exceptions import (
+    ItemNotFoundError,
+    UserNotFoundError,
+    ItemNotAvailableError,
+    ItemNotBorrowedError,
+)
 
 class Library:
     def __init__(self):
@@ -238,19 +244,21 @@ class Library:
         Returns:
             bool: True if item was borrowed successfully, False otherwise
         Raises:
-            ValueError: If user doesn't exist, item doesn't exist, or item is not available
+            UserNotFoundError: If the user doesn't exist
+            ItemNotFoundError: If the item doesn't exist
+            ItemNotAvailableError: If the item is not available
         """
         # Check if user exists in the library
         if user not in self.users:
-            raise ValueError(f"User '{user.id}' not found in the library")
+            raise UserNotFoundError(f"User '{user.id}' not found in the library")
         
         # Check if item exists in the library
         if item not in self.items:
-            raise ValueError(f"Item '{item.id}' not found in the library")
+            raise ItemNotFoundError(f"Item '{item.id}' not found in the library")
         
         # Check if item is available
         if not item.available:
-            raise ValueError(f"Item '{item.id}' is not available for borrowing")
+            raise ItemNotAvailableError(f"Item '{item.id}' is not available for borrowing")
         
         # Add item to user's borrowed items
         user.add_borrowed_item(item)
@@ -269,19 +277,23 @@ class Library:
         Returns:
             bool: True if item was returned successfully, False otherwise
         Raises:
-            ValueError: If user doesn't exist, item doesn't exist, or user hasn't borrowed the item
+            UserNotFoundError: If the user doesn't exist
+            ItemNotFoundError: If the item doesn't exist
+            ItemNotBorrowedError: If the user hasn't borrowed the item
         """
         # Check if user exists in the library
         if user not in self.users:
-            raise ValueError(f"User '{user.id}' not found in the library")
+            raise UserNotFoundError(f"User '{user.id}' not found in the library")
         
         # Check if item exists in the library
         if item not in self.items:
-            raise ValueError(f"Item '{item.id}' not found in the library")
+            raise ItemNotFoundError(f"Item '{item.id}' not found in the library")
         
         # Check if user has borrowed the item
         if item not in user.borrowed_items:
-            raise ValueError(f"User '{user.id}' has not borrowed item '{item.id}'")
+            raise ItemNotBorrowedError(
+                f"User '{user.id}' has not borrowed item '{item.id}'"
+            )
         
         # Remove item from user's borrowed items
         user.remove_borrowed_item(item)
