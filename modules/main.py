@@ -10,6 +10,21 @@ from exceptions import (
 )
 
 
+def print_menu_header(title: str) -> None:
+    """Print a formatted menu header."""
+    print()
+    separator = "=" * 30
+    print(separator)
+    print(title.center(len(separator)))
+    print(separator)
+
+
+def print_menu_options(options: list[str]) -> None:
+    """Print menu options using a consistent style."""
+    for option in options:
+        print(option)
+
+
 def parse_bool_input(prompt: str) -> bool:
     """Prompt the user for a boolean value until a valid entry is provided."""
     while True:
@@ -142,7 +157,7 @@ class Main:
     def items_view_options(self):
         while True:
             try:
-                items_view_option = int(input("Your Choice is: "))
+                items_view_option = int(input("Enter choice: "))
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
@@ -171,14 +186,17 @@ class Main:
                     print("Invalid choice. Please try again.")
 
     def items_view_menu(self):
-        print("Items Viewing Menu")
-        print("1- View all items")
-        print("2- View by type")
-        print("3- View by author")
-        print("4- View by title")
-        print("5- View by item_id")
-        print("6- Back")
+        print_menu_header("Items Viewing Menu")
+        print_menu_options([
+            "1- View all items",
+            "2- View by type",
+            "3- View by author",
+            "4- View by title",
+            "5- View by item_id",
+            "6- Back",
+        ])
         self.items_view_options()
+        print()
 
     def get_item_data(self):
         # FIXME: exception handling for user's input (Book, DVD, Magazine)
@@ -225,9 +243,10 @@ class Main:
         return item
             
     def items_add_menu(self):
-        print("Adding an Item")
+        print_menu_header("Adding an Item")
         item = self.create_item()
-        self.library.add_item(item)   
+        self.library.add_item(item)
+        print()
 
     def get_item(self, item_id):
         # FIXME: exception handling for user's input (id's format)
@@ -237,7 +256,7 @@ class Main:
         return None
 
     def items_remove_menu(self):
-        print("Removing an Item")
+        print_menu_header("Removing an Item")
         # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
@@ -246,9 +265,10 @@ class Main:
             print(f"Item '{item_id}' has been removed successfully.")
         else:
             print(f"No item found with ID: {item_id}")
+        print()
 
     def items_update_menu(self):
-        print("Updating an Item")
+        print_menu_header("Updating an Item")
         # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
@@ -259,7 +279,8 @@ class Main:
             new_item = self.create_item()
             self.library.update_item(item, new_item)
         else:
-            print(f"No item found with ID: {item_id}") 
+            print(f"No item found with ID: {item_id}")
+        print()
 
     def get_user(self, user_id):
         # FIXME: exception handling for user's input (id's format)
@@ -280,13 +301,14 @@ class Main:
         return User(user_id, first_name, last_name)
 
     def users_add_menu(self):
-        print("Adding a User")
+        print_menu_header("Adding a User")
         user = self.create_user()
         self.library.add_user(user)
         print(f"User '{user.first_name} {user.last_name}' has been added successfully.")
+        print()
 
     def users_remove_menu(self):
-        print("Removing a User")
+        print_menu_header("Removing a User")
         # FIXME: exception handling for user's input (id's format)
         user_id = input("User ID: ")
         user = self.get_user(user_id)
@@ -295,9 +317,10 @@ class Main:
             print(f"User '{user_id}' has been removed successfully.")
         else:
             print(f"No user found with ID: {user_id}")
+        print()
 
     def users_update_menu(self):
-        print("Updating a User")
+        print_menu_header("Updating a User")
         # FIXME: exception handling for user's input (id's format)
         user_id = input("User ID: ")
         user = self.get_user(user_id)
@@ -310,6 +333,7 @@ class Main:
             print(f"User '{user_id}' has been updated successfully.")
         else:
             print(f"No user found with ID: {user_id}")
+        print()
 
     def users_view_first_name(self):
         # FIXME: exception handling for user's input (first name's format)
@@ -347,7 +371,7 @@ class Main:
     def users_view_options(self):
         while True:
             try:
-                users_view_option = int(input("Your Choice is: "))
+                users_view_option = int(input("Enter choice: "))
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
@@ -373,18 +397,21 @@ class Main:
                     print("Invalid choice. Please try again.")
 
     def users_view_menu(self):
-        print("Users Viewing Menu")
-        print("1- View all users")
-        print("2- View by first name")
-        print("3- View by last name")
-        print("4- View by user ID")
-        print("5- Back")
+        print_menu_header("Users Viewing Menu")
+        print_menu_options([
+            "1- View all users",
+            "2- View by first name",
+            "3- View by last name",
+            "4- View by user ID",
+            "5- Back",
+        ])
         self.users_view_options()
+        print()
 
     def items_options(self):
         while True:
             try:
-                items_option = int(input("Your Choice is: "))
+                items_option = int(input("Enter choice: "))
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
@@ -413,19 +440,23 @@ class Main:
 
     def items_menu(self):
         while True:
-            print("Items Menu")
-            print("1- View items")
-            print("2- Add items")
-            print("3- Remove items")
-            print("4- Update items")
-            print("5- Back")
+            print_menu_header("Items Menu")
+            print_menu_options([
+                "1- View items",
+                "2- Add items",
+                "3- Remove items",
+                "4- Update items",
+                "5- Back",
+            ])
             if self.items_options():
                 break
+            print()
+        print()
 
     def users_options(self):
         while True:
             try:
-                users_option = int(input("Your Choice is: "))
+                users_option = int(input("Enter choice: "))
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
@@ -454,17 +485,21 @@ class Main:
 
     def users_menu(self):
         while True:
-            print("Users Menu")
-            print("1- View users")
-            print("2- Add users")
-            print("3- Remove users")
-            print("4- Update users")
-            print("5- Back")
+            print_menu_header("Users Menu")
+            print_menu_options([
+                "1- View users",
+                "2- Add users",
+                "3- Remove users",
+                "4- Update users",
+                "5- Back",
+            ])
             if self.users_options():
                 break
+            print()
+        print()
 
     def borrow_item_menu(self):
-        print("Borrowing Menu")
+        print_menu_header("Borrowing Menu")
         # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
@@ -490,9 +525,10 @@ class Main:
             print(f"User '{user_id}' borrowed Item '{item_id}' successfully")
         finally:
             print("Returning to Borrow/Return menu...")
+        print()
 
     def return_item_menu(self):
-        print("Returning Menu")
+        print_menu_header("Returning Menu")
         # FIXME: exception handling for user's input (id's format)
         item_id = input("Item id: ")
         item = self.get_item(item_id)
@@ -506,11 +542,12 @@ class Main:
         else:
             self.library.return_item(user, item)
             print(f"User '{user_id}' returned Item '{item_id}' successfully")
+        print()
 
     def borrow_return_options(self):
         while True:
             try:
-                borrow_return_option = int(input("Your Choice is: "))
+                borrow_return_option = int(input("Enter choice: "))
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
@@ -533,17 +570,21 @@ class Main:
 
     def borrow_return_menu(self):
         while True:
-            print("Borrow/Return Menu")
-            print("1- Borrow an Item")
-            print("2- Return an Item")
-            print("3- Back")
+            print_menu_header("Borrow/Return Menu")
+            print_menu_options([
+                "1- Borrow an Item",
+                "2- Return an Item",
+                "3- Back",
+            ])
             if self.borrow_return_options():
                 break
+            print()
+        print()
 
     def main_options(self):
         while True:
             try:
-                main_option = int(input("Your Choice is: "))
+                main_option = int(input("Enter choice: "))
             except ValueError:
                 print("Invalid input. Please enter a number.")
                 continue
@@ -568,13 +609,17 @@ class Main:
 
     def main_menu(self):
         while True:
-            print("Main Menu")
-            print("1- Items Menu")
-            print("2- Users Menu")
-            print("3- Borrow/Return Menu")
-            print("4- Save and Exit")
+            print_menu_header("Main Menu")
+            print_menu_options([
+                "1- Items Menu",
+                "2- Users Menu",
+                "3- Borrow/Return Menu",
+                "4- Save and Exit",
+            ])
             if self.main_options():
                 break
+            print()
+        print()
 
     def run(self):
         print("Welcome to LMS")
