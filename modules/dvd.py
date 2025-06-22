@@ -7,7 +7,15 @@ class DVD(LibraryItem, Reservable):
 
     def __init__(self, title, author, year, available, duration):
         super().__init__(title, author, year, available)
-        self.__duration = int(duration)  # duration of the dvd content in minutes
+
+        try:
+            duration = int(duration)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("duration must be a positive integer") from exc
+        if duration <= 0:
+            raise ValueError("duration must be a positive integer")
+
+        self.__duration = duration  # duration of the dvd content in minutes
         self.__reserved: User | None = None
         DVD.counter += 1
         self.__dvd_num = DVD.counter
