@@ -140,24 +140,35 @@ class Main:
             print(f"No item found with ID: {item_id}")
 
     def items_view_options(self):
-        # FIXME: exception handling for user's option
-        items_view_option = int(input("Your Choice is: "))
-        match items_view_option:
-            case 1:
-                self.items_view_all()
-            case 2:
-                self.items_view_type()
-            case 3:
-                self.items_view_author()
-            case 4:
-                self.items_view_title()
-            case 5:
-                self.items_view_id()
-            case 6:
-                pass # TODO: BACK
-            case _:
-                print("Invalid choice. Please try again.")
-                self.items_view_options()
+        while True:
+            try:
+                items_view_option = int(input("Your Choice is: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+            finally:
+                pass
+
+            match items_view_option:
+                case 1:
+                    self.items_view_all()
+                    break
+                case 2:
+                    self.items_view_type()
+                    break
+                case 3:
+                    self.items_view_author()
+                    break
+                case 4:
+                    self.items_view_title()
+                    break
+                case 5:
+                    self.items_view_id()
+                    break
+                case 6:
+                    break  # TODO: BACK
+                case _:
+                    print("Invalid choice. Please try again.")
 
     def items_view_menu(self):
         print("Items Viewing Menu")
@@ -318,22 +329,32 @@ class Main:
             print(f"No user found with ID: {user_id}")
 
     def users_view_options(self):
-        # FIXME: exception handling for user's option
-        users_view_option = int(input("Your Choice is: "))
-        match users_view_option:
-            case 1:
-                self.users_view_all()
-            case 2:
-                self.users_view_first_name()
-            case 3:
-                self.users_view_last_name()
-            case 4:
-                self.users_view_id()
-            case 5:
-                pass # TODO: BACK
-            case _:
-                print("Invalid choice. Please try again.")
-                self.users_view_options()
+        while True:
+            try:
+                users_view_option = int(input("Your Choice is: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+            finally:
+                pass
+
+            match users_view_option:
+                case 1:
+                    self.users_view_all()
+                    break
+                case 2:
+                    self.users_view_first_name()
+                    break
+                case 3:
+                    self.users_view_last_name()
+                    break
+                case 4:
+                    self.users_view_id()
+                    break
+                case 5:
+                    break  # TODO: BACK
+                case _:
+                    print("Invalid choice. Please try again.")
 
     def users_view_menu(self):
         print("Users Viewing Menu")
@@ -345,19 +366,32 @@ class Main:
         self.users_view_options()
 
     def items_options(self):
-        # FIXME: exception handling for user's option
-        items_option = int(input("Your Choice is: "))
-        match items_option:
-            case 1:
-                self.items_view_menu()
-            case 2:
-                self.items_add_menu()
-            case 3:
-                self.items_remove_menu()
-            case 4:
-                self.items_update_menu()
-            case 5:
-                return True
+        while True:
+            try:
+                items_option = int(input("Your Choice is: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+            finally:
+                pass
+
+            match items_option:
+                case 1:
+                    self.items_view_menu()
+                    break
+                case 2:
+                    self.items_add_menu()
+                    break
+                case 3:
+                    self.items_remove_menu()
+                    break
+                case 4:
+                    self.items_update_menu()
+                    break
+                case 5:
+                    return True
+                case _:
+                    print("Invalid choice. Please try again.")
         return False
 
 
@@ -373,19 +407,32 @@ class Main:
                 break
 
     def users_options(self):
-        # FIXME: exception handling for user's option
-        users_option = int(input("Your Choice is: "))
-        match users_option:
-            case 1:
-                self.users_view_menu()
-            case 2:
-                self.users_add_menu()
-            case 3:
-                self.users_remove_menu()
-            case 4:
-                self.users_update_menu()
-            case 5:
-                return True
+        while True:
+            try:
+                users_option = int(input("Your Choice is: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+            finally:
+                pass
+
+            match users_option:
+                case 1:
+                    self.users_view_menu()
+                    break
+                case 2:
+                    self.users_add_menu()
+                    break
+                case 3:
+                    self.users_remove_menu()
+                    break
+                case 4:
+                    self.users_update_menu()
+                    break
+                case 5:
+                    return True
+                case _:
+                    print("Invalid choice. Please try again.")
         return False
 
 
@@ -445,18 +492,26 @@ class Main:
             print(f"User '{user_id}' returned Item '{item_id}' successfully")
 
     def borrow_return_options(self):
-        # FIXME: exception handling for user's option
-        borrow_return_option = int(input("Your Choice is: "))
-        match borrow_return_option:
-            case 1:
-                self.borrow_item_menu()
+        while True:
+            try:
+                borrow_return_option = int(input("Your Choice is: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+            finally:
                 pass
-            case 2:
-                self.return_item_menu()
-                pass
-            case 3:
 
-                return True
+            match borrow_return_option:
+                case 1:
+                    self.borrow_item_menu()
+                    break
+                case 2:
+                    self.return_item_menu()
+                    break
+                case 3:
+                    return True
+                case _:
+                    print("Invalid choice. Please try again.")
         return False
 
 
@@ -470,17 +525,29 @@ class Main:
                 break
 
     def main_options(self):
-        # FIXME: exception handling for user's option
-        main_option = int(input("Your Choice is: "))
-        match main_option:
-            case 1:
-                self.items_menu()
-            case 2:
-                self.users_menu()
-            case 3:
-                self.borrow_return_menu()
-            case 4:
-                return True
+        while True:
+            try:
+                main_option = int(input("Your Choice is: "))
+            except ValueError:
+                print("Invalid input. Please enter a number.")
+                continue
+            finally:
+                pass
+
+            match main_option:
+                case 1:
+                    self.items_menu()
+                    break
+                case 2:
+                    self.users_menu()
+                    break
+                case 3:
+                    self.borrow_return_menu()
+                    break
+                case 4:
+                    return True
+                case _:
+                    print("Invalid choice. Please try again.")
         return False
 
     def main_menu(self):
