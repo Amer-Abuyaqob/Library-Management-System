@@ -3,6 +3,11 @@ from book import Book
 from dvd import DVD
 from magazine import Magazine
 from user import User
+from exceptions import (
+    ItemNotAvailableError,
+    ItemNotFoundError,
+    UserNotFoundError,
+)
 
 
 def parse_bool_input(prompt: str) -> bool:
@@ -402,14 +407,26 @@ class Main:
         item = self.get_item(item_id)
         user_id = input("User ID: ")
         user = self.get_user(user_id)
-        
+
         if not user:
             print(f"No user found with ID: {user_id}")
-        elif not item:
+            return
+        if not item:
             print(f"No item found with ID: {item_id}")
-        else:
+            return
+
+        try:
             self.library.borrow_item(user, item)
+        except ItemNotAvailableError as err:
+            print(err)
+        except ItemNotFoundError as err:
+            print(err)
+        except UserNotFoundError as err:
+            print(err)
+        else:
             print(f"User '{user_id}' borrowed Item '{item_id}' successfully")
+        finally:
+            print("Returning to Borrow/Return menu...")
 
     def return_item_menu(self):
         print("Returning Menu")
