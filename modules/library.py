@@ -1,5 +1,8 @@
 import json
 import os
+import logging
+
+logging.basicConfig(level=logging.ERROR)
 
 from user import User
 from book import Book
@@ -122,12 +125,23 @@ class Library:
         self.__items = []  # Clearing the items list to avoid duplicates
         # FIXME: exception handling for file and data
         if os.path.exists(self.__items_file):
-            with open(self.__items_file, "r", encoding="utf-8") as f:
+            f = None
+            error = None
+            try:
+                f = open(self.__items_file, "r", encoding="utf-8")
                 items_data = json.load(f)
-
-            for item in items_data:
-                item_obj = self.__create_item(item)
-                self.add_item(item_obj)
+                for item in items_data:
+                    item_obj = self.__create_item(item)
+                    self.add_item(item_obj)
+            except (OSError, json.JSONDecodeError) as exc:
+                error = exc
+            finally:
+                if f:
+                    f.close()
+                if error:
+                    logging.error(
+                        "Failed to load items from %s: %s", self.__items_file, error
+                    )
 
     def __load_users(self):
         """
@@ -138,12 +152,25 @@ class Library:
 
         # FIXME: exception handling for file and data
         if os.path.exists(self.__users_file):
-            with open(self.__users_file, "r", encoding="utf-8") as f:
+            f = None
+            error = None
+            try:
+                f = open(self.__users_file, "r", encoding="utf-8")
                 users_data = json.load(f)
-
-            for user in users_data:
-                user_obj = User(user["id"], user["first_name"], user["last_name"], user["borrowed_items"])
-                self.add_user(user_obj)
+                for user in users_data:
+                    user_obj = User(
+                        user["id"], user["first_name"], user["last_name"], user["borrowed_items"]
+                    )
+                    self.add_user(user_obj)
+            except (OSError, json.JSONDecodeError) as exc:
+                error = exc
+            finally:
+                if f:
+                    f.close()
+                if error:
+                    logging.error(
+                        "Failed to load users from %s: %s", self.__users_file, error
+                    )
 
     def load_data(self):
         """
@@ -186,11 +213,21 @@ class Library:
             items_data.append(entry)
 
         # FIXME: add better exception handling for files and data
+        f = None
+        error = None
         try:
-            with open(self.__items_file, "w", encoding="utf-8") as f:
-                json.dump(items_data, f, indent=2)
+            f = open(self.__items_file, "w", encoding="utf-8")
+            json.dump(items_data, f, indent=2)
         except OSError as exc:
-            raise IOError("Failed to save data") from exc
+            error = exc
+        finally:
+            if f:
+                f.close()
+            if error:
+                logging.error(
+                    "Failed to save items to %s: %s", self.__items_file, error
+                )
+                raise IOError("Failed to save data") from error
 
     def __save_users(self):
         users_data = []
@@ -199,11 +236,21 @@ class Library:
             users_data.append(entry)
 
         # FIXME: add better exception handling for files and data
+        f = None
+        error = None
         try:
-            with open(self.__users_file, "w", encoding="utf-8") as f:
-                json.dump(users_data, f, indent=2)
+            f = open(self.__users_file, "w", encoding="utf-8")
+            json.dump(users_data, f, indent=2)
         except OSError as exc:
-            raise IOError("Failed to save data") from exc
+            error = exc
+        finally:
+            if f:
+                f.close()
+            if error:
+                logging.error(
+                    "Failed to save users to %s: %s", self.__users_file, error
+                )
+                raise IOError("Failed to save data") from error
 
     def save_data(self):
         """
