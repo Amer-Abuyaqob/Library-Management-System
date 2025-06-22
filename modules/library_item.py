@@ -3,9 +3,23 @@ from abc import ABC, abstractmethod
 class LibraryItem(ABC):
     def __init__(self, title, author, year, available):
         super().__init__()
+
+        if not isinstance(title, str) or len(title.strip()) < 2:
+            raise ValueError("title must be a non-empty string with at least two characters")
+
+        if not isinstance(author, str) or len(author.strip()) < 2:
+            raise ValueError("author must be a non-empty string with at least two characters")
+
+        try:
+            year = int(year)
+        except (TypeError, ValueError) as exc:
+            raise ValueError("year must be a positive integer") from exc
+        if year <= 0:
+            raise ValueError("year must be a positive integer")
+
         self.__title = title
         self.__author = author
-        self.__year = int(year)
+        self.__year = year
         self.__available = bool(available)
         self._id = ""
 
