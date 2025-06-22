@@ -5,6 +5,7 @@ from user import User
 from book import Book
 from magazine import Magazine
 from dvd import DVD
+from exceptions import ItemNotFoundError, UserNotFoundError
 
 class Library:
     def __init__(self):
@@ -31,9 +32,16 @@ class Library:
             bool: True if item was added successfully, False otherwise
         Raises:
             ValueError: If item with same ID already exists
+            ItemNotFoundError: If item is not an instance of Book, DVD or Magazine
         """
-        # FIXME: exception handling
+        if not isinstance(item, (Book, DVD, Magazine)):
+            raise ItemNotFoundError("Invalid item type")
+
+        if any(existing_item.id == item.id for existing_item in self.items):
+            raise ValueError(f"Item with ID '{item.id}' already exists")
+
         self.items.append(item)
+        return True
 
     def update_item(self, item, new_item):
         """
@@ -72,9 +80,16 @@ class Library:
             bool: True if user was added successfully, False otherwise
         Raises:
             ValueError: If user with same ID already exists
+            UserNotFoundError: If user is not an instance of User
         """
-        # FIXME: exception handling
+        if not isinstance(user, User):
+            raise UserNotFoundError("Invalid user type")
+
+        if any(existing_user.id == user.id for existing_user in self.users):
+            raise ValueError(f"User with ID '{user.id}' already exists")
+
         self.users.append(user)
+        return True
     
     def remove_user(self, user):
         """
