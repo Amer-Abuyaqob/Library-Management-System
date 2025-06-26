@@ -1,27 +1,29 @@
 from abc import ABC, abstractmethod
 
+from exceptions import *
+
 class LibraryItem(ABC):
     def __init__(self, title, author, year, available):
         super().__init__()
 
-        if not isinstance(title, str) or len(title.strip()) < 2:
-            raise ValueError("title must be a non-empty string with at least two characters")
-
-        if not isinstance(author, str) or len(author.strip()) < 2:
-            raise ValueError("author must be a non-empty string with at least two characters")
-
         try:
-            year = int(year)
-        except (TypeError, ValueError) as exc:
-            raise ValueError("year must be a positive integer") from exc
-        if year <= 0:
-            raise ValueError("year must be a positive integer")
+            self.__validate_title(title)
+            self.__title = title
 
-        self.__title = title
-        self.__author = author
-        self.__year = year
-        self.__available = bool(available)
-        self._id = ""
+            self.__validate_author(author)
+            self.__author = author
+
+            self.__validate_year(year)
+            self.__year = year
+            
+            # FIXME: Fix it like codex did, currently it returns True for any (not None) input
+            self.__available = bool(available)
+            self._id = ""
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
 
     @property
     def title(self):
@@ -45,14 +47,17 @@ class LibraryItem(ABC):
 
     @title.setter
     def title(self, title):
+        self.__validate_title(title)
         self.__title = title
 
     @author.setter
     def author(self, author):
+        self.__validate_author(author)
         self.__author = author
 
     @year.setter
     def year(self, year):
+        self.__validate_year(year)
         self.__year = int(year)
 
     @available.setter
@@ -74,6 +79,78 @@ class LibraryItem(ABC):
         Should be implemented by subclasses.
         """
         pass
+    
+    def __validate_title(self, title):
+        """
+        Validate the title parameter for a library item.
+        
+        Args:
+            title: The title to validate
+            
+        Raises:
+            InvalidDataTypeError: If title is not a string
+            InvalidValueError: If title is empty or contains only whitespace
+        """
+        try:
+            if not isinstance(title, str):
+                raise InvalidDataTypeError("string", type(title).__name__)
+                
+            if not title.strip():
+                raise InvalidValueError("Title must be a non-empty string") 
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+
+    def __validate_author(self, author):
+        """
+        Validate the author parameter for a library item.
+        
+        Args:
+            author: The author name to validate
+            
+        Raises:
+            InvalidDataTypeError: If author is not a string
+            InvalidValueError: If author is empty, contains only whitespace, or has less than 2 characters
+        """
+        try:
+            if not isinstance(author, str):
+                raise InvalidDataTypeError("string", type(author).__name__)
+                
+            if not author.strip() or len(author.strip()) < 2:
+                raise InvalidValueError("Author's name must be a non-empty string with at least two characters.")
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+
+    def __validate_year(self, year):
+        """
+        Validate the year parameter for a library item.
+        
+        Args:
+            year: The publication year to validate
+            
+        Raises:
+            InvalidDataTypeError: If year is not an integer
+            InvalidValueError: If year is not a positive non-zero integer
+        """
+        try:
+            if not isinstance(year, int):
+                raise InvalidDataTypeError("integer", type(year).__name__)
+
+            if year <= 0:
+                raise InvalidValueError("Year must be a positive non zero integer")
+            
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
 
     def _item_id(self):
         """
