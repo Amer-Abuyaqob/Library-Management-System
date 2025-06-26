@@ -1,17 +1,46 @@
 from library_item import LibraryItem
+from exceptions import InvalidDataTypeError, InvalidValueError
 
 class Magazine(LibraryItem):
     counter = 0
     def __init__(self, title, author, year, available, genre):
         super().__init__(title, author, year, available)
 
-        if not isinstance(genre, str) or not genre.strip():
-            raise ValueError("genre must be a non-empty string")
+        try:
+            self.__validate_genre(genre)
+            self.__genre = genre
+            Magazine.counter += 1
+            self.__magazine_num = Magazine.counter
+            self._id = self._item_id()  # Initialize auto generated ID
 
-        self.__genre = genre
-        Magazine.counter += 1
-        self.__magazine_num = Magazine.counter
-        self._id = self._item_id()  # Initialize auto generated ID
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+
+    def __validate_genre(self, genre):
+        """
+        Validate the genre parameter for a magazine.
+        
+        Args:
+            genre: The genre to validate
+            
+        Raises:
+            InvalidDataTypeError: If genre is not a string
+            InvalidValueError: If genre is empty or contains only whitespace
+        """
+        try:
+            if not isinstance(genre, str):
+                raise InvalidDataTypeError("string", type(genre).__name__)
+                
+            if not genre.strip():
+                raise InvalidValueError("Genre must be a non-empty string")
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
 
     def _item_id(self):
         """
@@ -30,6 +59,7 @@ class Magazine(LibraryItem):
 
     @genre.setter
     def genre(self, genre):
+        self.__validate_genre(genre)
         self.__genre = genre
 
     def display_info(self):
