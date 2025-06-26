@@ -7,6 +7,7 @@ from magazine import Magazine
 from dvd import DVD
 
 from exceptions import (
+    InvalidDataTypeError,
     ItemNotFoundError,
     UserNotFoundError,
     ItemNotAvailableError,
@@ -32,10 +33,7 @@ class Library:
     
     def __validate_item(self, item):
         if not isinstance(item, (Book, DVD, Magazine)):
-            raise ItemNotFoundError("Book/DVD/Magazine", type(item).__name__)
-
-        if self.__item_exists(item):
-            raise ItemAlreadyExistsError(f"{item.title} ({item.year}) by {item.author}")
+            raise InvalidDataTypeError("Book/DVD/Magazine", type(item).__name__)
       
     def __item_exists(self, item):
         for existing_item in self.__items:
@@ -58,11 +56,15 @@ class Library:
         """
         try:
             self.__validate_item(item)
+            
+            if self.__item_exists(item):
+                raise ItemAlreadyExistsError(f"{item.title} ({item.year}) by {item.author}")
+
             self.__items.append(item)
             return True
 
-        except ItemNotFoundError as not_found:
-            print(f"Caught: {not_found}")
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
             return False
 
         except ItemAlreadyExistsError as exists:
@@ -80,9 +82,32 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # FIXME: exception handling
-        index = self.items.index(item)
-        self.items[index] = new_item
+        try:
+            self.__validate_item(new_item)
+            
+            if self.__item_exists(new_item):
+                raise ItemAlreadyExistsError(f"{new_item.title} ({new_item.year}) by {new_item.author}")
+
+            self.__validate_item(item)
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+
+        except ItemAlreadyExistsError as exists:
+            print(f"Caught: {exists}")
+            return False
+
+        try:
+            if item in self.__items:
+                index = self.__items.index(item)
+                self.__items[index] = new_item
+            else:
+                raise ItemNotFoundError(item)
+
+        except ItemNotFoundError as not_found:
+            print(f"Caught: {not_found}")
+            return False 
 
     def remove_item(self, item):
         """

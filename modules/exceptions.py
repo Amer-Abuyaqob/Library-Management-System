@@ -19,8 +19,8 @@ class ItemAlreadyExistsError(LibraryError):
 
 class ItemNotFoundError(LibraryError):
     """Raised when an item is not found in the library."""
-    def __init__(self, expected_type, received_type):
-        super().__init__(f"Expected item type: [{expected_type}], but got: {received_type}")
+    def __init__(self, item):
+        super().__init__(f"The item [{item}] doesn't exists.")
 
 
 class UserNotFoundError(LibraryError):
