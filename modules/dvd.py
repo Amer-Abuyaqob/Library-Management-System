@@ -1,6 +1,7 @@
 from library_item import LibraryItem
 from user import User
 from reservable import Reservable
+from exceptions import InvalidDataTypeError, InvalidValueError
 
 class DVD(LibraryItem, Reservable):
     counter = 0
@@ -9,17 +10,41 @@ class DVD(LibraryItem, Reservable):
         super().__init__(title, author, year, available)
 
         try:
-            duration = int(duration)
-        except (TypeError, ValueError) as exc:
-            raise ValueError("duration must be a positive integer") from exc
-        if duration <= 0:
-            raise ValueError("duration must be a positive integer")
+            self.__validate_duration(duration)
+            self.__duration = duration  # duration of the dvd content in minutes
+            self.__reserved: User | None = None
+            DVD.counter += 1
+            self.__dvd_num = DVD.counter
+            self._id = self._item_id()  # Initialize auto generated ID
 
-        self.__duration = duration  # duration of the dvd content in minutes
-        self.__reserved: User | None = None
-        DVD.counter += 1
-        self.__dvd_num = DVD.counter
-        self._id = self._item_id()  # Initialize auto generated ID
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+
+    def __validate_duration(self, duration):
+        """
+        Validate the duration parameter for a DVD.
+        
+        Args:
+            duration: The duration to validate (in minutes)
+            
+        Raises:
+            InvalidDataTypeError: If duration is not an integer
+            InvalidValueError: If duration is not a positive non-zero integer
+        """
+        try:
+            if not isinstance(duration, int):
+                raise InvalidDataTypeError("integer", type(duration).__name__)
+
+            if duration <= 0:
+                raise InvalidValueError("Duration must be a positive non-zero integer")
+            
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
 
     def _item_id(self):
         """
@@ -38,6 +63,7 @@ class DVD(LibraryItem, Reservable):
 
     @duration.setter
     def duration(self, duration):
+        self.__validate_duration(duration)
         self.__duration = duration
 
     def display_info(self):
