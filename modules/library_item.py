@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from exceptions import *
+from exceptions import InvalidDataTypeError, InvalidValueError
 
 class LibraryItem(ABC):
     def __init__(self, title, author, year, available):
