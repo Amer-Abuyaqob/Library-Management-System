@@ -11,6 +11,7 @@ from exceptions import (
     UserNotFoundError,
     ItemNotAvailableError,
     ItemNotBorrowedError,
+    ItemAlreadyExistsError
 )
 
 class Library:
@@ -28,6 +29,21 @@ class Library:
     @property
     def users(self):
         return self.__users
+    
+    def __validate_item(self, item):
+        if not isinstance(item, (Book, DVD, Magazine)):
+            raise ItemNotFoundError("Book/DVD/Magazine", type(item).__name__)
+
+        if self.__item_exists(item):
+            raise ItemAlreadyExistsError(f"{item.title} ({item.year}) by {item.author}")
+      
+    def __item_exists(self, item):
+        for existing_item in self.__items:
+            if (existing_item.title == item.title and
+                existing_item.author == item.author and
+                existing_item.year == item.year):
+                return True
+        return False
 
     def add_item(self, item):
         """
@@ -40,14 +56,18 @@ class Library:
             ValueError: If item with same ID already exists
             ItemNotFoundError: If item is not an instance of Book, DVD or Magazine
         """
-        if not isinstance(item, (Book, DVD, Magazine)):
-            raise ItemNotFoundError("Invalid item type")
+        try:
+            self.__validate_item(item)
+            self.__items.append(item)
+            return True
 
-        if any(existing_item.id == item.id for existing_item in self.items):
-            raise ValueError(f"Item with ID '{item.id}' already exists")
+        except ItemNotFoundError as not_found:
+            print(f"Caught: {not_found}")
+            return False
 
-        self.items.append(item)
-        return True
+        except ItemAlreadyExistsError as exists:
+            print(f"Caught: {exists}")
+            return False
 
     def update_item(self, item, new_item):
         """

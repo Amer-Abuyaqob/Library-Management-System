@@ -12,9 +12,15 @@ class LibraryError(Exception):
     """Base class for library related exceptions."""
     pass
 
+class ItemAlreadyExistsError(LibraryError):
+    """Raised when trying to add an item that already exists."""
+    def __init__(self, item):
+        super().__init__(f"The item [{item}] already exists.")
+
 class ItemNotFoundError(LibraryError):
     """Raised when an item is not found in the library."""
-    pass
+    def __init__(self, expected_type, received_type):
+        super().__init__(f"Expected item type: [{expected_type}], but got: {received_type}")
 
 
 class UserNotFoundError(LibraryError):
