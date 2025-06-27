@@ -19,7 +19,7 @@ import json
 def print_menu_header(title: str) -> None:
     """Print a formatted menu header."""
     print()
-    separator = "=" * 30
+    separator = "=" * 40
     print(separator)
     print(title.center(len(separator)))
     print(separator)
@@ -28,18 +28,18 @@ def print_menu_header(title: str) -> None:
 def print_menu_options(options: list[str]) -> None:
     """Print menu options using a consistent style."""
     for option in options:
-        print(option)
+        print(f"  {option}")
 
 
 def parse_bool_input(prompt: str) -> bool:
     """Prompt the user for a boolean value until a valid entry is provided."""
     while True:
-        value = input(prompt).strip().lower()
+        value = input(f"  {prompt}: ").strip().lower()
         if value in {"true", "t", "yes", "y", "1"}:
             return True
         if value in {"false", "f", "no", "n", "0"}:
             return False
-        print("Please enter 'yes' or 'no'.")
+        print("  Please enter 'yes' or 'no'.")
 
 class Main:
     def __init__(self):
@@ -72,20 +72,20 @@ class Main:
             self.library = Library()
     
     def items_summary(self, books, dvds, magazines):
-        print("SUMMARY:")
-        print(f"   Books: {len(books)}")
-        print(f"   Magazines: {len(magazines)}")
-        print(f"   DVDs: {len(dvds)}")
-        print(f"   Total: {len(self.library.items)}")
+        print("  SUMMARY:")
+        print(f"    Books: {len(books)}")
+        print(f"    Magazines: {len(magazines)}")
+        print(f"    DVDs: {len(dvds)}")
+        print(f"    Total: {len(self.library.items)}")
         
     def users_summary(self):
-        print("USERS SUMMARY:")
-        print(f"   Total Users: {len(self.library.users)}")
+        print("  USERS SUMMARY:")
+        print(f"    Total Users: {len(self.library.users)}")
         
     def users_view_all(self):
-        print("Viewing all library users")
+        print("  Viewing all library users")
         if not self.library.users:
-            print("No users found in the library.")
+            print("  No users found in the library.")
             return
         for user in self.library.users:
             print(user.display_info())
@@ -117,9 +117,9 @@ class Main:
         return books, dvds, magazines
 
     def items_view_all(self):
-        print("Viewing all library items")
+        print("  Viewing all library items")
         if not self.library.items:
-            print("No items found in the library.")
+            print("  No items found in the library.")
             return
         books, dvds, magazines = self.group_by_type()
         self.view_all_books(books)
@@ -130,9 +130,9 @@ class Main:
     def items_view_type(self):
         # FIXME: exception handling for user's input (Book, DVD, Magazine)
         while True:
-            type = input("View all items of type (Book/DVD/Magazine): ").strip()
+            type = input("  View all items of type (Book/DVD/Magazine): ").strip()
             if type not in ["Book", "DVD", "Magazine"]:
-                print("Invalid item type. Please enter Book, DVD, or Magazine.")
+                print("  Invalid item type. Please enter Book, DVD, or Magazine.")
                 continue
             break
         
@@ -157,13 +157,13 @@ class Main:
                         print(item.display_info())
                         found = True
         if not found:
-            print(f"No items found of type: {type}")
+            print(f"  No items found of type: {type}")
                         
     def items_view_author(self):
         # FIXME: exception handling for user's input (author's format)
-        author = input("View all items of author: ").strip()
+        author = input("  View all items of author: ").strip()
         if not author:
-            print("Error: Author name cannot be empty.")
+            print("  Error: Author name cannot be empty.")
             return
         
         found = False
@@ -172,13 +172,13 @@ class Main:
                 print(item.display_info())
                 found = True
         if not found:
-            print(f"No items found by author: {author}")
+            print(f"  No items found by author: {author}")
 
     def items_view_title(self):
         # FIXME: exception handling for user's input (title's format)
-        title = input("View all items of title: ").strip()
+        title = input("  View all items of title: ").strip()
         if not title:
-            print("Error: Title cannot be empty.")
+            print("  Error: Title cannot be empty.")
             return
         
         found = False
@@ -187,13 +187,13 @@ class Main:
                 print(item.display_info())
                 found = True
         if not found:
-            print(f"No items found with title: {title}")
+            print(f"  No items found with title: {title}")
 
     def items_view_id(self):
         # FIXME: exception handling for user's input (id's format)
-        item_id = input("View all item of id: ").strip()
+        item_id = input("  View item with ID: ").strip()
         if not item_id:
-            print("Error: Item ID cannot be empty.")
+            print("  Error: Item ID cannot be empty.")
             return
         
         found = False
@@ -202,14 +202,14 @@ class Main:
                 print(item.display_info())
                 found = True
         if not found:
-            print(f"No item found with ID: {item_id}")
+            print(f"  No item found with ID: {item_id}")
 
     def items_view_options(self):
         while True:
             try:
-                items_view_option = int(input("Enter choice: "))
+                items_view_option = int(input("  Enter choice: "))
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("  ✗ Invalid input. Please enter a number.")
                 continue
             finally:
                 pass
@@ -233,7 +233,7 @@ class Main:
                 case 6:
                     break  # TODO: BACK
                 case _:
-                    print("Invalid choice. Please try again.")
+                    print("  ✗ Invalid choice. Please try again.")
 
     def items_view_menu(self):
         print_menu_header("Items Viewing Menu")
@@ -251,46 +251,46 @@ class Main:
     def get_item_data(self):
         while True:
             try:
-                type = input("Item type (Book/DVD/Magazine): ").strip()
+                type = input("  Item type (Book/DVD/Magazine): ").strip()
                 if type not in ["Book", "DVD", "Magazine"]:
                     raise InvalidValueError("Type must be: [Book or DVD or Magazine]")
                 break
 
             except InvalidValueError as value:
-                print(f"Error: {value}")
+                print(f"  Error: {value}")
                 continue
             
         while True:
             try:
-                title = input(f"{type} title: ").strip()
+                title = input(f"  {type} title: ").strip()
                 if not title:
                     raise InvalidValueError("Title must be a non-empty string")
                 break
 
             except InvalidValueError as value:
-                print(f"Error: {value}")
+                print(f"  Error: {value}")
                 continue
     
         while True:
             try:
-                author = input(f"{type} author: ").strip()
+                author = input(f"  {type} author: ").strip()
                 if not author or len(author) < 2:
                     raise InvalidValueError("Author's name must be a non-empty string with at least two characters.")
                 break
             
             except InvalidValueError as value:
-                print(f"Error: {value}")
+                print(f"  Error: {value}")
                 continue
         
         while True:
             try:
-                year = int(input(f"{type} publish year: "))
+                year = int(input(f"  {type} publish year: "))
                 if year <= 0:
                     raise InvalidValueError("Year must be a positive non-zero integer")
                 break
             
             except InvalidValueError as value:
-                print(f"Error: {value}")
+                print(f"  Error: {value}")
                 continue
         
         return type, title, author, year
@@ -298,48 +298,48 @@ class Main:
     def create_item(self):
         type, title, author, year = self.get_item_data()
         # FIXME: ensure exception handled in parse_bool_input
-        available = parse_bool_input(f"{type} available (True/False or Yes/No): ")
+        available = parse_bool_input(f"{type} available (True/False or Yes/No)")
         match type:
             case "Book":
                 while True:
                     try:
-                        genre = input(f"{type} genre: ").strip()
+                        genre = input(f"  {type} genre: ").strip()
                         if not genre:
                             raise InvalidValueError("Genre must be a non-empty string")
                         item = Book(title, author, year, available, genre)
                         break
 
                     except InvalidValueError as value:
-                        print(f"Error: {value}")
+                        print(f"  Error: {value}")
                         continue
 
             case "DVD":
                 while True:
                     try:
-                        duration = int(input(f"{type} duration in minutes: "))
+                        duration = int(input(f"  {type} duration in minutes: "))
                         if duration <= 0:
                             raise InvalidValueError("Duration must be a positive non-zero integer")
                         item = DVD(title, author, year, available, duration)
                         break
 
                     except ValueError:
-                        print("Duration must be a number. Please try again.")
+                        print("  Duration must be a number. Please try again.")
                         continue
                     except InvalidValueError as value:
-                        print(f"Error: {value}")
+                        print(f"  Error: {value}")
                         continue
 
 
             case "Magazine":
                 while True:
                     try:
-                        genre = input(f"{type} genre: ").strip()
+                        genre = input(f"  {type} genre: ").strip()
                         if not genre:
                             raise InvalidValueError("Genre must be a non-empty string")
                         item = Magazine(title, author, year, available, genre)
                         break
                     except InvalidValueError as value:
-                        print(f"Error: {value}")
+                        print(f"  Error: {value}")
                         continue
         return item
             
@@ -348,22 +348,22 @@ class Main:
         item = self.create_item()
         try:
             if self.library.add_item(item):
-                print(f"Item '{item.title}' has been added successfully.")
+                print(f"  ✓ Item '{item.title}' has been added successfully.")
             else:
-                print(f"Item '{item.title}' has NOT been added.")
+                print(f"  ✗ Item '{item.title}' has NOT been added.")
         except ItemAlreadyExistsError as exists:
-            print(f"Error: {exists}")
+            print(f"  ✗ Error: {exists}")
         except InvalidDataTypeError as data_type:
-            print(f"Error: {data_type}")
+            print(f"  ✗ Error: {data_type}")
         except InvalidValueError as value:
-            print(f"Error: {value}")
+            print(f"  ✗ Error: {value}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def get_item(self, item_id):
         if not item_id or not item_id.strip():
-            print("Error: Item ID cannot be empty.")
+            print("  ✗ Error: Item ID cannot be empty.")
             return None
         
         item_id = item_id.strip()
@@ -376,71 +376,71 @@ class Main:
         print_menu_header("Removing an Item")
         while True:
             try:
-                item_id = input("Item id: ").strip()
+                item_id = input("  Item ID: ").strip()
                 if not item_id:
                     raise InvalidValueError("ID must be a non-empty string")
                 break
 
             except InvalidValueError as value:
-                print(f"Error: {value}")
+                print(f"  ✗ Error: {value}")
                 continue
             
         try:    
             item = self.get_item(item_id)
             if item:
                 if self.library.remove_item(item):
-                    print(f"Item '{item_id}' has been removed successfully.")
+                    print(f"  ✓ Item '{item_id}' has been removed successfully.")
                 else:
-                    print(f"Item '{item_id}' has NOT been removed.")
+                    print(f"  ✗ Item '{item_id}' has NOT been removed.")
             else:
-                print(f"No item found with ID: {item_id}")
+                print(f"  ✗ No item found with ID: {item_id}")
         except ItemNotFoundError as not_found:
-            print(f"Error: {not_found}")
+            print(f"  ✗ Error: {not_found}")
         except InvalidDataTypeError as data_type:
-            print(f"Error: {data_type}")
+            print(f"  ✗ Error: {data_type}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def items_update_menu(self):
         # FIXME: Add comprehensive exception handling for all library operations
         print_menu_header("Updating an Item")
         try:
-            item_id = input("Item id: ").strip()
+            item_id = input("  Item ID: ").strip()
             if not item_id:
-                print("Error: Item ID cannot be empty.")
+                print("  ✗ Error: Item ID cannot be empty.")
                 return
             
             item = self.get_item(item_id)
             if item:
-                print(f"Current item '{item_id}' info:-")
+                print(f"  Current item '{item_id}' info:")
                 print(item.display_info())
-                print("Input the updated item data:-")
+                print("  Input the updated item data:")
                 new_item = self.create_item()
                 if new_item is None:
-                    print("Item creation failed.")
+                    print("  ✗ Item creation failed.")
                     return
                 
                 self.library.update_item(item, new_item)
-                print(f"Item '{item_id}' has been updated successfully.")
+                print(f"  ✓ Item '{item_id}' has been updated successfully.")
             else:
-                print(f"No item found with ID: {item_id}")
+                print(f"  ✗ No item found with ID: {item_id}")
         except ItemNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except ItemAlreadyExistsError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidValueError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def get_user(self, user_id):
         # FIXME: exception handling for user's input (id's format)
         if not user_id or not user_id.strip():
-            print("Error: User ID cannot be empty.")
+            print("  ✗ Error: User ID cannot be empty.")
             return None
         
         user_id = user_id.strip()
@@ -451,19 +451,19 @@ class Main:
 
     def get_user_data(self):
         # FIXME: exception handling for user's input
-        user_id = input("User ID: ").strip()
+        user_id = input("  User ID: ").strip()
         if not user_id:
-            print("Error: User ID cannot be empty.")
+            print("  ✗ Error: User ID cannot be empty.")
             return None, None, None
         
-        first_name = input("First name: ").strip()
+        first_name = input("  First name: ").strip()
         if not first_name:
-            print("Error: First name cannot be empty.")
+            print("  ✗ Error: First name cannot be empty.")
             return None, None, None
         
-        last_name = input("Last name: ").strip()
+        last_name = input("  Last name: ").strip()
         if not last_name:
-            print("Error: Last name cannot be empty.")
+            print("  ✗ Error: Last name cannot be empty.")
             return None, None, None
         
         return user_id, first_name, last_name
@@ -477,13 +477,13 @@ class Main:
             
             return User(first_name, last_name, user_id)
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
             return None
         except InvalidValueError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
             return None
         except Exception as e:
-            print(f"Unexpected error creating user: {e}")
+            print(f"  ✗ Unexpected error creating user: {e}")
             return None
 
     def users_add_menu(self):
@@ -492,84 +492,84 @@ class Main:
         try:
             user = self.create_user()
             if user is None:
-                print("User creation failed.")
+                print("  ✗ User creation failed.")
                 return
             
             self.library.add_user(user)
-            print(f"User '{user.first_name} {user.last_name}' has been added successfully.")
+            print(f"  ✓ User '{user.first_name} {user.last_name}' has been added successfully.")
         except UserAlreadyExistsError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidValueError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def users_remove_menu(self):
         # FIXME: Add comprehensive exception handling for all library operations
         print_menu_header("Removing a User")
         try:
-            user_id = input("User ID: ").strip()
+            user_id = input("  User ID: ").strip()
             if not user_id:
-                print("Error: User ID cannot be empty.")
+                print("  ✗ Error: User ID cannot be empty.")
                 return
             
             user = self.get_user(user_id)
             if user:
                 self.library.remove_user(user)
-                print(f"User '{user_id}' has been removed successfully.")
+                print(f"  ✓ User '{user_id}' has been removed successfully.")
             else:
-                print(f"No user found with ID: {user_id}")
+                print(f"  ✗ No user found with ID: {user_id}")
         except UserNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def users_update_menu(self):
         # FIXME: Add comprehensive exception handling for all library operations
         print_menu_header("Updating a User")
         try:
-            user_id = input("User ID: ").strip()
+            user_id = input("  User ID: ").strip()
             if not user_id:
-                print("Error: User ID cannot be empty.")
+                print("  ✗ Error: User ID cannot be empty.")
                 return
             
             user = self.get_user(user_id)
             if user:
-                print(f"Current user '{user_id}' info:-")
+                print(f"  Current user '{user_id}' info:")
                 print(user.display_info())
-                print("Input the updated user data:-")
+                print("  Input the updated user data:")
                 new_user = self.create_user()
                 if new_user is None:
-                    print("User creation failed.")
+                    print("  ✗ User creation failed.")
                     return
                 
                 self.library.update_user(user, new_user)
-                print(f"User '{user_id}' has been updated successfully.")
+                print(f"  ✓ User '{user_id}' has been updated successfully.")
             else:
-                print(f"No user found with ID: {user_id}")
+                print(f"  ✗ No user found with ID: {user_id}")
         except UserNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except UserAlreadyExistsError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidValueError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def users_view_first_name(self):
         # FIXME: exception handling for user's input (first name's format)
-        first_name = input("View all users with first name: ").strip()
+        first_name = input("  View all users with first name: ").strip()
         if not first_name:
-            print("Error: First name cannot be empty.")
+            print("  ✗ Error: First name cannot be empty.")
             return
         
         found = False
@@ -578,13 +578,13 @@ class Main:
                 print(user.display_info())
                 found = True
         if not found:
-            print(f"No users found with first name: {first_name}")
+            print(f"  No users found with first name: {first_name}")
 
     def users_view_last_name(self):
         # FIXME: exception handling for user's input (last name's format)
-        last_name = input("View all users with last name: ").strip()
+        last_name = input("  View all users with last name: ").strip()
         if not last_name:
-            print("Error: Last name cannot be empty.")
+            print("  ✗ Error: Last name cannot be empty.")
             return
         
         found = False
@@ -593,13 +593,13 @@ class Main:
                 print(user.display_info())
                 found = True
         if not found:
-            print(f"No users found with last name: {last_name}")
+            print(f"  No users found with last name: {last_name}")
 
     def users_view_id(self):
         # FIXME: exception handling for user's input (id's format)
-        user_id = input("View user with ID: ").strip()
+        user_id = input("  View user with ID: ").strip()
         if not user_id:
-            print("Error: User ID cannot be empty.")
+            print("  ✗ Error: User ID cannot be empty.")
             return
         
         found = False
@@ -608,14 +608,14 @@ class Main:
                 print(user.display_info())
                 found = True
         if not found:
-            print(f"No user found with ID: {user_id}")
+            print(f"  No user found with ID: {user_id}")
 
     def users_view_options(self):
         while True:
             try:
-                users_view_option = int(input("Enter choice: "))
+                users_view_option = int(input("  Enter choice: "))
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("  ✗ Invalid input. Please enter a number.")
                 continue
             finally:
                 pass
@@ -636,7 +636,7 @@ class Main:
                 case 5:
                     break  # TODO: BACK
                 case _:
-                    print("Invalid choice. Please try again.")
+                    print("  ✗ Invalid choice. Please try again.")
 
     def users_view_menu(self):
         print_menu_header("Users Viewing Menu")
@@ -653,9 +653,9 @@ class Main:
     def items_options(self):
         while True:
             try:
-                items_option = int(input("Enter choice: "))
+                items_option = int(input("  Enter choice: "))
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("  ✗ Invalid input. Please enter a number.")
                 continue
             finally:
                 pass
@@ -676,9 +676,8 @@ class Main:
                 case 5:
                     return True
                 case _:
-                    print("Invalid choice. Please try again.")
+                    print("  ✗ Invalid choice. Please try again.")
         return False
-
 
     def items_menu(self):
         while True:
@@ -698,9 +697,9 @@ class Main:
     def users_options(self):
         while True:
             try:
-                users_option = int(input("Enter choice: "))
+                users_option = int(input("  Enter choice: "))
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("  ✗ Invalid input. Please enter a number.")
                 continue
             finally:
                 pass
@@ -721,9 +720,8 @@ class Main:
                 case 5:
                     return True
                 case _:
-                    print("Invalid choice. Please try again.")
+                    print("  ✗ Invalid choice. Please try again.")
         return False
-
 
     def users_menu(self):
         while True:
@@ -744,84 +742,84 @@ class Main:
         # FIXME: Add comprehensive exception handling for all library operations
         print_menu_header("Borrowing Menu")
         try:
-            item_id = input("Item id: ").strip()
+            item_id = input("  Item ID: ").strip()
             if not item_id:
-                print("Error: Item ID cannot be empty.")
+                print("  ✗ Error: Item ID cannot be empty.")
                 return
             
             item = self.get_item(item_id)
             if not item:
-                print(f"No item found with ID: {item_id}")
+                print(f"  ✗ No item found with ID: {item_id}")
                 return
             
-            user_id = input("User ID: ").strip()
+            user_id = input("  User ID: ").strip()
             if not user_id:
-                print("Error: User ID cannot be empty.")
+                print("  ✗ Error: User ID cannot be empty.")
                 return
             
             user = self.get_user(user_id)
             if not user:
-                print(f"No user found with ID: {user_id}")
+                print(f"  ✗ No user found with ID: {user_id}")
                 return
 
             self.library.borrow_item(user, item)
-            print(f"User '{user_id}' borrowed Item '{item_id}' successfully")
+            print(f"  ✓ User '{user_id}' borrowed Item '{item_id}' successfully")
         except ItemNotAvailableError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except ItemNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except UserNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         finally:
-            print("Returning to Borrow/Return menu...")
+            print("  Returning to Borrow/Return menu...")
         print()
 
     def return_item_menu(self):
         # FIXME: Add comprehensive exception handling for all library operations
         print_menu_header("Returning Menu")
         try:
-            item_id = input("Item id: ").strip()
+            item_id = input("  Item ID: ").strip()
             if not item_id:
-                print("Error: Item ID cannot be empty.")
+                print("  ✗ Error: Item ID cannot be empty.")
                 return
             
             item = self.get_item(item_id)
             if not item:
-                print(f"No item found with ID: {item_id}")
+                print(f"  ✗ No item found with ID: {item_id}")
                 return
             
-            user_id = input("User ID: ").strip()
+            user_id = input("  User ID: ").strip()
             if not user_id:
-                print("Error: User ID cannot be empty.")
+                print("  ✗ Error: User ID cannot be empty.")
                 return
             
             user = self.get_user(user_id)
             if not user:
-                print(f"No user found with ID: {user_id}")
+                print(f"  ✗ No user found with ID: {user_id}")
                 return
             
             self.library.return_item(user, item)
-            print(f"User '{user_id}' returned Item '{item_id}' successfully")
+            print(f"  ✓ User '{user_id}' returned Item '{item_id}' successfully")
         except ItemNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except UserNotFoundError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except InvalidDataTypeError as e:
-            print(f"Error: {e}")
+            print(f"  ✗ Error: {e}")
         except Exception as e:
-            print(f"Unexpected error: {e}")
+            print(f"  ✗ Unexpected error: {e}")
         print()
 
     def borrow_return_options(self):
         while True:
             try:
-                borrow_return_option = int(input("Enter choice: "))
+                borrow_return_option = int(input("  Enter choice: "))
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("  ✗ Invalid input. Please enter a number.")
                 continue
             finally:
                 pass
@@ -836,9 +834,8 @@ class Main:
                 case 3:
                     return True
                 case _:
-                    print("Invalid choice. Please try again.")
+                    print("  ✗ Invalid choice. Please try again.")
         return False
-
 
     def borrow_return_menu(self):
         while True:
@@ -856,9 +853,9 @@ class Main:
     def main_options(self):
         while True:
             try:
-                main_option = int(input("Enter choice: "))
+                main_option = int(input("  Enter choice: "))
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("  ✗ Invalid input. Please enter a number.")
                 continue
             finally:
                 pass
@@ -876,7 +873,7 @@ class Main:
                 case 4:
                     return True
                 case _:
-                    print("Invalid choice. Please try again.")
+                    print("  ✗ Invalid choice. Please try again.")
         return False
 
     def main_menu(self):
@@ -894,16 +891,18 @@ class Main:
         print()
 
     def run(self):
-        print("Welcome to LMS")
+        print("  Welcome to Library Management System (LMS)")
+        print()
         self.main_menu()
         # TODO: Add graceful handling for data saving
         try:
             self.library.save_data()
-            print("Library data saved successfully.")
+            print("  ✓ Library data saved successfully.")
         except IOError as e:
-            print(f"Error saving library data: {e}")
+            print(f"  ✗ Error saving library data: {e}")
         except Exception as e:
-            print(f"Unexpected error while saving: {e}")
+            print(f"  ✗ Unexpected error while saving: {e}")
+        print("  Thank you for using LMS!")
 
 if __name__ == "__main__":
     main = Main()
