@@ -102,8 +102,9 @@ class Library:
             if item in self.__items:
                 index = self.__items.index(item)
                 self.__items[index] = new_item
+                return True
             else:
-                raise ItemNotFoundError(item)
+                raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
 
         except ItemNotFoundError as not_found:
             print(f"Caught: {not_found}")
@@ -119,8 +120,22 @@ class Library:
         Raises:
             ItemNotFoundError: If item doesn't exist
         """
-        # FIXME: exception handling
-        self.items.remove(item)
+        try:
+            self.__validate_item(item)
+            
+            if item not in self.__items:
+                raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+
+            self.__items.remove(item)
+            return True
+        
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+
+        except ItemNotFoundError as not_found:
+            print(f"Caught: {not_found}")
+            return False 
 
     def add_user(self, user):
         """
