@@ -83,17 +83,16 @@ class User:
         '''
     # FIXME: exception handling: validate item (Book, DVD, Magazine), insure no duplicates
     # FIXME: should take item_id only
-    def add_borrowed_item(self, item):
-        """Add an item to the user's borrowed items list."""
-        if item not in self.__borrowed_items:
-            self.__borrowed_items.append(item)
+    def add_borrowed_item(self, item_id):
+        """Add an item_id to the user's borrowed items list."""
+        if item_id not in self.__borrowed_items:
+            self.__borrowed_items.append(item_id)
 
     # FIXME: exception handling: validate item (Book, DVD, Magazine), insure item exists
-    # FIXME: should take item_id only
-    def remove_borrowed_item(self, item):
+    def remove_borrowed_item(self, item_id):
         """Remove an item from the user's borrowed items list."""
-        if item in self.__borrowed_items:
-            self.__borrowed_items.remove(item)
+        if item_id in self.__borrowed_items:
+            self.__borrowed_items.remove(item_id)
 
     @first_name.setter
     def first_name(self, first_name):
