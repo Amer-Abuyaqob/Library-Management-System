@@ -9,6 +9,8 @@
     "id": "U-Bo-Jo-2",
     "first_name": "Bob",
     "last_name": "Johnson",
-    "borrowed_items": ["D-WA-1999-1"]
+    "borrowed_items": [
+      "D-WA-1999-1"
+    ]
   }
 ]
