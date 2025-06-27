@@ -6,24 +6,18 @@ class LibraryItem(ABC):
     def __init__(self, title, author, year, available):
         super().__init__()
 
-        try:
-            self.__validate_title(title)
-            self.__title = title
+        self.__validate_title(title)
+        self.__title = title
 
-            self.__validate_author(author)
-            self.__author = author
+        self.__validate_author(author)
+        self.__author = author
 
-            self.__validate_year(year)
-            self.__year = year
-            
-            # FIXME: Fix it like codex did, currently it returns True for any (not None) input
-            self.__available = bool(available)
-            self._id = ""
-
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
+        self.__validate_year(year)
+        self.__year = year
+        
+        # FIXME: Fix it like codex did, currently it returns True for any (not None) input
+        self.__available = bool(available)
+        self._id = ""
 
     @property
     def title(self):
@@ -47,42 +41,18 @@ class LibraryItem(ABC):
 
     @title.setter
     def title(self, title):
-        try:
-            self.__validate_title(title)
-            self.__title = title
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_title(title)
+        self.__title = title
 
     @author.setter
     def author(self, author):
-        try:
-            self.__validate_author(author)
-            self.__author = author
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_author(author)
+        self.__author = author
 
     @year.setter
     def year(self, year):
-        try:
-            self.__validate_year(year)
-            self.__year = year
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_year(year)
+        self.__year = year
 
     @available.setter
     def available(self, available):
@@ -153,7 +123,7 @@ class LibraryItem(ABC):
             raise InvalidDataTypeError("integer", type(year).__name__)
 
         if year <= 0:
-            raise InvalidValueError("Year must be a positive non zero integer")
+            raise InvalidValueError("Year must be a positive non-zero integer")
 
     def _item_id(self):
         """

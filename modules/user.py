@@ -5,24 +5,18 @@ class User:
     # FIXME: delete attribute (user_id) after removing it from all of the other methods
     def __init__(self, first_name, last_name, custom_id=None):
         # TODO: auto generated user_id (U-FfLl-N)
-        try:
-            self.__validate_name(first_name, "first name")
-            self.__first_name = first_name
+        self.__validate_name(first_name, "first name")
+        self.__first_name = first_name
 
-            self.__validate_name(last_name, "last name")
-            self.__last_name = last_name
+        self.__validate_name(last_name, "last name")
+        self.__last_name = last_name
 
-            self.__borrowed_items = []
+        self.__borrowed_items = []
 
-            User.counter += 1
-            self.__user_num = User.counter
-            # Set ID to custom_id if provided, otherwise use auto-generated ID
-            self.__id = custom_id if custom_id is not None else self.__user_id()
-
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
+        User.counter += 1
+        self.__user_num = User.counter
+        # Set ID to custom_id if provided, otherwise use auto-generated ID
+        self.__id = custom_id if custom_id is not None else self.__user_id()
 
     def __validate_name(self, name, name_type):
         """
@@ -96,27 +90,11 @@ class User:
 
     @first_name.setter
     def first_name(self, first_name):
-        try:
-            self.__validate_name(first_name, "first name")
-            self.__first_name = first_name
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_name(first_name, "first name")
+        self.__first_name = first_name
 
     @last_name.setter
     def last_name(self, last_name):
-        try:
-            self.__validate_name(last_name, "last name")
-            self.__last_name = last_name
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_name(last_name, "last name")
+        self.__last_name = last_name
         

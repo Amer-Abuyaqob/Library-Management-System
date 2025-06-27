@@ -16,8 +16,6 @@ class Book(LibraryItem, Reservable):
         # Set ID to custom_id if provided, otherwise use auto-generated ID
         self._id = custom_id if custom_id is not None else self._item_id()
 
-            
-
     def __validate_genre(self, genre):
         """
         Validate the genre parameter for a book.
@@ -52,16 +50,8 @@ class Book(LibraryItem, Reservable):
 
     @genre.setter
     def genre(self, genre):
-        try:
-            self.__validate_genre(genre)
-            self.__genre = genre
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_genre(genre)
+        self.__genre = genre
 
     def display_info(self):
         return f'''

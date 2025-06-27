@@ -8,20 +8,13 @@ class DVD(LibraryItem, Reservable):
 
     def __init__(self, title, author, year, available, duration, custom_id=None):
         super().__init__(title, author, year, available)
-
-        try:
-            self.__validate_duration(duration)
-            self.__duration = duration  # duration of the dvd content in minutes
-            self.__reserved: User | None = None
-            DVD.counter += 1
-            self.__dvd_num = DVD.counter
-            # Set ID to custom_id if provided, otherwise use auto-generated ID
-            self._id = custom_id if custom_id is not None else self._item_id()
-
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
+        self.__validate_duration(duration)
+        self.__duration = duration  # duration of the dvd content in minutes
+        self.__reserved: User | None = None
+        DVD.counter += 1
+        self.__dvd_num = DVD.counter
+        # Set ID to custom_id if provided, otherwise use auto-generated ID
+        self._id = custom_id if custom_id is not None else self._item_id()
 
     def __validate_duration(self, duration):
         """
@@ -57,16 +50,8 @@ class DVD(LibraryItem, Reservable):
 
     @duration.setter
     def duration(self, duration):
-        try:
-            self.__validate_duration(duration)
-            self.__duration = duration
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_duration(duration)
+        self.__duration = duration
 
     def display_info(self):
         return f'''

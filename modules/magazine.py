@@ -6,19 +6,12 @@ class Magazine(LibraryItem):
     def __init__(self, title, author, year, available, genre, custom_id=None):
         # FIXME: add reserved as an attribute and refactor all of the methods accordingly
         super().__init__(title, author, year, available)
-
-        try:
-            self.__validate_genre(genre)
-            self.__genre = genre
-            Magazine.counter += 1
-            self.__magazine_num = Magazine.counter
-            # Set ID to custom_id if provided, otherwise use auto-generated ID
-            self._id = custom_id if custom_id is not None else self._item_id()
-
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
+        self.__validate_genre(genre)
+        self.__genre = genre
+        Magazine.counter += 1
+        self.__magazine_num = Magazine.counter
+        # Set ID to custom_id if provided, otherwise use auto-generated ID
+        self._id = custom_id if custom_id is not None else self._item_id()
 
     def __validate_genre(self, genre):
         """
@@ -54,16 +47,8 @@ class Magazine(LibraryItem):
 
     @genre.setter
     def genre(self, genre):
-        try:
-            self.__validate_genre(genre)
-            self.__genre = genre
-            return True
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-            return False
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
-            return False
+        self.__validate_genre(genre)
+        self.__genre = genre
 
     def display_info(self):
         return f'''
