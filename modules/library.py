@@ -295,10 +295,9 @@ class Library:
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
 
-        # FIXME: add id field
-        # FIXME: validate id field: str, not None, not empty, follows the format
         # Common mandatory fields for all items
         required_fields = {
+            "id": str,
             "type": str,
             "title": str,
             "author": str,
@@ -306,6 +305,7 @@ class Library:
             "available": bool,
         }
 
+        # Validate required fields
         for field, expected_type in required_fields.items():
             # try:
             if field not in item:
@@ -316,10 +316,12 @@ class Library:
             # except
             
             # Validate if the data follows the required format (not empty, > 0)
-            # type: not empty, title: not empty, author: > 2 chars, year: > 0
+            # id: not empty, type: not empty, title: not empty, author: > 2 chars, year: > 0
 
             # try:
-            if field == "type" and not item[field].strip():
+            if field == "id" and not item[field].strip():
+                raise InvalidValueError("ID must be a non-empty string")
+            elif field == "type" and not item[field].strip():
                 raise InvalidValueError("Type must be a non-empty string")
             elif field == "title" and not item[field].strip():
                 raise InvalidValueError("Title must be a non-empty string")
@@ -348,7 +350,7 @@ class Library:
             if not item["genre"].strip():
                 raise InvalidValueError("Genre must be a non-empty string")
                 
-            item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+            item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"], item["id"])
             # except
 
         elif item_type == "MAGAZINE":
@@ -361,7 +363,7 @@ class Library:
             # genre: not empty
             if not item["genre"].strip():
                 raise InvalidValueError("Genre must be a non-empty string")
-            item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+            item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"], item["id"])
             # except
 
         elif item_type == "DVD":
@@ -374,7 +376,7 @@ class Library:
             # duration: > 0
             if item["duration"] <= 0:
                 raise InvalidValueError("Duration must be a positive non-zero integer")
-            item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+            item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"], item["id"])
             # except
 
         else:
@@ -409,30 +411,51 @@ class Library:
         # TODO: move to helper method
         for user in users_data:
             try:
-                self.__IsUserName(user["first_name"], "first name")
-                self.__IsUserName(user["last_name"], "last name")
-                user_obj = User(user["first_name"], user["last_name"])
+                # Validate required fields
+                required_fields = {
+                    "first_name": str,
+                    "last_name": str,
+                    "id": str
+                }
+
+                for field, expected_type in required_fields.items():
+                    if field not in user:
+                        raise MissingFieldError(field)
+                    
+                    if not isinstance(user[field], expected_type):
+                        raise InvalidDataTypeError(expected_type.__name__, type(user[field]).__name__)
+                    
+                    # Validate if the data follows the required format
+                    if field in ["first_name", "last_name"] and len(user[field].strip()) < 2:
+                        raise InvalidValueError(f"{field.replace('_', ' ').title()} must be a non-empty string with at least two characters")
+                    elif field == "id" and not user[field].strip():
+                        raise InvalidValueError("User ID must be a non-empty string")
+
+                # Create user object with validated data
+                user_obj = User(user["first_name"], user["last_name"], user["id"])
+
+                # Add borrowed items by matching IDs with already loaded items
+                for item_id in user.get("borrowed_items", []):
+                    try:
+                        # Find the corresponding item in the library
+                        for item in self.__items:
+                            if item.id == item_id:
+                                user_obj.add_borrowed_item(item_id)
+                                break
+                        else:
+                            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+
+                    except ItemNotFoundError as item_Nfound:
+                        print(f"Caught: {item_Nfound}")
+
+                self.add_user(user_obj)
+
+            except MissingFieldError as missing:
+                print(f"Caught: {missing}")
             except InvalidDataTypeError as data_type:
                 print(f"Caught: {data_type}")
             except InvalidValueError as value:
                 print(f"Caught: {value}")
-
-            # TODO: move to helper method
-            # Add borrowed items by matching IDs with already loaded items
-            for item_id in user.get("borrowed_items", []):
-                try:
-                    # Find the corresponding item in the library
-                    for item in self.__items:
-                        if item.id == item_id:
-                            user_obj.add_borrowed_item(item_id)
-                            break
-                    else:
-                        raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
-
-                except ItemNotFoundError as item_Nfound:
-                    print(f"Caught: {item_Nfound}")
-
-            self.add_user(user_obj)
 
     def load_data(self):
         """
@@ -445,8 +468,8 @@ class Library:
 
 
     def __item_entry(self, item):
-        # add id
         entry = {
+                "id": item.id,
                 "type": item.__class__.__name__,
                 "title": item.title,
                 "author": item.author,
@@ -460,8 +483,8 @@ class Library:
         return entry
     
     def __user_entry(self, user):
-        # add id
         entry = {
+            "id": user.id,
             "first_name": user.first_name,
             "last_name": user.last_name,
             "borrowed_items": user.borrowed_items

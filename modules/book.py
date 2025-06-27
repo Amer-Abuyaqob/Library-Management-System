@@ -6,21 +6,16 @@ from exceptions import InvalidDataTypeError, InvalidValueError
 class Book(LibraryItem, Reservable):
     counter = 0  # counts every object created from this class
     # FIXME: add reserved as an attribute and refactor all of the methods accordingly
-    def __init__(self, title, author, year, available, genre):
+    def __init__(self, title, author, year, available, genre, custom_id=None):
         super().__init__(title, author, year, available)
+        self.__validate_genre(genre)
+        self.__genre = genre
+        self.__reserved: User | None = None
+        Book.counter += 1
+        self.__book_num = Book.counter
+        # Set ID to custom_id if provided, otherwise use auto-generated ID
+        self._id = custom_id if custom_id is not None else self._item_id()
 
-        try:
-            self.__validate_genre(genre)
-            self.__genre = genre
-            self.__reserved: User | None = None
-            Book.counter += 1
-            self.__book_num = Book.counter
-            self._id = self._item_id()  # Initialize auto generated ID
-
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
             
 
     def __validate_genre(self, genre):

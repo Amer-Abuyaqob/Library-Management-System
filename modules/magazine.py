@@ -3,7 +3,7 @@ from exceptions import InvalidDataTypeError, InvalidValueError
 
 class Magazine(LibraryItem):
     counter = 0  # counts every object created from this class
-    def __init__(self, title, author, year, available, genre):
+    def __init__(self, title, author, year, available, genre, custom_id=None):
         # FIXME: add reserved as an attribute and refactor all of the methods accordingly
         super().__init__(title, author, year, available)
 
@@ -12,7 +12,8 @@ class Magazine(LibraryItem):
             self.__genre = genre
             Magazine.counter += 1
             self.__magazine_num = Magazine.counter
-            self._id = self._item_id()  # Initialize auto generated ID
+            # Set ID to custom_id if provided, otherwise use auto-generated ID
+            self._id = custom_id if custom_id is not None else self._item_id()
 
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")

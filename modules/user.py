@@ -3,7 +3,7 @@ from exceptions import InvalidDataTypeError, InvalidValueError
 class User:
     counter = 0
     # FIXME: delete attribute (user_id) after removing it from all of the other methods
-    def __init__(self, first_name, last_name):
+    def __init__(self, first_name, last_name, custom_id=None):
         # TODO: auto generated user_id (U-FfLl-N)
         try:
             self.__validate_name(first_name, "first name")
@@ -16,7 +16,8 @@ class User:
 
             User.counter += 1
             self.__user_num = User.counter
-            self.__id = self.__user_id()
+            # Set ID to custom_id if provided, otherwise use auto-generated ID
+            self.__id = custom_id if custom_id is not None else self.__user_id()
 
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")

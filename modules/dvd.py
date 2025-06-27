@@ -6,7 +6,7 @@ from exceptions import InvalidDataTypeError, InvalidValueError
 class DVD(LibraryItem, Reservable):
     counter = 0
 
-    def __init__(self, title, author, year, available, duration):
+    def __init__(self, title, author, year, available, duration, custom_id=None):
         super().__init__(title, author, year, available)
 
         try:
@@ -15,7 +15,8 @@ class DVD(LibraryItem, Reservable):
             self.__reserved: User | None = None
             DVD.counter += 1
             self.__dvd_num = DVD.counter
-            self._id = self._item_id()  # Initialize auto generated ID
+            # Set ID to custom_id if provided, otherwise use auto-generated ID
+            self._id = custom_id if custom_id is not None else self._item_id()
 
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
