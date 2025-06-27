@@ -904,3 +904,7 @@ class Main:
             print(f"Error saving library data: {e}")
         except Exception as e:
             print(f"Unexpected error while saving: {e}")
+
+if __name__ == "__main__":
+    main = Main()
+    main.run()

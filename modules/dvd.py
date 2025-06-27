@@ -36,9 +36,9 @@ class DVD(LibraryItem, Reservable):
     def _item_id(self):
         """
         Auto generation of item IDs based on the item's type
-        Format: T-AA-YYYY-N
+        Format: T-Aa-YYYY-N
             T: Item's type -> D: DVD
-            AA: Author's first name initials
+            Aa: Author's initials (first character of each word)
             YYYY: Publish year
             N: Item number
         """

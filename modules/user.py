@@ -54,14 +54,14 @@ class User:
     
     def __user_id(self):
         """
-        Auto generation of item IDs based on the item's type
-        Format: T.AA.YYYY.N
-            T: Item's type -> {B: book, D: DVD, M: Magazine}
-            AA: Author's first name initials
-            YYYY: Publish year
-            N: Item number (implemented by subclasses)
+        Auto generation of user IDs
+        Format: U-Ff-Ll-N
+            U: User
+            Ff: First name initials (first two characters)
+            Ll: Last name initials (first two characters)
+            N: User number
         """
-        return f"U-{self.__first_initials()}{self.__last_initials()}-{self.__user_num}"
+        return f"U-{self.__first_initials()}-{self.__last_initials()}-{self.__user_num}"
     
     def __first_initials(self):
         return f"{self.__first_name[0].upper()}{self.__first_name[1].lower()}"

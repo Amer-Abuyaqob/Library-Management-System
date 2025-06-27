@@ -128,13 +128,20 @@ class LibraryItem(ABC):
     def _item_id(self):
         """
         Auto generation of item IDs based on the item's type
-        Format: T.AA.YYYY.N
+        Format: T-Aa-YYYY-N
             T: Item's type -> {B: book, D: DVD, M: Magazine}
-            AA: Author's first name initials
+            Aa: Author's initials (first character of each word)
             YYYY: Publish year
             N: Item number (implemented by subclasses)
         """
         return f"{self.__author_initials()}-{self.__year}"
     
     def __author_initials(self):
-        return f"{self.__author[0].upper()}{self.__author[1].lower()}"
+        """Generate author initials from the first character of each word in the author's name."""
+        words = self.__author.strip().split()
+        if len(words) >= 2:
+            # Take first character of first and last word
+            return f"{words[0][0].upper()}{words[-1][0].upper()}"
+        else:
+            # If single word, take first two characters
+            return f"{self.__author[0].upper()}{self.__author[1].lower()}"
