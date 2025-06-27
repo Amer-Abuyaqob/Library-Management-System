@@ -242,7 +242,7 @@ class Main:
             "2- View by type",
             "3- View by author",
             "4- View by title",
-            "5- View by item_id",
+            "5- View by Item ID",
             "6- Back",
         ])
         self.items_view_options()
