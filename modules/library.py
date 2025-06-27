@@ -33,7 +33,7 @@ class Library:
     def users(self):
         return self.__users
     
-    def __validate_item(self, item):
+    def __isItem(self, item):
         if not isinstance(item, (Book, DVD, Magazine)):
             raise InvalidDataTypeError("Book/DVD/Magazine", type(item).__name__)
       
@@ -42,6 +42,17 @@ class Library:
             if (existing_item.title == item.title and
                 existing_item.author == item.author and
                 existing_item.year == item.year):
+                return True
+        return False
+
+    def __isUser(self, user):
+        if not isinstance(user, User):
+            raise InvalidDataTypeError("User", type(user).__name__)
+      
+    def __user_exists(self, user):
+        for existing_user in self.__users:
+            if (existing_user.first_name == user.first_name and
+                existing_user.last_name == user.last_name):
                 return True
         return False
 
@@ -57,7 +68,7 @@ class Library:
             ItemNotFoundError: If item is not an instance of Book, DVD or Magazine
         """
         try:
-            self.__validate_item(item)
+            self.__isItem(item)
             
             if self.__item_exists(item):
                 raise ItemAlreadyExistsError(f"{item.title} ({item.year}) by {item.author}")
@@ -85,12 +96,12 @@ class Library:
             ItemNotFoundError: If item doesn't exist
         """
         try:
-            self.__validate_item(new_item)
+            self.__isItem(new_item)
             
             if self.__item_exists(new_item):
                 raise ItemAlreadyExistsError(f"{new_item.title} ({new_item.year}) by {new_item.author}")
 
-            self.__validate_item(item)
+            self.__isItem(item)
 
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
@@ -123,7 +134,7 @@ class Library:
             ItemNotFoundError: If item doesn't exist
         """
         try:
-            self.__validate_item(item)
+            self.__isItem(item)
             
             if item not in self.__items:
                 raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
@@ -139,17 +150,6 @@ class Library:
             print(f"Caught: {not_found}")
             return False 
 
-    def __validate_user(self, user):
-        if not isinstance(user, User):
-            raise InvalidDataTypeError("User", type(user).__name__)
-      
-    def __user_exists(self, user):
-        # FIXME: compare based on name
-        for existing_user in self.__users:
-            if existing_user.id == user.id:
-                return True
-        return False
-
     def add_user(self, user):
         """
         Add a new user to the library.
@@ -162,7 +162,7 @@ class Library:
             ItemAlreadyExistsError: If user with same ID already exists
         """
         try:
-            self.__validate_user(user)
+            self.__isUser(user)
             
             if self.__user_exists(user):
                 # FIXME: replace with UserAlreadyExistsError
@@ -191,7 +191,7 @@ class Library:
             UserNotFoundError: If user doesn't exist
         """
         try:
-            self.__validate_user(user)
+            self.__isUser(user)
             
             if user not in self.__users:
                 # FIXME: Check error parameters in exceptions.py
@@ -222,10 +222,10 @@ class Library:
             ItemAlreadyExistsError: If new_user with same ID already exists
         """
         try:
-            self.__validate_user(user)
-            self.__validate_user(new_user)
+            self.__isUser(user)
+            self.__isUser(new_user)
             
-            if self.__user_exists(new_user) and new_user.id != user.id:
+            if self.__user_exists(new_user):
                 # FIXME: replace with UserAlreadyExistsError
                 raise ItemAlreadyExistsError(f"User with ID '{new_user.id}'")
 
@@ -276,6 +276,8 @@ class Library:
         if not isinstance(item, dict):
             raise InvalidDataTypeError("dict", type(item).__name__)
 
+        # FIXME: add id field
+        # FIXME: validate id field: str, not None, not empty, follows the format
         # Common mandatory fields for all items
         required_fields = {
             "type": str,
@@ -423,7 +425,7 @@ class Library:
             "last_name": user.last_name,
             # FIXME: borrowed items should be saved as a list of item IDs
             # TODO: save it as a dict of item data (type, title, author, year)
-            "borrowed_items": user.borrowed_items
+            "borrowed_items": user.borrowed_items.__str__
         }
         return entry
     
@@ -433,14 +435,10 @@ class Library:
         for item in self.__items:
             entry = self.__item_entry(item)
             items_data.append(entry)
-
         # FIXME: add better exception handling for files and data
-        try:
-            os.makedirs(os.path.dirname(self.__items_file), exist_ok=True)
-            with open(self.__items_file, "w", encoding="utf-8") as f:
-                json.dump(items_data, f, indent=2)
-        except OSError as exc:
-            raise IOError("Failed to save data") from exc
+        os.makedirs(os.path.dirname(self.__items_file), exist_ok=True)
+        with open(self.__items_file, "w", encoding="utf-8") as f:
+            json.dump(items_data, f, indent=2)
 
     def __save_users(self):
         # FIXME: insure data is saved correctly, users_data: list of dict
@@ -448,14 +446,10 @@ class Library:
         for user in self.__users:
             entry = self.__user_entry(user)
             users_data.append(entry)
-
         # FIXME: add better exception handling for files and data
-        try:
-            os.makedirs(os.path.dirname(self.__users_file), exist_ok=True)
-            with open(self.__users_file, "w", encoding="utf-8") as f:
-                json.dump(users_data, f, indent=2)
-        except OSError as exc:
-            raise IOError("Failed to save data") from exc
+        os.makedirs(os.path.dirname(self.__users_file), exist_ok=True)
+        with open(self.__users_file, "w", encoding="utf-8") as f:
+            json.dump(users_data, f, indent=2)
 
     def save_data(self):
         """
@@ -479,28 +473,40 @@ class Library:
             ItemNotFoundError: If the item doesn't exist
             ItemNotAvailableError: If the item is not available
         """
-        # FIXME: vladitae if item is a LibraryItem
-        # FIXME: validate if user is a User
+        try:
+            self.__isItem(item)
+            self.__isUser(user)
 
-        # Check if user exists in the library
-        if user not in self.__users:
-            raise UserNotFoundError(f"User '{user.id}' not found in the library")
+            # Check if user exists in the library
+            if user not in self.__users:
+                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+            
+            # Check if item exists in the library
+            if item not in self.__items:
+                raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+            
+            # Check if item is available
+            if not item.available:
+                raise ItemNotAvailableError(f"{item.title} ({item.year}) by {item.author}")
+            
+            # Add item to user's borrowed items
+            user.add_borrowed_item(item)
+            # Mark item as unavailable
+            item.available = False
+            return True
         
-        # Check if item exists in the library
-        if item not in self.__items:
-            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
-        
-        # Check if item is available
-        if not item.available:
-            raise ItemNotAvailableError(f"{item.title} ({item.year}) by {item.author}")
-        
-        # Add item to user's borrowed items
-        user.add_borrowed_item(item)
-        
-        # Mark item as unavailable
-        item.available = False
-        
-        return True
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False  
+        except UserNotFoundError as user_Nfound:
+            print(f"Caught: {user_Nfound}")
+            return False
+        except ItemNotFoundError as item_Nfound:
+            print(f"Caught: {item_Nfound}")
+            return False
+        except ItemNotAvailableError as item_Navailable:
+            print(f"Caught: {item_Navailable}")
+            return False
 
     def return_item(self, user, item):
         """
@@ -515,25 +521,37 @@ class Library:
             ItemNotFoundError: If the item doesn't exist
             ItemNotBorrowedError: If the user hasn't borrowed the item
         """
-        # FIXME: vladitae if item is a LibraryItem
-        # FIXME: validate if user is a User
+        try:
+            self.__isItem(item)
+            self.__isUser(user)
         
-        # Check if user exists in the library
-        if user not in self.users:
-            raise UserNotFoundError(f"User '{user.id}' not found in the library")
+            # Check if user exists in the library
+            if user not in self.users:
+                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+            
+            # Check if item exists in the library
+            if item not in self.items:
+                raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+            
+            # Check if user has borrowed the item
+            if item not in user.borrowed_items:
+                raise ItemNotBorrowedError(f"{item.title} ({item.year}) by {item.author}", f"{user.first_name} {user.last_name}")
+            
+            # Remove item from user's borrowed items
+            user.remove_borrowed_item(item)
+            # Mark item as available
+            item.available = True
+            return True
         
-        # Check if item exists in the library
-        if item not in self.items:
-            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
-        
-        # Check if user has borrowed the item
-        if item not in user.borrowed_items:
-            raise ItemNotBorrowedError(f"{item.title} ({item.year}) by {item.author}", f"{user.first_name} {user.last_name}")
-        
-        # Remove item from user's borrowed items
-        user.remove_borrowed_item(item)
-        
-        # Mark item as available
-        item.available = True
-        
-        return True
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False  
+        except UserNotFoundError as user_Nfound:
+            print(f"Caught: {user_Nfound}")
+            return False
+        except ItemNotFoundError as item_Nfound:
+            print(f"Caught: {item_Nfound}")
+            return False
+        except ItemNotBorrowedError as item_Nborrowed:
+            print(f"Caught: {item_Nborrowed}")
+            return False
