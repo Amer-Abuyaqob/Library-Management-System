@@ -137,6 +137,17 @@ class Library:
             print(f"Caught: {not_found}")
             return False 
 
+    def __validate_user(self, user):
+        if not isinstance(user, User):
+            raise InvalidDataTypeError("User", type(user).__name__)
+      
+    def __user_exists(self, user):
+        # FIXME: compare based on name
+        for existing_user in self.__users:
+            if existing_user.id == user.id:
+                return True
+        return False
+
     def add_user(self, user):
         """
         Add a new user to the library.
@@ -145,45 +156,98 @@ class Library:
         Returns:
             bool: True if user was added successfully, False otherwise
         Raises:
-            ValueError: If user with same ID already exists
-            UserNotFoundError: If user is not an instance of User
+            InvalidDataTypeError: If user is not an instance of User
+            ItemAlreadyExistsError: If user with same ID already exists
         """
-        if not isinstance(user, User):
-            raise UserNotFoundError("Invalid user type")
+        try:
+            self.__validate_user(user)
+            
+            if self.__user_exists(user):
+                # FIXME: replace with UserAlreadyExistsError
+                raise ItemAlreadyExistsError(f"User with ID '{user.id}'")
 
-        if any(existing_user.id == user.id for existing_user in self.users):
-            raise ValueError(f"User with ID '{user.id}' already exists")
+            self.__users.append(user)
+            return True
 
-        self.users.append(user)
-        return True
-    
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+        # FIXME: replace with UserAlreadyExistsError
+        except ItemAlreadyExistsError as exists:
+            print(f"Caught: {exists}")
+            return False
+
     def remove_user(self, user):
         """
         Remove a user from the library.
         Args:
-            user_id: ID of the user to remove
+            user: User object to remove
         Returns:
             bool: True if user was removed successfully, False otherwise
         Raises:
+            InvalidDataTypeError: If user is not an instance of User
             UserNotFoundError: If user doesn't exist
         """
-        # FIXME: exception handling
-        self.users.remove(user)
+        try:
+            self.__validate_user(user)
+            
+            if user not in self.__users:
+                # FIXME: Check error parameters in exceptions.py
+                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+
+            self.__users.remove(user)
+            return True
+        
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+
+        except UserNotFoundError as not_found:
+            print(f"Caught: {not_found}")
+            return False
 
     def update_user(self, user, new_user):
         """
         Update a user's attributes.
         Args:
-            user_id: ID of the user to update
-            **kwargs: Key-value pairs of attributes to update
+            user: User object to update
+            new_user: New User object with updated attributes
         Returns:
             bool: True if update was successful, False otherwise
         Raises:
+            InvalidDataTypeError: If user or new_user is not an instance of User
             UserNotFoundError: If user doesn't exist
+            ItemAlreadyExistsError: If new_user with same ID already exists
         """
-        # FIXME: exception handling
-        index = self.users.index(user)
-        self.users[index] = new_user
+        try:
+            self.__validate_user(user)
+            self.__validate_user(new_user)
+            
+            if self.__user_exists(new_user) and new_user.id != user.id:
+                # FIXME: replace with UserAlreadyExistsError
+                raise ItemAlreadyExistsError(f"User with ID '{new_user.id}'")
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+
+        # FIXME: replace with UserAlreadyExistsError
+        except ItemAlreadyExistsError as exists:
+            print(f"Caught: {exists}")
+            return False
+
+        try:
+            if user in self.__users:
+                index = self.__users.index(user)
+                self.__users[index] = new_user
+                return True
+            else:
+                # FIXME: Check error parameters in exceptions.py
+                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+
+        except UserNotFoundError as not_found:
+            print(f"Caught: {not_found}")
+            return False
 
     def __create_item(self, item):
         """Create a ``LibraryItem`` from a raw dictionary.
