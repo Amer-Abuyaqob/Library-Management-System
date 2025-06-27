@@ -32,7 +32,8 @@ class ItemNotFoundError(LibraryError):
 
 class UserNotFoundError(LibraryError):
     """Raised when a user is not found in the library."""
-    pass
+    def __init__(self, user):
+        super().__init__(f"The user [{user}] doesn't exists.")
 
 
 class ItemNotAvailableError(LibraryError):

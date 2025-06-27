@@ -56,6 +56,24 @@ class Library:
                 return True
         return False
 
+    def __IsUserName(self, name, name_type):
+        """
+        Validate a name parameter for a user.
+        
+        Args:
+            name: The name to validate
+            name_type: The type of name (e.g., "first name", "last name") for error messages
+            
+        Raises:
+            InvalidDataTypeError: If name is not a string
+            InvalidValueError: If name is empty, contains only whitespace, or has less than 2 characters
+        """
+        if not isinstance(name, str):
+            raise InvalidDataTypeError("string", type(name).__name__)
+            
+        if not name.strip() or len(name.strip()) < 2:
+            raise InvalidValueError(f"{name_type.title()} must be a non-empty string with at least two characters")
+        
     def add_item(self, item):
         """
         Add a new item to the library.
@@ -194,8 +212,7 @@ class Library:
             self.__isUser(user)
             
             if user not in self.__users:
-                # FIXME: Check error parameters in exceptions.py
-                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+                raise UserNotFoundError(f"{user.first_name} {user.last_name}")
 
             self.__users.remove(user)
             return True
@@ -244,8 +261,7 @@ class Library:
                 self.__users[index] = new_user
                 return True
             else:
-                # FIXME: Check error parameters in exceptions.py
-                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+                raise UserNotFoundError(f"{user.first_name} {user.last_name}")
 
         except UserNotFoundError as not_found:
             print(f"Caught: {not_found}")
@@ -273,8 +289,11 @@ class Library:
             If the dictionary is missing fields or if a field has an invalid
             type or value.
         """
-        if not isinstance(item, dict):
-            raise InvalidDataTypeError("dict", type(item).__name__)
+        try:
+            if not isinstance(item, dict):
+                raise InvalidDataTypeError("dict", type(item).__name__)
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
 
         # FIXME: add id field
         # FIXME: validate id field: str, not None, not empty, follows the format
@@ -288,14 +307,18 @@ class Library:
         }
 
         for field, expected_type in required_fields.items():
+            # try:
             if field not in item:
                 raise MissingFieldError(field)
                 
             if not isinstance(item[field], expected_type):
                 raise InvalidDataTypeError(expected_type.__name__, type(item[field]).__name__)
+            # except
             
             # Validate if the data follows the required format (not empty, > 0)
             # type: not empty, title: not empty, author: > 2 chars, year: > 0
+
+            # try:
             if field == "type" and not item[field].strip():
                 raise InvalidValueError("Type must be a non-empty string")
             elif field == "title" and not item[field].strip():
@@ -304,14 +327,18 @@ class Library:
                 raise InvalidValueError("Author must be a non-empty string with at least two characters")
             elif field == "year" and item[field] <= 0:
                 raise InvalidValueError("Year must be a positive non-zero integer")
+            # except
 
         # Optional validation for reserved
+        # try:
         if "reserved" in item and not isinstance(item["reserved"], User):
             raise InvalidDataTypeError("User", type(item["reserved"]).__name__)
+        # except
 
         item_type = item["type"].upper()
 
         if item_type == "BOOK":
+            # try:
             if "genre" not in item:
                 raise MissingFieldError("genre")
             if not isinstance(item["genre"], str):
@@ -322,8 +349,10 @@ class Library:
                 raise InvalidValueError("Genre must be a non-empty string")
                 
             item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+            # except
 
         elif item_type == "MAGAZINE":
+            # try:
             if "genre" not in item:
                 raise MissingFieldError("genre")
             if not isinstance(item["genre"], str):
@@ -333,8 +362,10 @@ class Library:
             if not item["genre"].strip():
                 raise InvalidValueError("Genre must be a non-empty string")
             item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+            # except
 
         elif item_type == "DVD":
+            # try:
             if "duration" not in item:
                 raise MissingFieldError("duration")
             if not isinstance(item["duration"], int):
@@ -344,9 +375,12 @@ class Library:
             if item["duration"] <= 0:
                 raise InvalidValueError("Duration must be a positive non-zero integer")
             item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+            # except
 
         else:
+            # try:
             raise InvalidValueError(f"Unknown item type '{item_type}'")
+            # except
 
         return item_obj
     
@@ -356,9 +390,9 @@ class Library:
         Reads items.json to populate the library's items list.
         """
         self.__items = []  # Clearing the items list to avoid duplicates
-        # FIXME: exception handling for file and data
         with open(self.__items_file, "r", encoding="utf-8") as f:
             items_data = json.load(f)
+
         # FIXME: try-except here
         for item in items_data:
             item_obj = self.__create_item(item)
@@ -370,25 +404,33 @@ class Library:
         Reads users.json to populate the library's users list.
         """
         self.__users = []  # Clearing the items list to avoid duplicates
-
-        # FIXME: exception handling for file and data
         with open(self.__users_file, "r", encoding="utf-8") as f:
             users_data = json.load(f)
         # TODO: move to helper method
-        # FIXME: validate user data
         for user in users_data:
-            user_obj = User(user["first_name"], user["last_name"])
+            try:
+                self.__IsUserName(user["first_name"], "first name")
+                self.__IsUserName(user["last_name"], "last name")
+                user_obj = User(user["first_name"], user["last_name"])
+            except InvalidDataTypeError as data_type:
+                print(f"Caught: {data_type}")
+            except InvalidValueError as value:
+                print(f"Caught: {value}")
 
             # TODO: move to helper method
             # Add borrowed items by matching IDs with already loaded items
             for item_id in user.get("borrowed_items", []):
-                # Find the corresponding item in the library
-                # FIXME: exception handling: item not found
-                # FIXME: borrowed items are saved as dict of item data (type, title, author, year)
-                for item in self.__items:
-                    if item.id == item_id:
-                        user_obj.add_borrowed_item(item)
-                        break
+                try:
+                    # Find the corresponding item in the library
+                    for item in self.__items:
+                        if item.id == item_id:
+                            user_obj.add_borrowed_item(item_id)
+                            break
+                    else:
+                        raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+
+                except ItemNotFoundError as item_Nfound:
+                    print(f"Caught: {item_Nfound}")
 
             self.add_user(user_obj)
 
@@ -398,14 +440,12 @@ class Library:
         Reads items.json and users.json to populate the library's items and users.
         Raises FileNotFoundError if files don't exist.
         """
-        # FIXME: add all of the raised exception
-        try:
-            self.__load_items()
-            self.__load_users()
-        except FileNotFoundError as exc:
-            raise FileNotFoundError("Data files not found") from exc
+        self.__load_items()
+        self.__load_users()
+
 
     def __item_entry(self, item):
+        # add id
         entry = {
                 "type": item.__class__.__name__,
                 "title": item.title,
@@ -420,33 +460,30 @@ class Library:
         return entry
     
     def __user_entry(self, user):
+        # add id
         entry = {
             "first_name": user.first_name,
             "last_name": user.last_name,
-            # FIXME: borrowed items should be saved as a list of item IDs
-            # TODO: save it as a dict of item data (type, title, author, year)
-            "borrowed_items": user.borrowed_items.__str__
+            "borrowed_items": user.borrowed_items
         }
         return entry
     
     def __save_items(self):
-        # FIXME: insure data is saved correctly, itmes_data: list of dict
         items_data = []
         for item in self.__items:
             entry = self.__item_entry(item)
             items_data.append(entry)
-        # FIXME: add better exception handling for files and data
+            
         os.makedirs(os.path.dirname(self.__items_file), exist_ok=True)
         with open(self.__items_file, "w", encoding="utf-8") as f:
             json.dump(items_data, f, indent=2)
 
     def __save_users(self):
-        # FIXME: insure data is saved correctly, users_data: list of dict
         users_data = []
         for user in self.__users:
             entry = self.__user_entry(user)
             users_data.append(entry)
-        # FIXME: add better exception handling for files and data
+
         os.makedirs(os.path.dirname(self.__users_file), exist_ok=True)
         with open(self.__users_file, "w", encoding="utf-8") as f:
             json.dump(users_data, f, indent=2)
@@ -479,7 +516,7 @@ class Library:
 
             # Check if user exists in the library
             if user not in self.__users:
-                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+                raise UserNotFoundError(f"{user.first_name} {user.last_name}")
             
             # Check if item exists in the library
             if item not in self.__items:
@@ -527,7 +564,7 @@ class Library:
         
             # Check if user exists in the library
             if user not in self.users:
-                raise UserNotFoundError(f"User '{user.id}' not found in the library")
+                raise UserNotFoundError(f"{user.first_name} {user.last_name}")
             
             # Check if item exists in the library
             if item not in self.items:
@@ -555,3 +592,8 @@ class Library:
         except ItemNotBorrowedError as item_Nborrowed:
             print(f"Caught: {item_Nborrowed}")
             return False
+
+if __name__ == "__main__":
+    l = ["abc", "efg", "hij"]
+    dic = {"list": l}
+    print(dic)
