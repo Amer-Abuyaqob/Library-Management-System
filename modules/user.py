@@ -70,12 +70,12 @@ class User:
         return f"{self.__last_name[0].upper()}{self.__last_name[1].lower()}"   
 
     def display_info(self):
-        return f'''
-        User ID: {self.id}
-        First Name: {self.first_name}
-        Last Name: {self.last_name}
-        Borrowed Items: {len(self.borrowed_items)} items
-        '''
+        return (
+            f"User ID: {self.id}\n"
+            f"First Name: {self.first_name}\n"
+            f"Last Name: {self.last_name}\n"
+            f"Borrowed Items: {len(self.borrowed_items)} items"
+        )
     # FIXME: exception handling: validate item (Book, DVD, Magazine), insure no duplicates
     def add_borrowed_item(self, item_id):
         """Add an item_id to the user's borrowed items list."""
