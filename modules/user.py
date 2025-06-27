@@ -113,6 +113,8 @@ class User:
             return True
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
+            return False
         except InvalidValueError as value:
             print(f"Caught: {value}")
+            return False
         

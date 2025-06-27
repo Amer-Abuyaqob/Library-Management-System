@@ -50,30 +50,39 @@ class LibraryItem(ABC):
         try:
             self.__validate_title(title)
             self.__title = title
+            return True
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
+            return False
         except InvalidValueError as value:
             print(f"Caught: {value}")
+            return False
 
     @author.setter
     def author(self, author):
         try:
             self.__validate_author(author)
             self.__author = author
+            return True
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
+            return False
         except InvalidValueError as value:
             print(f"Caught: {value}")
+            return False
 
     @year.setter
     def year(self, year):
         try:
             self.__validate_year(year)
-            self.__year = int(year)
+            self.__year = year
+            return True
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
+            return False
         except InvalidValueError as value:
             print(f"Caught: {value}")
+            return False
 
     @available.setter
     def available(self, available):

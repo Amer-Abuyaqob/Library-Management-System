@@ -56,8 +56,16 @@ class DVD(LibraryItem, Reservable):
 
     @duration.setter
     def duration(self, duration):
-        self.__validate_duration(duration)
-        self.__duration = duration
+        try:
+            self.__validate_duration(duration)
+            self.__duration = duration
+            return True
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+            return False
 
     def display_info(self):
         return f'''

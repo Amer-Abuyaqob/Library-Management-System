@@ -55,10 +55,13 @@ class Magazine(LibraryItem):
         try:
             self.__validate_genre(genre)
             self.__genre = genre
+            return True
         except InvalidDataTypeError as data_type:
             print(f"Caught: {data_type}")
+            return False
         except InvalidValueError as value:
             print(f"Caught: {value}")
+            return False
 
     def display_info(self):
         return f'''
