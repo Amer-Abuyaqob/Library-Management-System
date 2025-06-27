@@ -5,7 +5,7 @@ class Magazine(LibraryItem):
     counter = 0  # counts every object created from this class
     def __init__(self, title, author, year, available, genre, custom_id=None):
         # FIXME: add reserved as an attribute and refactor all of the methods accordingly
-        super().__init__(title, author, year, available)
+        super().__init__(title, author, year, bool(available))
         self.__validate_genre(genre)
         self.__genre = genre
         Magazine.counter += 1

@@ -16,7 +16,9 @@ class LibraryItem(ABC):
         self.__year = year
         
         # FIXME: Fix it like codex did, currently it returns True for any (not None) input
-        self.__available = bool(available)
+        if not isinstance(available, bool):
+            raise InvalidDataTypeError("bool", type(available).__name__)
+        self.__available = available
         self._id = ""
 
     @property
@@ -56,7 +58,9 @@ class LibraryItem(ABC):
 
     @available.setter
     def available(self, available):
-        self.__available = bool(available)
+        if not isinstance(available, bool):
+            raise InvalidDataTypeError("bool", type(available).__name__)
+        self.__available = available
         
     @abstractmethod
     def display_info(self):
