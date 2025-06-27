@@ -37,9 +37,11 @@ class UserNotFoundError(LibraryError):
 
 class ItemNotAvailableError(LibraryError):
     """Raised when an item is not available for borrowing."""
-    pass
+    def __init__(self, item):
+        super().__init__(f"The item [{item}] is not available for borrowing.")
 
 
 class ItemNotBorrowedError(LibraryError):
     """Raised when a user tries to return an item they haven't borrowed."""
-    pass
+    def __init__(self, item, user):
+        super().__init__(f"The item [{item}] is not borrowed by [{user}].")
