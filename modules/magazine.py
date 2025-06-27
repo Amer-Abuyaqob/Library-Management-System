@@ -2,8 +2,9 @@ from library_item import LibraryItem
 from exceptions import InvalidDataTypeError, InvalidValueError
 
 class Magazine(LibraryItem):
-    counter = 0
+    counter = 0  # counts every object created from this class
     def __init__(self, title, author, year, available, genre):
+        # FIXME: add reserved as an attribute and refactor all of the methods accordingly
         super().__init__(title, author, year, available)
 
         try:
