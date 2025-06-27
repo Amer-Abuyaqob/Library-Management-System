@@ -94,10 +94,25 @@ class User:
 
     @first_name.setter
     def first_name(self, first_name):
-        self.__validate_name(first_name, "first name")
-        self.__first_name = first_name
+        try:
+            self.__validate_name(first_name, "first name")
+            self.__first_name = first_name
+            return True
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+            return False
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+            return False
 
     @last_name.setter
     def last_name(self, last_name):
-        self.__validate_name(last_name, "last name")
-        self.__last_name = last_name
+        try:
+            self.__validate_name(last_name, "last name")
+            self.__last_name = last_name
+            return True
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+        
