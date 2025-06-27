@@ -8,11 +8,13 @@ from dvd import DVD
 
 from exceptions import (
     InvalidDataTypeError,
+    MissingFieldError,
     ItemNotFoundError,
     UserNotFoundError,
     ItemNotAvailableError,
     ItemNotBorrowedError,
-    ItemAlreadyExistsError
+    ItemAlreadyExistsError,
+    InvalidValueError
 )
 
 class Library:
@@ -270,9 +272,8 @@ class Library:
             If the dictionary is missing fields or if a field has an invalid
             type or value.
         """
-
         if not isinstance(item, dict):
-            raise ValueError("Item entry must be a dictionary")
+            raise InvalidDataTypeError("dict", type(item).__name__)
 
         # Common mandatory fields for all items
         required_fields = {
@@ -285,42 +286,64 @@ class Library:
 
         for field, expected_type in required_fields.items():
             if field not in item:
-                raise ValueError(f"Missing required field '{field}' in item entry")
+                raise MissingFieldError(field)
+                
             if not isinstance(item[field], expected_type):
-                raise ValueError(
-                    f"Field '{field}' must be of type {expected_type.__name__}"
-                )
+                raise InvalidDataTypeError(expected_type.__name__, type(item[field]).__name__)
+            
+            # Validate if the data follows the required format (not empty, > 0)
+            # type: not empty, title: not empty, author: > 2 chars, year: > 0
+            if field == "type" and not item[field].strip():
+                raise InvalidValueError("Type must be a non-empty string")
+            elif field == "title" and not item[field].strip():
+                raise InvalidValueError("Title must be a non-empty string")
+            elif field == "author" and len(item[field].strip()) < 2:
+                raise InvalidValueError("Author must be a non-empty string with at least two characters")
+            elif field == "year" and item[field] <= 0:
+                raise InvalidValueError("Year must be a positive non-zero integer")
 
-        # Optional validation for reserved or borrowed_items fields
-        if "reserved" in item and not isinstance(item["reserved"], bool):
-            raise ValueError("'reserved' must be a boolean if provided")
-        if "borrowed_items" in item:
-            borrowed = item["borrowed_items"]
-            if not isinstance(borrowed, list) or not all(isinstance(i, str) for i in borrowed):
-                raise ValueError("'borrowed_items' must be a list of strings")
+        # Optional validation for reserved
+        if "reserved" in item and not isinstance(item["reserved"], User):
+            raise InvalidDataTypeError("User", type(item["reserved"]).__name__)
 
-        item_type = item["type"]
+        item_type = item["type"].upper()
 
-        if item_type == "Book":
-            if "genre" not in item or not isinstance(item["genre"], str):
-                raise ValueError("Book entry must have a 'genre' string field")
-            item_obj = Book(
-                item["title"], item["author"], item["year"], item["available"], item["genre"]
-            )
-        elif item_type == "Magazine":
-            if "genre" not in item or not isinstance(item["genre"], str):
-                raise ValueError("Magazine entry must have a 'genre' string field")
-            item_obj = Magazine(
-                item["title"], item["author"], item["year"], item["available"], item["genre"]
-            )
+        if item_type == "BOOK":
+            if "genre" not in item:
+                raise MissingFieldError("genre")
+            if not isinstance(item["genre"], str):
+                raise InvalidDataTypeError("string", type(item["genre"]).__name__)
+            # Validate if the data follows the required format (not empty, > 0)
+            # genre: not empty
+            if not item["genre"].strip():
+                raise InvalidValueError("Genre must be a non-empty string")
+                
+            item_obj = Book(item["title"], item["author"], item["year"], item["available"], item["genre"])
+
+        elif item_type == "MAGAZINE":
+            if "genre" not in item:
+                raise MissingFieldError("genre")
+            if not isinstance(item["genre"], str):
+                raise InvalidDataTypeError("string", type(item["genre"]).__name__)
+            # Validate if the data follows the required format (not empty, > 0)
+            # genre: not empty
+            if not item["genre"].strip():
+                raise InvalidValueError("Genre must be a non-empty string")
+            item_obj = Magazine(item["title"], item["author"], item["year"], item["available"], item["genre"])
+
         elif item_type == "DVD":
-            if "duration" not in item or not isinstance(item["duration"], int):
-                raise ValueError("DVD entry must have a numeric 'duration' field")
-            item_obj = DVD(
-                item["title"], item["author"], item["year"], item["available"], item["duration"]
-            )
+            if "duration" not in item:
+                raise MissingFieldError("duration")
+            if not isinstance(item["duration"], int):
+                raise InvalidDataTypeError("integer", type(item["duration"]).__name__)
+            # Validate if the data follows the required format (not empty, > 0)
+            # duration: > 0
+            if item["duration"] <= 0:
+                raise InvalidValueError("Duration must be a positive non-zero integer")
+            item_obj = DVD(item["title"], item["author"], item["year"], item["available"], item["duration"])
+
         else:
-            raise ValueError(f"Unknown item type '{item_type}'")
+            raise InvalidValueError(f"Unknown item type '{item_type}'")
 
         return item_obj
     
@@ -333,7 +356,7 @@ class Library:
         # FIXME: exception handling for file and data
         with open(self.__items_file, "r", encoding="utf-8") as f:
             items_data = json.load(f)
-
+        # FIXME: try-except here
         for item in items_data:
             item_obj = self.__create_item(item)
             self.add_item(item_obj)
@@ -348,14 +371,14 @@ class Library:
         # FIXME: exception handling for file and data
         with open(self.__users_file, "r", encoding="utf-8") as f:
             users_data = json.load(f)
-
+        # FIXME: validate user data
         for user in users_data:
             user_obj = User(user["id"], user["first_name"], user["last_name"])
 
             # Add borrowed items by matching IDs with already loaded items
             for item_id in user.get("borrowed_items", []):
                 # Find the corresponding item in the library
-                for item in self.items:
+                for item in self.__items:
                     if item.id == item_id:
                         user_obj.add_borrowed_item(item)
                         # Keep the item's availability in sync with the user

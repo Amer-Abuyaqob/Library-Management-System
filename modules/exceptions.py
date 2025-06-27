@@ -8,6 +8,13 @@ class InvalidValueError(Exception):
     def __init__(self, message):
         super().__init__(message)
 
+class MissingFieldError(Exception):
+    """Raised when a required field is missing from a dictionary."""
+    def __init__(self, field_name):
+        super().__init__(f"The entry is missing the required field '{field_name}'.")
+
+
+
 class LibraryError(Exception):
     """Base class for library related exceptions."""
     pass
