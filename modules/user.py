@@ -82,7 +82,6 @@ class User:
         Borrowed Items: {len(self.borrowed_items)} items
         '''
     # FIXME: exception handling: validate item (Book, DVD, Magazine), insure no duplicates
-    # FIXME: should take item_id only
     def add_borrowed_item(self, item_id):
         """Add an item_id to the user's borrowed items list."""
         if item_id not in self.__borrowed_items:
