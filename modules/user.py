@@ -1,15 +1,45 @@
+from exceptions import InvalidDataTypeError, InvalidValueError
+
 class User:
     counter = 0
     # FIXME: delete attribute (user_id) after removing it from all of the other methods
     def __init__(self, first_name, last_name):
         # TODO: auto generated user_id (U-FfLl-N)
-        self.__first_name = first_name
-        self.__last_name = last_name
-        self.__borrowed_items = []
+        try:
+            self.__validate_name(first_name, "first name")
+            self.__first_name = first_name
 
-        User.counter += 1
-        self.__user_num = User.counter
-        self.__id = self.__user_id()
+            self.__validate_name(last_name, "last name")
+            self.__last_name = last_name
+
+            self.__borrowed_items = []
+
+            User.counter += 1
+            self.__user_num = User.counter
+            self.__id = self.__user_id()
+
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
+
+    def __validate_name(self, name, name_type):
+        """
+        Validate a name parameter for a user.
+        
+        Args:
+            name: The name to validate
+            name_type: The type of name (e.g., "first name", "last name") for error messages
+            
+        Raises:
+            InvalidDataTypeError: If name is not a string
+            InvalidValueError: If name is empty, contains only whitespace, or has less than 2 characters
+        """
+        if not isinstance(name, str):
+            raise InvalidDataTypeError("string", type(name).__name__)
+            
+        if not name.strip() or len(name.strip()) < 2:
+            raise InvalidValueError(f"{name_type.title()} must be a non-empty string with at least two characters")
 
     @property
     def id(self):
@@ -61,3 +91,13 @@ class User:
         """Remove an item from the user's borrowed items list."""
         if item in self.__borrowed_items:
             self.__borrowed_items.remove(item)
+
+    @first_name.setter
+    def first_name(self, first_name):
+        self.__validate_name(first_name, "first name")
+        self.__first_name = first_name
+
+    @last_name.setter
+    def last_name(self, last_name):
+        self.__validate_name(last_name, "last name")
+        self.__last_name = last_name
