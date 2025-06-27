@@ -1,14 +1,19 @@
 class User:
-    def __init__(self, user_id, first_name, last_name):
+    counter = 0
+    # FIXME: delete attribute (user_id) after removing it from all of the other methods
+    def __init__(self, first_name, last_name):
         # TODO: auto generated user_id (U-FfLl-N)
-        self._id = user_id
         self.__first_name = first_name
         self.__last_name = last_name
         self.__borrowed_items = []
 
+        User.counter += 1
+        self.__user_num = User.counter
+        self.__id = self.__user_id()
+
     @property
     def id(self):
-        return self._id
+        return self.__id
 
     @property
     def first_name(self):
@@ -21,6 +26,23 @@ class User:
     @property
     def borrowed_items(self):
         return self.__borrowed_items
+    
+    def __user_id(self):
+        """
+        Auto generation of item IDs based on the item's type
+        Format: T.AA.YYYY.N
+            T: Item's type -> {B: book, D: DVD, M: Magazine}
+            AA: Author's first name initials
+            YYYY: Publish year
+            N: Item number (implemented by subclasses)
+        """
+        return f"U-{self.__first_initials()}{self.__last_initials()}-{self.__user_num}"
+    
+    def __first_initials(self):
+        return f"{self.__first_name[0].upper()}{self.__first_name[1].lower()}"
+    
+    def __last_initials(self):
+        return f"{self.__last_name[0].upper()}{self.__last_name[1].lower()}"   
 
     def display_info(self):
         return f'''
