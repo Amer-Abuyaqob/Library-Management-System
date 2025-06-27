@@ -7,7 +7,7 @@ class Book(LibraryItem, Reservable):
     counter = 0  # counts every object created from this class
     # FIXME: add reserved as an attribute and refactor all of the methods accordingly
     def __init__(self, title, author, year, available, genre, custom_id=None):
-        super().__init__(title, author, year, available)
+        super().__init__(title, author, year, bool(available))
         self.__validate_genre(genre)
         self.__genre = genre
         self.__reserved: User | None = None

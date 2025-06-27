@@ -7,7 +7,7 @@ class DVD(LibraryItem, Reservable):
     counter = 0
 
     def __init__(self, title, author, year, available, duration, custom_id=None):
-        super().__init__(title, author, year, available)
+        super().__init__(title, author, year, bool(available))
         self.__validate_duration(duration)
         self.__duration = duration  # duration of the dvd content in minutes
         self.__reserved: User | None = None
