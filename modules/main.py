@@ -211,8 +211,6 @@ class Main:
             except ValueError:
                 print("  ✗ Invalid input. Please enter a number.")
                 continue
-            finally:
-                pass
 
             match items_view_option:
                 case 1:
@@ -617,8 +615,6 @@ class Main:
             except ValueError:
                 print("  ✗ Invalid input. Please enter a number.")
                 continue
-            finally:
-                pass
 
             match users_view_option:
                 case 1:
@@ -657,8 +653,6 @@ class Main:
             except ValueError:
                 print("  ✗ Invalid input. Please enter a number.")
                 continue
-            finally:
-                pass
 
             match items_option:
                 case 1:
@@ -701,8 +695,6 @@ class Main:
             except ValueError:
                 print("  ✗ Invalid input. Please enter a number.")
                 continue
-            finally:
-                pass
 
             match users_option:
                 case 1:
@@ -821,8 +813,6 @@ class Main:
             except ValueError:
                 print("  ✗ Invalid input. Please enter a number.")
                 continue
-            finally:
-                pass
 
             match borrow_return_option:
                 case 1:
@@ -857,8 +847,6 @@ class Main:
             except ValueError:
                 print("  ✗ Invalid input. Please enter a number.")
                 continue
-            finally:
-                pass
 
             match main_option:
                 case 1:
