@@ -29,18 +29,11 @@ class Magazine(LibraryItem):
             InvalidDataTypeError: If genre is not a string
             InvalidValueError: If genre is empty or contains only whitespace
         """
-        try:
-            if not isinstance(genre, str):
-                raise InvalidDataTypeError("string", type(genre).__name__)
-                
-            if not genre.strip():
-                raise InvalidValueError("Genre must be a non-empty string")
-
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
+        if not isinstance(genre, str):
+            raise InvalidDataTypeError("string", type(genre).__name__)
+            
+        if not genre.strip():
+            raise InvalidValueError("Genre must be a non-empty string")
 
     def _item_id(self):
         """
@@ -59,8 +52,13 @@ class Magazine(LibraryItem):
 
     @genre.setter
     def genre(self, genre):
-        self.__validate_genre(genre)
-        self.__genre = genre
+        try:
+            self.__validate_genre(genre)
+            self.__genre = genre
+        except InvalidDataTypeError as data_type:
+            print(f"Caught: {data_type}")
+        except InvalidValueError as value:
+            print(f"Caught: {value}")
 
     def display_info(self):
         return f'''

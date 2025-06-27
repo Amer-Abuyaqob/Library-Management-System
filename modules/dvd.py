@@ -33,18 +33,11 @@ class DVD(LibraryItem, Reservable):
             InvalidDataTypeError: If duration is not an integer
             InvalidValueError: If duration is not a positive non-zero integer
         """
-        try:
-            if not isinstance(duration, int):
-                raise InvalidDataTypeError("integer", type(duration).__name__)
+        if not isinstance(duration, int):
+            raise InvalidDataTypeError("integer", type(duration).__name__)
 
-            if duration <= 0:
-                raise InvalidValueError("Duration must be a positive non-zero integer")
-            
-        except InvalidDataTypeError as data_type:
-            print(f"Caught: {data_type}")
-
-        except InvalidValueError as value:
-            print(f"Caught: {value}")
+        if duration <= 0:
+            raise InvalidValueError("Duration must be a positive non-zero integer")
 
     def _item_id(self):
         """
