@@ -490,8 +490,3 @@ class Library:
         # Mark item as available
         item.available = True
         return True
-
-if __name__ == "__main__":
-    l = ["abc", "efg", "hij"]
-    dic = {"list": l}
-    print(dic)
