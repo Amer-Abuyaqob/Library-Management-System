@@ -24,6 +24,11 @@ class ItemAlreadyExistsError(LibraryError):
     def __init__(self, item):
         super().__init__(f"The item [{item}] already exists.")
 
+class UserAlreadyExistsError(LibraryError):
+    """Raised when trying to add a user that already exists."""
+    def __init__(self, user):
+        super().__init__(f"The user [{user}] already exists.")
+
 class ItemNotFoundError(LibraryError):
     """Raised when an item is not found in the library."""
     def __init__(self, item):

@@ -14,6 +14,7 @@ from exceptions import (
     ItemNotAvailableError,
     ItemNotBorrowedError,
     ItemAlreadyExistsError,
+    UserAlreadyExistsError,
     InvalidValueError
 )
 
@@ -88,7 +89,7 @@ class Library:
         self.__isItem(item)
         
         if self.__item_exists(item):
-            raise ItemAlreadyExistsError(f"{item.title} ({item.year}) by {item.author}")
+            raise ItemAlreadyExistsError(f"{item.title} ({item.year}) by {item.author} (ID: {item.id})")
 
         self.__items.append(item)
         return True
@@ -107,7 +108,7 @@ class Library:
         self.__isItem(new_item)
         
         if self.__item_exists(new_item):
-            raise ItemAlreadyExistsError(f"{new_item.title} ({new_item.year}) by {new_item.author}")
+            raise ItemAlreadyExistsError(f"{new_item.title} ({new_item.year}) by {new_item.author} (ID: {new_item.id})")
 
         self.__isItem(item)
 
@@ -116,7 +117,7 @@ class Library:
             self.__items[index] = new_item
             return True
         else:
-            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author} (ID: {item.id})")
 
     def remove_item(self, item):
         """
@@ -131,7 +132,7 @@ class Library:
         self.__isItem(item)
         
         if item not in self.__items:
-            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author} (ID: {item.id})")
 
         self.__items.remove(item)
         return True
@@ -145,13 +146,12 @@ class Library:
             bool: True if user was added successfully, False otherwise
         Raises:
             InvalidDataTypeError: If user is not an instance of User
-            ItemAlreadyExistsError: If user with same ID already exists
+            UserAlreadyExistsError: If user with same name already exists
         """
         self.__isUser(user)
         
         if self.__user_exists(user):
-            # FIXME: replace with UserAlreadyExistsError
-            raise ItemAlreadyExistsError(f"User with ID '{user.id}'")
+            raise UserAlreadyExistsError(f"{user.first_name} {user.last_name} (ID: {user.id})")
 
         self.__users.append(user)
         return True
@@ -170,7 +170,7 @@ class Library:
         self.__isUser(user)
         
         if user not in self.__users:
-            raise UserNotFoundError(f"{user.first_name} {user.last_name}")
+            raise UserNotFoundError(f"{user.first_name} {user.last_name} (ID: {user.id})")
 
         self.__users.remove(user)
         return True
@@ -185,12 +185,12 @@ class Library:
             bool: True if update was successful, False otherwise
         Raises:
             UserNotFoundError: If user doesn't exist
+            UserAlreadyExistsError: If new_user with same name already exists
         """
         self.__isUser(new_user)
         
         if self.__user_exists(new_user):
-            # FIXME: replace with UserAlreadyExistsError
-            raise ItemAlreadyExistsError(f"User with ID '{new_user.id}'")
+            raise UserAlreadyExistsError(f"{new_user.first_name} {new_user.last_name} (ID: {new_user.id})")
 
         self.__isUser(user)
 
@@ -199,7 +199,7 @@ class Library:
             self.__users[index] = new_user
             return True
         else:
-            raise UserNotFoundError(f"{user.first_name} {user.last_name}")
+            raise UserNotFoundError(f"{user.first_name} {user.last_name} (ID: {user.id})")
 
     def __create_item(self, item):
         """Create a ``LibraryItem`` from a raw dictionary.
@@ -441,11 +441,11 @@ class Library:
 
         # Check if user exists in the library
         if user not in self.__users:
-            raise UserNotFoundError(f"{user.first_name} {user.last_name}")
+            raise UserNotFoundError(f"{user.first_name} {user.last_name} (ID: {user.id})")
         
         # Check if item exists in the library
         if item not in self.__items:
-            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author} (ID: {item.id})")
         
         # Check if item is available
         if not item.available:
@@ -475,11 +475,11 @@ class Library:
     
         # Check if user exists in the library
         if user not in self.users:
-            raise UserNotFoundError(f"{user.first_name} {user.last_name}")
+            raise UserNotFoundError(f"{user.first_name} {user.last_name} (ID: {user.id})")
         
         # Check if item exists in the library
         if item not in self.items:
-            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author}")
+            raise ItemNotFoundError(f"{item.title} ({item.year}) by {item.author} (ID: {item.id})")
         
         # Check if user has borrowed the item
         if item.id not in user.borrowed_items:
