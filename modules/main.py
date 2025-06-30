@@ -42,6 +42,7 @@ def parse_bool_input(prompt: str) -> bool:
         print("  Please enter 'yes' or 'no'.")
 
 class Main:
+    # ===================== INIT & DATA LOADING =====================
     def __init__(self):
         # FIXME: Handle data loading exceptions
         try:
@@ -71,38 +72,7 @@ class Main:
             print(f"Error loading library data: {e}")
             self.library = Library()
     
-    def items_summary(self, books, dvds, magazines):
-        print("  SUMMARY:")
-        print(f"    Books: {len(books)}")
-        print(f"    Magazines: {len(magazines)}")
-        print(f"    DVDs: {len(dvds)}")
-        print(f"    Total: {len(self.library.items)}")
-        
-    def users_summary(self):
-        print("  USERS SUMMARY:")
-        print(f"    Total Users: {len(self.library.users)}")
-        
-    def users_view_all(self):
-        print("  Viewing all library users")
-        if not self.library.users:
-            print("  No users found in the library.")
-            return
-        for user in self.library.users:
-            print(user.display_info())
-        self.users_summary()
-    
-    def view_all_books(self, books):
-        for book in books:
-            print(book.display_info())
-    
-    def view_all_dvds(self, dvds):
-        for dvd in dvds:
-            print(dvd.display_info())
-    
-    def view_all_magazines(self, magazines):
-        for magazine in magazines:
-            print(magazine.display_info())
-            
+    # ===================== ITEM GROUPING & SUMMARY =====================
     def group_by_type(self):
         books = []
         dvds = []
@@ -116,6 +86,30 @@ class Main:
                 magazines.append(item)
         return books, dvds, magazines
 
+    def items_summary(self, books, dvds, magazines):
+        print("  SUMMARY:")
+        print(f"    Books: {len(books)}")
+        print(f"    Magazines: {len(magazines)}")
+        print(f"    DVDs: {len(dvds)}")
+        print(f"    Total: {len(self.library.items)}")
+        
+    def users_summary(self):
+        print("  USERS SUMMARY:")
+        print(f"    Total Users: {len(self.library.users)}")
+        
+    # ===================== ITEM VIEWING =====================
+    def view_all_books(self, books):
+        for book in books:
+            print(book.display_info())
+    
+    def view_all_dvds(self, dvds):
+        for dvd in dvds:
+            print(dvd.display_info())
+    
+    def view_all_magazines(self, magazines):
+        for magazine in magazines:
+            print(magazine.display_info())
+            
     def items_view_all(self):
         print("  Viewing all library items")
         if not self.library.items:
@@ -158,21 +152,7 @@ class Main:
                         found = True
         if not found:
             print(f"  No items found of type: {type}")
-                        
-    def items_view_author(self):
-        # FIXME: exception handling for user's input (author's format)
-        author = input("  View all items of author: ").strip()
-        if not author:
-            print("  Error: Author name cannot be empty.")
-            return
-        
-        found = False
-        for item in self.library.items:
-            if item.author.lower() == author.lower():
-                print(item.display_info())
-                found = True
-        if not found:
-            print(f"  No items found by author: {author}")
+
 
     def items_view_title(self):
         # FIXME: exception handling for user's input (title's format)
@@ -188,7 +168,22 @@ class Main:
                 found = True
         if not found:
             print(f"  No items found with title: {title}")
-
+                        
+    def items_view_author(self):
+        # FIXME: exception handling for user's input (author's format)
+        author = input("  View all items of author: ").strip()
+        if not author:
+            print("  Error: Author name cannot be empty.")
+            return
+        
+        found = False
+        for item in self.library.items:
+            if item.author.lower() == author.lower():
+                print(item.display_info())
+                found = True
+        if not found:
+            print(f"  No items found by author: {author}")
+            
     def items_view_id(self):
         # FIXME: exception handling for user's input (id's format)
         item_id = input("  View item with ID: ").strip()
@@ -248,6 +243,7 @@ class Main:
         self.items_view_options()
         print()
 
+    # ===================== ITEM CREATION & MODIFICATION =====================
     def get_item_data(self):
         while True:
             try:
@@ -437,6 +433,7 @@ class Main:
             print(f"  ✗ Unexpected error: {e}")
         print()
 
+    # ===================== USER RETRIEVAL & CREATION =====================
     def get_user(self, user_id):
         # FIXME: exception handling for user's input (id's format)
         if not user_id or not user_id.strip():
@@ -486,6 +483,7 @@ class Main:
             print(f"  ✗ Unexpected error creating user: {e}")
             return None
 
+    # ===================== USER MANAGEMENT MENUS =====================
     def users_add_menu(self):
         # FIXME: Add comprehensive exception handling for all library operations
         print_menu_header("Adding a User")
@@ -565,6 +563,16 @@ class Main:
             print(f"  ✗ Unexpected error: {e}")
         print()
 
+    # ===================== USER VIEWING =====================
+    def users_view_all(self):
+        print("  Viewing all library users")
+        if not self.library.users:
+            print("  No users found in the library.")
+            return
+        for user in self.library.users:
+            print(user.display_info())
+        self.users_summary()
+    
     def users_view_first_name(self):
         # FIXME: exception handling for user's input (first name's format)
         first_name = input("  View all users with first name: ").strip()
@@ -650,6 +658,7 @@ class Main:
         self.users_view_options()
         print()
 
+    # ===================== MENU NAVIGATION =====================
     def items_options(self):
         while True:
             try:

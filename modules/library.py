@@ -19,6 +19,7 @@ from exceptions import (
 )
 
 class Library:
+    # ===================== INIT & FILE PATHS =====================
     def __init__(self):
         self.__items_file = os.path.join("data", "items.json")
         self.__users_file = os.path.join("data", "users.json")
@@ -26,6 +27,7 @@ class Library:
         self.__users = []
         self.load_data()
 
+    # ===================== PROPERTY GETTERS =====================
     @property
     def items(self):
         return self.__items
@@ -33,12 +35,14 @@ class Library:
     @property
     def users(self):
         return self.__users
-    
+
+    # ===================== VALIDATION METHODS =====================
     def __isItem(self, item):
         if not isinstance(item, (Book, DVD, Magazine)):
             raise InvalidDataTypeError("Book/DVD/Magazine", type(item).__name__)
-      
+    
     def __item_exists(self, item):
+        # FIXME: might need to check id as well
         for existing_item in self.__items:
             if (existing_item.title == item.title and
                 existing_item.author == item.author and
@@ -49,8 +53,9 @@ class Library:
     def __isUser(self, user):
         if not isinstance(user, User):
             raise InvalidDataTypeError("User", type(user).__name__)
-      
+    
     def __user_exists(self, user):
+        # FIXME: might need to check id as well
         for existing_user in self.__users:
             if (existing_user.first_name == user.first_name and
                 existing_user.last_name == user.last_name):
@@ -75,6 +80,7 @@ class Library:
         if not name.strip() or len(name.strip()) < 2:
             raise InvalidValueError(f"{name_type.title()} must be a non-empty string with at least two characters")
         
+    # ===================== ITEM MODIFICATION METHODS =====================
     def add_item(self, item):
         """
         Add a new item to the library.
@@ -137,6 +143,7 @@ class Library:
         self.__items.remove(item)
         return True
 
+    # ===================== USER MODIFICATION METHODS =====================
     def add_user(self, user):
         """
         Add a new user to the library.
@@ -201,6 +208,7 @@ class Library:
         else:
             raise UserNotFoundError(f"{user.first_name} {user.last_name} (ID: {user.id})")
 
+    # ===================== ITEM LOADING METHODS =====================
     def __create_item(self, item):
         """Create a ``LibraryItem`` from a raw dictionary.
 
@@ -315,6 +323,7 @@ class Library:
             item_obj = self.__create_item(item)
             self.add_item(item_obj)
 
+    # ===================== USER LOADING METHODS =====================
     def __load_users(self):
         """
         Loads users from JSON file.
@@ -369,7 +378,7 @@ class Library:
         self.__load_items()
         self.__load_users()
 
-
+    # ===================== ITEM SAVING METHODS =====================
     def __item_entry(self, item):
         entry = {
                 "id": item.id,
@@ -385,15 +394,6 @@ class Library:
             entry["duration"] = item.duration
         return entry
     
-    def __user_entry(self, user):
-        entry = {
-            "id": user.id,
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "borrowed_items": user.borrowed_items
-        }
-        return entry
-    
     def __save_items(self):
         items_data = []
         for item in self.__items:
@@ -404,6 +404,16 @@ class Library:
         with open(self.__items_file, "w", encoding="utf-8") as f:
             json.dump(items_data, f, indent=2)
 
+    # ===================== USER SAVING METHODS =====================
+    def __user_entry(self, user):
+        entry = {
+            "id": user.id,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "borrowed_items": user.borrowed_items
+        }
+        return entry
+    
     def __save_users(self):
         users_data = []
         for user in self.__users:
@@ -423,6 +433,7 @@ class Library:
         self.__save_items()
         self.__save_users()
 
+    # ===================== BORROW/RETURN METHODS =====================
     def borrow_item(self, user, item):
         """
         Borrow an item for a user.
