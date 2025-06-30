@@ -1,0 +1,47 @@
+DVD class methods and their exceptions (from modules/dvd.py)
+============================================================
+
+1. __init__(self, title, author, year, available, duration, custom_id=None)
+   - Calls: super().__init__, self.__validate_duration(duration)
+   - Exceptions:
+     - InvalidDataTypeError: Raised by self.__validate_duration if duration is not an integer.
+     - InvalidValueError: Raised by self.__validate_duration if duration is not a positive non-zero integer.
+     - InvalidDataTypeError: Raised by LibraryItem.__init__ if title, author, or year are not the correct type, or available is not a bool.
+     - InvalidValueError: Raised by LibraryItem.__init__ if title is empty, author is empty or <2 chars, or year <= 0.
+
+2. __validate_duration(self, duration)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if duration is not an integer.
+     - InvalidValueError: Raised if duration is not a positive non-zero integer.
+
+3. _item_id(self)
+   - Calls: super()._item_id()
+   - Exceptions:
+     - None directly in this method, but super()._item_id() (from LibraryItem) may call __author_initials(), which does not raise but could fail if author is too short (handled in LibraryItem).
+
+4. duration (property getter)
+   - Exceptions: None
+
+5. duration (property setter)
+   - Calls: self.__validate_duration(duration)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if duration is not an integer.
+     - InvalidValueError: Raised if duration is not a positive non-zero integer.
+
+6. display_info(self)
+   - Exceptions: None
+
+7. check_availability(self)
+   - Exceptions: None
+
+8. reserved_by (property getter)
+   - Exceptions: None
+
+9. reserve(self, user)
+   - Exceptions: None
+
+Notes:
+------
+- Methods like __init__ and duration.setter call validation methods that can raise exceptions.
+- The parent class LibraryItem.__init__ can raise InvalidDataTypeError and InvalidValueError for title, author, year, and available.
+- All exception types are imported from exceptions.py. 
