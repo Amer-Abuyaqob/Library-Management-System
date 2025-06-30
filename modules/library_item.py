@@ -15,9 +15,7 @@ class LibraryItem(ABC):
         self.__validate_year(year)
         self.__year = year
         
-        # FIXME: Fix it like codex did, currently it returns True for any (not None) input
-        if not isinstance(available, bool):
-            raise InvalidDataTypeError("bool", type(available).__name__)
+        self.__validate_available(available)
         self.__available = available
         self._id = ""
 
@@ -58,8 +56,7 @@ class LibraryItem(ABC):
 
     @available.setter
     def available(self, available):
-        if not isinstance(available, bool):
-            raise InvalidDataTypeError("bool", type(available).__name__)
+        self.__validate_available(available)
         self.__available = available
         
     @abstractmethod
@@ -149,3 +146,16 @@ class LibraryItem(ABC):
         else:
             # If single word, take first two characters
             return f"{self.__author[0].upper()}{self.__author[1].lower()}"
+
+    def __validate_available(self, available):
+        """
+        Validate the available parameter for a library item.
+        
+        Args:
+            available: The availability status to validate
+            
+        Raises:
+            InvalidDataTypeError: If available is not a boolean
+        """
+        if not isinstance(available, bool):
+            raise InvalidDataTypeError("bool", type(available).__name__)
