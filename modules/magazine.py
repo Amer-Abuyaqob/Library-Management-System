@@ -51,14 +51,15 @@ class Magazine(LibraryItem):
         self.__genre = genre
 
     def display_info(self):
-        return f'''
-        Item type: Magazine
-        Title: {self.title}
-        Author: {self.author}
-        Year: {self.year}
-        Available: {self.available}
-        Genre: {self.genre}
-        '''
+        return (
+            f"Item ID: {self.id}\n"
+            f"Item type: Magazine\n"
+            f"Title: {self.title}\n"
+            f"Author: {self.author}\n"
+            f"Year: {self.year}\n"
+            f"Available: {self.available}\n"
+            f"Genre: {self.genre}"
+        )
 
     def check_availability(self):
         return self.available
