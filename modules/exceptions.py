@@ -4,7 +4,7 @@ class InvalidDataTypeError(Exception):
         super().__init__(f"Expected data type: {expected_type}, but got: {received_type}")
 
 class InvalidValueError(Exception):
-    """Raised when a string value is invalid (e.g., empty or too short)."""
+    """Raised when a value is invalid (e.g., empty or too short)."""
     def __init__(self, message):
         super().__init__(message)
 
