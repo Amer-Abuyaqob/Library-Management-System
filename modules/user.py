@@ -2,9 +2,7 @@ from exceptions import InvalidDataTypeError, InvalidValueError
 
 class User:
     counter = 0
-    # FIXME: delete attribute (user_id) after removing it from all of the other methods
     def __init__(self, first_name, last_name, custom_id=None):
-        # TODO: auto generated user_id (U-FfLl-N)
         self.__validate_name(first_name, "first name")
         self.__first_name = first_name
 
@@ -33,7 +31,7 @@ class User:
         if not isinstance(name, str):
             raise InvalidDataTypeError("string", type(name).__name__)
             
-        if not name.strip() or len(name.strip()) < 2:
+        if len(name.strip()) < 2:
             raise InvalidValueError(f"{name_type.title()} must be a non-empty string with at least two characters")
 
     @property
