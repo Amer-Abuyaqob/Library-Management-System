@@ -106,7 +106,7 @@ class LibraryItem(ABC):
         if not isinstance(author, str):
             raise InvalidDataTypeError("string", type(author).__name__)
             
-        if not author.strip() or len(author.strip()) < 2:
+        if len(author.strip()) < 2:
             raise InvalidValueError("Author's name must be a non-empty string with at least two characters.")
 
     def __validate_year(self, year):
