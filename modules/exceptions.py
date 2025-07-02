@@ -51,3 +51,13 @@ class ItemNotBorrowedError(LibraryError):
     """Raised when a user tries to return an item they haven't borrowed."""
     def __init__(self, item, user):
         super().__init__(f"The item [{item}] is not borrowed by [{user}].")
+
+class InvalidItemIDFormatError(LibraryError):
+    """Raised when an item_id does not follow the required format."""
+    def __init__(self, item_id):
+        super().__init__(f"Expected ID format: T-Aa-YYYY-N (e.g., B-JD-2020-1), but got: {item_id}")
+
+class InvalidUserIDFormatError(LibraryError):
+    """Raised when a user_id does not follow the required format."""
+    def __init__(self, user_id):
+        super().__init__(f"Expected ID format: U-Ff-Ll-N (e.g., U-Jo-Sm-1), but got: {user_id}")
