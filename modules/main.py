@@ -40,8 +40,10 @@ def insure_decision():
         try:
             decision = input("  Yes or No? ").strip()
             if decision in {"yes", "y"}:
+                print()
                 return True            
             elif decision in {"no", "n"}:
+                print()
                 return False
             else:
                 raise InvalidValueError("Your decision must be 'yes' or 'no'.")
@@ -50,11 +52,13 @@ def insure_decision():
             continue
 
 # IMPORTANT
-def validate_choice(choice, expected_type, num_options):
-    if not isinstance(choice, expected_type):
+def validate_choice(choice, num_options):
+    if not choice.isdigit():
         raise InvalidDataTypeError("integer", type(choice).__name__)
+    choice = int(choice)
     if choice <= 0 or choice > num_options:
         raise InvalidValueError("Your choice should be a number from the menu")
+    return choice
 
 # IMPORTANT    
 def validate_type(kind):
@@ -127,10 +131,10 @@ def validate_item_id(item_id):
     if t not in ['B', 'D', 'M']:
         raise InvalidItemIDFormatError(item_id)
     # Aa: two uppercase letters
-    if len(aa) != 2 or not aa.isalpha() or not aa.isupper():
+    if len(aa) != 2 or not aa.isalpha():
         raise InvalidItemIDFormatError(item_id)
     # YYYY: 4 digits
-    if len(yyyy) != 4 or not yyyy.isdigit():
+    if not yyyy.isdigit():
         raise InvalidItemIDFormatError(item_id)
     # N: positive integer
     if not n.isdigit() or int(n) <= 0:
@@ -170,14 +174,15 @@ def validate_user_id(user_id):
 def take_choice(num_options):
     while True:
         try:
-            choice = int(input("  Enter choice: "))
-            validate_choice(choice, int, num_options) # Raises InvalidDataTypeError
-            return choice
+            choice = input("  Enter choice: ")
+            return validate_choice(choice, num_options)
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -185,13 +190,16 @@ def take_type():
     while True:
         try:
             kind = input("  Enter the item's type (Book/DVD/Magazine): ").strip()
+            print()
             validate_type(kind)
             return kind
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -199,13 +207,16 @@ def take_author():
     while True:
         try:
             author = input("  Enter the item's author: ").strip()
+            print()
             validate_author(author)
             return author
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -213,13 +224,16 @@ def take_title():
     while True:
         try:
             title = input("  Enter the item's title: ").strip()
+            print()
             validate_title(title)
             return title
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -227,12 +241,15 @@ def take_available():
     while True:
         try:
             available = input("  Is the item available? ").strip()
+            print()
             return validate_available(available)
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -240,16 +257,20 @@ def take_item_id():
     while True:
         try:
             item_id = input("  Enter the item's ID: ").strip()
+            print()
             validate_item_id(item_id)
             return item_id
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidItemIDFormatError as e:
             print(f"  ✗ Invalid input: {e}")
+            print()
             continue
 
 # IMPORTANT
@@ -257,13 +278,15 @@ def take_year():
     while True:
         try:
             year = input("  Enter the item's publish year: ").strip()
-            year = validate_year(year)
-            return year
+            print()
+            return validate_year(year)
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -271,13 +294,16 @@ def take_genre():
     while True:
         try:
             genre = input("  Enter the item's genre: ").strip()
-            genre = validate_genre(genre)
+            print()
+            validate_genre(genre)
             return genre
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -285,13 +311,15 @@ def take_duration():
     while True:
         try:
             duration = input("  Enter DVD duration in minutes: ").strip()
-            duration = validate_duration(duration)
-            return duration
+            print()
+            return validate_duration(duration)
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -301,6 +329,7 @@ def get_item_data():
     author = take_author()
     year = take_year()
     available = take_available()
+    special = ""
     if type in ["Book", "Magazine"]:
         special = take_genre()
     else:
@@ -326,13 +355,16 @@ def take_user_name(kind):
     while True:
         try:
             user_name = input(f"  Enter the user's {kind}: ").strip()
+            print()
             validate_user_name(user_name, kind)
             return user_name
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
 
 # IMPORTANT
@@ -340,16 +372,20 @@ def take_user_id():
     while True:
         try:
             user_id = input("  Enter the uaer's ID: ").strip()
+            print()
             validate_user_id(user_id)
             return user_id
         except InvalidDataTypeError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidValueError as e:
             print(f"  ✗ Invalid input: {e}.")
+            print()
             continue
         except InvalidUserIDFormatError as e:
             print(f"  ✗ Invalid input: {e}")
+            print()
             continue
 
 # IMPORTANT
@@ -373,35 +409,35 @@ class Main:
             print("Warning: Data files not found. Starting with empty library.")
             self.library = Library()
         except json.JSONDecodeError as e:
-            print(f"Error: Invalid JSON in data files: {e}")
+            print(f"  ✗ Error: Invalid JSON in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except MissingFieldError as e:
-            print(f"Error: Missing required field in data files: {e}")
+            print(f"  ✗ Error: Missing required field in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except InvalidDataTypeError as e:
-            print(f"Error: Invalid data type in data files: {e}")
+            print(f"  ✗ Error: Invalid data type in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except InvalidValueError as e:
-            print(f"Error: Invalid value in data files: {e}")
+            print(f"  ✗ Error: Invalid value in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except ItemNotFoundError as e:
-            print(f"Error: Item not found in data files: {e}")
+            print(f"  ✗ Error: Item not found in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except ItemAlreadyExistsError as e:
-            print(f"Error: Duplicate item in data files: {e}")
+            print(f"  ✗ Error: Duplicate item in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except UserAlreadyExistsError as e:
-            print(f"Error: Duplicate user in data files: {e}")
+            print(f"  ✗ Error: Duplicate user in data files: {e}")
             print("Starting with empty library.")
             self.library = Library()
         except Exception as e:
-            print(f"Error loading library data: {e}")
+            print(f"  ✗ Error loading library data: {e}")
             print("Starting with empty library.")
             self.library = Library()
     
@@ -437,6 +473,7 @@ class Main:
     def display_info(self, items):
         for item in items:
             print(item.display_info())
+            print()
            
     # IMPORTANT
     def items_view_all(self):
@@ -450,27 +487,33 @@ class Main:
         print("📚 BOOKS")
         if not self.books:
             print("  No books to display.")
+            print()
         else:
             self.display_info(self.books)
             
         print("📀 DVDS")
         if not self.dvds:
             print("  No dvds to display.")
+            print()
         else:
             self.display_info(self.dvds)
 
         print("📰 MAGAZINES")
         if not self.magazines:
             print("  No magazines to display.")
+            print()
         else:
             self.display_info(self.magazines)
 
         self.items_summary(self.books, self.dvds, self.magazines)
+        print()
 
     # IMPORTANT
     def items_view_type(self):
+        print_menu_header("Viewing items by type")
         type = take_type()
         print(f"  Viewing all items of type: {type}...")
+        print()
         found = False
         self.group_by_type()
         match type:
@@ -491,11 +534,14 @@ class Main:
                     self.display_info(self.magazines)
         if not found:
             print(f"  No items found of type: {type}")
+        print()
 
     # IMPORTANT
     def items_view_title(self):
+        print_menu_header("Viewing items by title")
         title = take_title()
         print(f"  Viewing all items of title: {title}...")
+        print()
         found = False
         for item in self.library.items:
             if item.title.lower() == title.lower():
@@ -503,11 +549,14 @@ class Main:
                 found = True
         if not found:
             print(f"  No items found with title: {title}")
+        print()
     
     # IMPORTANT
     def items_view_author(self):
+        print_menu_header("Viewing items by author")
         author = take_author()        
         print(f"  Viewing all items of author: {author}...")
+        print()
         found = False
         for item in self.library.items:
             if item.author.lower() == author.lower():
@@ -515,11 +564,14 @@ class Main:
                 found = True
         if not found:
             print(f"  No items found by author: {author}")
+        print()
     
     # IMPORTANT
     def items_view_id(self):
+        print_menu_header("Viewing item by ID")
         item_id = take_item_id()
         print(f"  Viewing the item with ID: {item_id}...")
+        print()
         found = False
         for item in self.library.items:
             if item.id == item_id:
@@ -527,6 +579,7 @@ class Main:
                 found = True
         if not found:
             print(f"  No item found with ID: {item_id}")
+        print()
 
     # IMPORTANT
     def items_view_options(self):
@@ -587,19 +640,25 @@ class Main:
                     break
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except ItemAlreadyExistsError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ Item '{item.title}' has NOT been added.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ Item '{item.title}' has NOT been added.")
+                print()
+                break
         print()
 
-    # IMPORTANT
+    # FIXME: item should be available to be removed
     def items_remove_menu(self):
         print_menu_header("Removing an Item")
         while True:
@@ -624,19 +683,25 @@ class Main:
                     raise ItemNotFoundError(item_id)
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except ItemNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been removed.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been removed.")
+                print()
+                break
         print()
 
-    # IMPORTANT
+    # FIXME: item should be available to be updated
     def items_update_menu(self):
         print_menu_header("Updating an Item")
         while True:
@@ -664,19 +729,27 @@ class Main:
                     raise ItemNotFoundError(item_id)
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except ItemNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been updated.")
+                print()
+                break
             except ItemAlreadyExistsError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been updated.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been updated.")
+                print()
+                break
         print()
 
     # ===================== USER MANAGEMENT MENUS =====================
@@ -690,23 +763,29 @@ class Main:
                     print(f"  ✓ User '{user.first_name} {user.last_name}' has been added successfully.")
                     break
                 else:
-                    print(f"  ✓ User '{user.first_name} {user.last_name}' has NOT been added.")
+                    print(f"  ✗ User '{user.first_name} {user.last_name}' has NOT been added.")
                     break
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except UserAlreadyExistsError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user.first_name} {user.last_name}' has NOT been added.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ User '{user.first_name} {user.last_name}' has NOT been added.")
+                print()
+                break
         print()
 
-    # IMPORTANT
+    # FIXME: user shouldn't borrowing items be removed
     def users_remove_menu(self):
         print_menu_header("Removing a User")
         while True:
@@ -723,7 +802,7 @@ class Main:
                             print(f"  ✓ User '{user_id}' has been removed successfully.")
                             break
                         else:
-                            print(f"  ✓ User '{user_id}' has NOT been removed.")
+                            print(f"  ✗ User '{user_id}' has NOT been removed.")
                             break
                     else:
                         break
@@ -731,19 +810,25 @@ class Main:
                     raise UserNotFoundError(user_id)
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except UserNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT been removed.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT been removed.")
+                print()
+                break
         print()
 
-    # IMPORTANT
+    # FIXME: user shouldn't borrowing items be updated
     def users_update_menu(self):
         print_menu_header("Updating a User")
         while True:
@@ -771,19 +856,27 @@ class Main:
                     raise UserNotFoundError(user_id)
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except UserNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT been updated.")
+                print()
+                break
             except UserAlreadyExistsError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT been updated.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT been updated.")
+                print()
+                break
         print()
 
     # ===================== USER VIEWING =====================
@@ -796,12 +889,16 @@ class Main:
             return
         for user in self.library.users:
             print(user.display_info())
+            print()
         self.users_summary()
+        print()
     
     # IMPORTANT
     def users_view_first_name(self):
+        print_menu_header("Viewing users by first name")
         first_name = take_user_name("first name")
         print(f"  Viewing all users with first name: {first_name}...")
+        print()
         found = False
         for user in self.library.users:
             if user.first_name.lower() == first_name.lower():
@@ -809,11 +906,14 @@ class Main:
                 print(user.display_info())
         if not found:
             print(f"  No users found with first name: {first_name}")
+        print()
 
     # IMPORTANT
     def users_view_last_name(self):
+        print_menu_header("Viewing users by last name")
         last_name = take_user_name("last name")
         print(f"  Viewing all users with last name: {last_name}...")
+        print()
         found = False
         for user in self.library.users:
             if user.last_name.lower() == last_name.lower():
@@ -821,11 +921,14 @@ class Main:
                 print(user.display_info())
         if not found:
             print(f"  No users found with last name: {last_name}")
+        print()
 
     # IMPORTANT
     def users_view_id(self):
+        print_menu_header("Viewing users by first name")
         user_id = take_user_id()
         print(f"  Viewing the user with ID: {user_id}...")
+        print()
         found = False
         for user in self.library.users:
             if user.id == user_id:
@@ -833,6 +936,7 @@ class Main:
                 print(user.display_info())
         if not found:
             print(f"  No user found with ID: {user_id}")
+        print()
 
     # IMPORTANT
     def users_view_options(self):
@@ -968,22 +1072,32 @@ class Main:
                     break
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}.")
+                print()
                 continue
             except ItemNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been borrowed.")
+                print()
+                break
             except UserNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT borrowed Item '{item_id}'.")
+                print()
+                break
             except ItemNotAvailableError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT borrowed Item '{item_id}'.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT borrowed Item '{item_id}'.")
+                print()
+                break
         print()
 
     # IMPORTANT
@@ -1007,22 +1121,32 @@ class Main:
                     break
             except InvalidDataTypeError as e:
                 print(f"  ✗ Error: {e}")
+                print()
                 continue
             except InvalidValueError as e:
                 print(f"  ✗ Error: {e}.")
+                print()
                 continue
             except ItemNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ Item '{item_id}' has NOT been returned.")
+                print()
+                break
             except UserNotFoundError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT returned Item '{item_id}'.")
+                print()
+                break
             except ItemNotBorrowedError as e:
                 print(f"  ✗ Error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT returned Item '{item_id}'.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
-                continue
+                print(f"  ✗ User '{user_id}' has NOT returned Item '{item_id}'.")
+                print()
+                break
         print()
 
     # IMPORTANT
@@ -1034,7 +1158,6 @@ class Main:
                     self.borrow_item_menu()
                     break
                 case 2:
-                    # FIXME: to be checked
                     self.return_item_menu()
                     break
                 case 3:
@@ -1068,7 +1191,6 @@ class Main:
                     self.users_menu()
                     break
                 case 3:
-                    # FIXME: to be checked
                     self.borrow_return_menu()
                     break
                 case 4:
@@ -1095,20 +1217,22 @@ class Main:
         print("  Welcome to Library Management System (LMS)")
         print()
         self.main_menu()
+        # FIXME: implement the saving feature
+
         # while True:
         #     try:
         #         self.library.save_data()
         #         print("  ✓ Library data saved successfully.")
         #         break
-        #     except IOError as e:
-        #         print(f"  ✗ Error saving library data: {e}")
-        #         print("  Please check file permissions and try again.")
-        #         retry = input("  Retry saving? (y/n): ").strip().lower()
-        #         if retry not in ['y', 'yes']:
-        #             break
         #     except OSError as e:
         #         print(f"  ✗ Error creating directories: {e}")
         #         print("  Please check directory permissions and try again.")
+        #         retry = input("  Retry saving? (y/n): ").strip().lower()
+        #         if retry not in ['y', 'yes']:
+        #             break
+        #     except IOError as e:
+        #         print(f"  ✗ Error saving library data: {e}")
+        #         print("  Please check file permissions and try again.")
         #         retry = input("  Retry saving? (y/n): ").strip().lower()
         #         if retry not in ['y', 'yes']:
         #             break
