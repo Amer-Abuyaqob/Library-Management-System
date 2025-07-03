@@ -69,7 +69,7 @@ class Library:
         return None
     
     def get_user(self, user_id):
-        for user in self.library.users:
+        for user in self.__users:
             if user.id == user_id:
                 return user
         return None
