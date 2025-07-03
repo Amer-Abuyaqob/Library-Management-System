@@ -72,15 +72,14 @@ class User:
             f"User ID: {self.id}\n"
             f"First Name: {self.first_name}\n"
             f"Last Name: {self.last_name}\n"
-            f"Borrowed Items: {len(self.borrowed_items)} items"
+            f"Borrowed Items: {self.borrowed_items}"
         )
-    # FIXME: exception handling: validate item (Book, DVD, Magazine), insure no duplicates
+    
     def add_borrowed_item(self, item_id):
         """Add an item_id to the user's borrowed items list."""
         if item_id not in self.__borrowed_items:
             self.__borrowed_items.append(item_id)
 
-    # FIXME: exception handling: validate item (Book, DVD, Magazine), insure item exists
     def remove_borrowed_item(self, item_id):
         """Remove an item from the user's borrowed items list."""
         if item_id in self.__borrowed_items:
