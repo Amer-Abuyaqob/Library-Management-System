@@ -1,28 +1,44 @@
 from library_item import LibraryItem
 from user import User
 from reservable import Reservable
+from exceptions import InvalidDataTypeError, InvalidValueError
 
 class Book(LibraryItem, Reservable):
     counter = 0  # counts every object created from this class
-
-    def __init__(self, title, author, year, available, genre):
-        super().__init__(title, author, year, available)
-
-        if not isinstance(genre, str) or not genre.strip():
-            raise ValueError("genre must be a non-empty string")
-
+    # FIXME: add reserved as an attribute and refactor all of the methods accordingly
+    def __init__(self, title, author, year, available, genre, custom_id=None):
+        super().__init__(title, author, year, bool(available))
+        self.__validate_genre(genre)
         self.__genre = genre
         self.__reserved: User | None = None
         Book.counter += 1
         self.__book_num = Book.counter
-        self._id = self._item_id()  # Changed from __id to _id
+        # Set ID to custom_id if provided, otherwise use auto-generated ID
+        self._id = custom_id if custom_id is not None else self._item_id()
+
+    def __validate_genre(self, genre):
+        """
+        Validate the genre parameter for a book.
+        
+        Args:
+            genre: The genre to validate
+            
+        Raises:
+            InvalidDataTypeError: If genre is not a string
+            InvalidValueError: If genre is empty or contains only whitespace
+        """
+        if not isinstance(genre, str):
+            raise InvalidDataTypeError("string", type(genre).__name__)
+            
+        if not genre.strip():
+            raise InvalidValueError("Genre must be a non-empty string")
 
     def _item_id(self):
         """
         Auto generation of item IDs based on the item's type
-        Format: T-AA-YYYY-N
+        Format: T-Aa-YYYY-N
             T: Item's type -> B: book
-            AA: Author's first name initials
+            Aa: Author's initials (first character of each word)
             YYYY: Publish year
             N: Item number
         """
@@ -34,17 +50,19 @@ class Book(LibraryItem, Reservable):
 
     @genre.setter
     def genre(self, genre):
+        self.__validate_genre(genre)
         self.__genre = genre
 
     def display_info(self):
-        return f'''
-        Item type: Book
-        Title: {self.title}
-        Author: {self.author}
-        Year: {self.year}
-        Available: {self.available}
-        Genre: {self.genre}
-        '''
+        return (
+            f"Item ID: {self.id}\n"
+            f"Item type: Book\n"
+            f"Title: {self.title}\n"
+            f"Author: {self.author}\n"
+            f"Year: {self.year}\n"
+            f"Available: {self.available}\n"
+            f"Genre: {self.genre}"
+        )
 
     def check_availability(self):
         return self.available

@@ -1,14 +1,16 @@
 [
   {
-    "id": "U1001",
+    "id": "U-Al-Sm-1",
     "first_name": "Alice",
     "last_name": "Smith",
     "borrowed_items": []
   },
   {
-    "id": "U1002",
+    "id": "U-Bo-Jo-2",
     "first_name": "Bob",
     "last_name": "Johnson",
-    "borrowed_items": ["D-Wa-1999-1"]
+    "borrowed_items": [
+      "D-WA-1999-1"
+    ]
   }
 ]

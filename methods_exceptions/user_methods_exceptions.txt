@@ -1,0 +1,63 @@
+User class methods and their exceptions (from modules/user.py)
+==============================================================
+
+1. __init__(self, first_name, last_name, custom_id=None)
+   - Calls: self.__validate_name(first_name, "first name"), self.__validate_name(last_name, "last name"), self.__user_id()
+   - Exceptions:
+     - InvalidDataTypeError: Raised by __validate_name() if first_name or last_name is not a string.
+     - InvalidValueError: Raised by __validate_name() if first_name or last_name is empty, only whitespace, or <2 chars.
+
+2. __validate_name(self, name, name_type)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if name is not a string.
+     - InvalidValueError: Raised if name is empty, only whitespace, or <2 characters.
+
+3. id (property getter)
+   - Exceptions: None
+
+4. first_name (property getter)
+   - Exceptions: None
+
+5. last_name (property getter)
+   - Exceptions: None
+
+6. borrowed_items (property getter)
+   - Exceptions: None
+
+7. __user_id(self)
+   - Calls: self.__first_initials(), self.__last_initials()
+   - Exceptions: None
+
+8. __first_initials(self)
+   - Exceptions: None (but could fail if first_name is too short, handled by validation)
+
+9. __last_initials(self)
+   - Exceptions: None (but could fail if last_name is too short, handled by validation)
+
+10. display_info(self)
+    - Exceptions: None
+
+11. add_borrowed_item(self, item_id)
+    - Exceptions: None
+
+12. remove_borrowed_item(self, item_id)
+    - Exceptions: None
+
+13. first_name (property setter)
+    - Calls: self.__validate_name(first_name, "first name")
+    - Exceptions:
+      - InvalidDataTypeError: Raised if first_name is not a string.
+      - InvalidValueError: Raised if first_name is empty, only whitespace, or <2 chars.
+
+14. last_name (property setter)
+    - Calls: self.__validate_name(last_name, "last name")
+    - Exceptions:
+      - InvalidDataTypeError: Raised if last_name is not a string.
+      - InvalidValueError: Raised if last_name is empty, only whitespace, or <2 chars.
+
+Notes:
+------
+- All exception types are imported from exceptions.py.
+- Validation methods are called by __init__ and setters, so their exceptions propagate up.
+- Methods like __first_initials() and __last_initials() don't raise exceptions but could fail if names are too short (handled by validation in __init__).
+- Property getters and borrowed item management methods don't raise exceptions. 

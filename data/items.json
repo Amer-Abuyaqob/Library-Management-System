@@ -1,5 +1,6 @@
 [
   {
+    "id": "B-GO-1949-1",
     "type": "Book",
     "title": "1984",
     "author": "George Orwell",
@@ -8,6 +9,7 @@
     "genre": "Dystopian"
   },
   {
+    "id": "B-HL-1960-2",
     "type": "Book",
     "title": "To Kill a Mockingbird",
     "author": "Harper Lee",
@@ -16,6 +18,7 @@
     "genre": "Fiction"
   },
   {
+    "id": "M-VA-2023-1",
     "type": "Magazine",
     "title": "National Geographic",
     "author": "Various",
@@ -24,6 +27,7 @@
     "genre": "Science"
   },
   {
+    "id": "D-WA-1999-1",
     "type": "DVD",
     "title": "The Matrix",
     "author": "Wachowskis",

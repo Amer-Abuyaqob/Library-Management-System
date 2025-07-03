@@ -1,0 +1,15 @@
+Reservable class methods and their exceptions (from modules/reservable.py)
+=========================================================================
+
+1. reserved_by (property getter) - Abstract
+   - Exceptions: None (abstract method, implementation depends on subclass)
+
+2. reserve(self, user) - Abstract
+   - Exceptions: None (abstract method, implementation depends on subclass)
+
+Notes:
+------
+- This is an abstract base class (ABC) that defines the interface for reservable objects.
+- All methods are abstract and don't raise exceptions themselves.
+- The actual exception behavior depends on the implementing classes (Book, DVD).
+- The interface requires User type for the user parameter, but validation is handled by implementing classes. 

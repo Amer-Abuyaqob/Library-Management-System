@@ -1,0 +1,168 @@
+Library class methods and their exceptions (from modules/library.py)
+==================================================================
+
+1. __init__(self)
+   - Calls: self.load_data()
+   - Exceptions:
+     - FileNotFoundError: Raised by load_data() if data files don't exist.
+     - json.JSONDecodeError: Raised by load_data() if JSON files are invalid.
+     - MissingFieldError: Raised by __load_items() or __load_users() if required fields are missing.
+     - InvalidDataTypeError: Raised by __create_item() or __load_users() if field types are incorrect.
+     - InvalidValueError: Raised by __create_item() or __load_users() if field values are invalid.
+     - ItemNotFoundError: Raised by __load_users() if borrowed item ID doesn't exist.
+     - ItemAlreadyExistsError: Raised by add_item() if item already exists.
+     - UserAlreadyExistsError: Raised by add_user() if user already exists.
+
+2. items (property getter)
+   - Exceptions: None
+
+3. users (property getter)
+   - Exceptions: None
+
+4. __isItem(self, item)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if item is not an instance of Book, DVD, or Magazine.
+
+5. __item_exists(self, item)
+   - Exceptions: None
+
+6. __isUser(self, user)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if user is not an instance of User.
+
+7. __user_exists(self, user)
+   - Exceptions: None
+
+8. __IsUserName(self, name, name_type)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if name is not a string.
+     - InvalidValueError: Raised if name is empty, only whitespace, or <2 characters.
+
+9. add_item(self, item)
+   - Calls: self.__isItem(item), self.__item_exists(item)
+   - Exceptions:
+     - InvalidDataTypeError: Raised by __isItem() if item is not Book/DVD/Magazine.
+     - ItemAlreadyExistsError: Raised if item with same title/author/year already exists.
+
+10. update_item(self, item, new_item)
+    - Calls: self.__isItem(new_item), self.__item_exists(new_item), self.__isItem(item)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isItem() if item or new_item is not Book/DVD/Magazine.
+      - ItemAlreadyExistsError: Raised if new_item with same title/author/year already exists.
+      - ItemNotFoundError: Raised if item doesn't exist in library.
+
+11. remove_item(self, item)
+    - Calls: self.__isItem(item)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isItem() if item is not Book/DVD/Magazine.
+      - ItemNotFoundError: Raised if item doesn't exist in library.
+
+12. add_user(self, user)
+    - Calls: self.__isUser(user), self.__user_exists(user)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isUser() if user is not User instance.
+      - UserAlreadyExistsError: Raised if user with same first_name/last_name already exists.
+
+13. remove_user(self, user)
+    - Calls: self.__isUser(user)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isUser() if user is not User instance.
+      - UserNotFoundError: Raised if user doesn't exist in library.
+
+14. update_user(self, user, new_user)
+    - Calls: self.__isUser(new_user), self.__user_exists(new_user), self.__isUser(user)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isUser() if user or new_user is not User instance.
+      - UserAlreadyExistsError: Raised if new_user with same first_name/last_name already exists.
+      - UserNotFoundError: Raised if user doesn't exist in library.
+
+15. __create_item(self, item)
+    - Exceptions:
+      - InvalidDataTypeError: Raised if item is not a dict, or if any field has wrong type.
+      - MissingFieldError: Raised if required fields (id, type, title, author, year, available) are missing.
+      - InvalidValueError: Raised if id/type/title are empty, author <2 chars, year <=0, genre empty, duration <=0.
+      - InvalidValueError: Raised if item type is unknown (not BOOK, MAGAZINE, DVD).
+
+16. __load_items(self)
+    - Calls: self.__create_item(item), self.add_item(item_obj)
+    - Exceptions:
+      - FileNotFoundError: Raised if items.json doesn't exist.
+      - json.JSONDecodeError: Raised if items.json has invalid JSON.
+      - MissingFieldError: Raised by __create_item() if required fields are missing.
+      - InvalidDataTypeError: Raised by __create_item() if field types are incorrect.
+      - InvalidValueError: Raised by __create_item() if field values are invalid.
+      - ItemAlreadyExistsError: Raised by add_item() if item already exists.
+
+17. __load_users(self)
+    - Calls: User(), user_obj.add_borrowed_item(item_id), self.add_user(user_obj)
+    - Exceptions:
+      - FileNotFoundError: Raised if users.json doesn't exist.
+      - json.JSONDecodeError: Raised if users.json has invalid JSON.
+      - MissingFieldError: Raised if required fields (first_name, last_name, id) are missing.
+      - InvalidDataTypeError: Raised if field types are incorrect.
+      - InvalidValueError: Raised if first_name/last_name <2 chars or id is empty.
+      - ItemNotFoundError: Raised if borrowed item ID doesn't exist in library.
+      - UserAlreadyExistsError: Raised by add_user() if user already exists.
+      - InvalidDataTypeError: Raised by User.__init__() if names are not strings.
+      - InvalidValueError: Raised by User.__init__() if names are empty or <2 chars.
+
+18. load_data(self)
+    - Calls: self.__load_items(), self.__load_users()
+    - Exceptions:
+      - FileNotFoundError: Raised by __load_items() or __load_users() if files don't exist.
+      - json.JSONDecodeError: Raised by __load_items() or __load_users() if JSON is invalid.
+      - MissingFieldError: Raised by __load_items() or __load_users() if required fields are missing.
+      - InvalidDataTypeError: Raised by __load_items() or __load_users() if field types are incorrect.
+      - InvalidValueError: Raised by __load_items() or __load_users() if field values are invalid.
+      - ItemNotFoundError: Raised by __load_users() if borrowed item ID doesn't exist.
+      - ItemAlreadyExistsError: Raised by __load_items() if item already exists.
+      - UserAlreadyExistsError: Raised by __load_users() if user already exists.
+
+19. __item_entry(self, item)
+    - Exceptions: None
+
+20. __save_items(self)
+    - Calls: self.__item_entry(item)
+    - Exceptions:
+      - IOError: Raised if writing to items.json fails.
+      - OSError: Raised if creating directory fails.
+
+21. __user_entry(self, user)
+    - Exceptions: None
+
+22. __save_users(self)
+    - Calls: self.__user_entry(user)
+    - Exceptions:
+      - IOError: Raised if writing to users.json fails.
+      - OSError: Raised if creating directory fails.
+
+23. save_data(self)
+    - Calls: self.__save_items(), self.__save_users()
+    - Exceptions:
+      - IOError: Raised by __save_items() or __save_users() if writing to files fails.
+      - OSError: Raised by __save_items() or __save_users() if creating directories fails.
+
+24. borrow_item(self, user, item)
+    - Calls: self.__isItem(item), self.__isUser(user), user.add_borrowed_item(item.id)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isItem() if item is not Book/DVD/Magazine.
+      - InvalidDataTypeError: Raised by __isUser() if user is not User instance.
+      - UserNotFoundError: Raised if user doesn't exist in library.
+      - ItemNotFoundError: Raised if item doesn't exist in library.
+      - ItemNotAvailableError: Raised if item is not available.
+
+25. return_item(self, user, item)
+    - Calls: self.__isItem(item), self.__isUser(user), user.remove_borrowed_item(item.id)
+    - Exceptions:
+      - InvalidDataTypeError: Raised by __isItem() if item is not Book/DVD/Magazine.
+      - InvalidDataTypeError: Raised by __isUser() if user is not User instance.
+      - UserNotFoundError: Raised if user doesn't exist in library.
+      - ItemNotFoundError: Raised if item doesn't exist in library.
+      - ItemNotBorrowedError: Raised if user hasn't borrowed the item.
+
+Notes:
+------
+- All exception types are imported from exceptions.py.
+- File operations can raise FileNotFoundError, json.JSONDecodeError, IOError, and OSError.
+- Validation methods are called by many other methods, so their exceptions propagate up.
+- User and Item creation can raise exceptions from their respective __init__ methods. 
