@@ -62,24 +62,18 @@ class Library:
                 return True
         return False
 
-    def __IsUserName(self, name, name_type):
-        """
-        Validate a name parameter for a user.
-        
-        Args:
-            name: The name to validate
-            name_type: The type of name (e.g., "first name", "last name") for error messages
-            
-        Raises:
-            InvalidDataTypeError: If name is not a string
-            InvalidValueError: If name is empty, contains only whitespace, or has less than 2 characters
-        """
-        if not isinstance(name, str):
-            raise InvalidDataTypeError("string", type(name).__name__)
-            
-        if not name.strip() or len(name.strip()) < 2:
-            raise InvalidValueError(f"{name_type.title()} must be a non-empty string with at least two characters")
-        
+    def get_item(self, item_id):
+        for item in self.__items:
+            if item.id == item_id:
+                return item
+        return None
+    
+    def get_user(self, user_id):
+        for user in self.library.users:
+            if user.id == user_id:
+                return user
+        return None
+       
     # ===================== ITEM MODIFICATION METHODS =====================
     def add_item(self, item):
         """
