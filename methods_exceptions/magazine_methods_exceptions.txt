@@ -1,0 +1,41 @@
+Magazine class methods and their exceptions (from modules/magazine.py)
+=====================================================================
+
+1. __init__(self, title, author, year, available, genre, custom_id=None)
+   - Calls: super().__init__, self.__validate_genre(genre)
+   - Exceptions:
+     - InvalidDataTypeError: Raised by self.__validate_genre if genre is not a string.
+     - InvalidValueError: Raised by self.__validate_genre if genre is empty or only whitespace.
+     - InvalidDataTypeError: Raised by LibraryItem.__init__ if title, author, or year are not the correct type, or available is not a bool.
+     - InvalidValueError: Raised by LibraryItem.__init__ if title is empty, author is empty or <2 chars, or year <= 0.
+
+2. __validate_genre(self, genre)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if genre is not a string.
+     - InvalidValueError: Raised if genre is empty or only whitespace.
+
+3. _item_id(self)
+   - Calls: super()._item_id()
+   - Exceptions:
+     - None directly in this method, but super()._item_id() (from LibraryItem) may call __author_initials(), which does not raise but could fail if author is too short (handled in LibraryItem).
+
+4. genre (property getter)
+   - Exceptions: None
+
+5. genre (property setter)
+   - Calls: self.__validate_genre(genre)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if genre is not a string.
+     - InvalidValueError: Raised if genre is empty or only whitespace.
+
+6. display_info(self)
+   - Exceptions: None
+
+7. check_availability(self)
+   - Exceptions: None
+
+Notes:
+------
+- Methods like __init__ and genre.setter call validation methods that can raise exceptions.
+- The parent class LibraryItem.__init__ can raise InvalidDataTypeError and InvalidValueError for title, author, year, and available.
+- All exception types are imported from exceptions.py. 

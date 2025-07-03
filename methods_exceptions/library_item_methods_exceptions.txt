@@ -1,0 +1,83 @@
+LibraryItem class methods and their exceptions (from modules/library_item.py)
+==========================================================================
+
+1. __init__(self, title, author, year, available)
+   - Calls: self.__validate_title(title), self.__validate_author(author), self.__validate_year(year)
+   - Exceptions:
+     - InvalidDataTypeError: Raised by __validate_title if title is not a string.
+     - InvalidValueError: Raised by __validate_title if title is empty or only whitespace.
+     - InvalidDataTypeError: Raised by __validate_author if author is not a string.
+     - InvalidValueError: Raised by __validate_author if author is empty, only whitespace, or <2 chars.
+     - InvalidDataTypeError: Raised by __validate_year if year is not an integer.
+     - InvalidValueError: Raised by __validate_year if year is not a positive non-zero integer.
+     - InvalidDataTypeError: Raised if available is not a bool.
+
+2. title (property getter)
+   - Exceptions: None
+
+3. author (property getter)
+   - Exceptions: None
+
+4. year (property getter)
+   - Exceptions: None
+
+5. available (property getter)
+   - Exceptions: None
+
+6. id (property getter)
+   - Exceptions: None
+
+7. title (property setter)
+   - Calls: self.__validate_title(title)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if title is not a string.
+     - InvalidValueError: Raised if title is empty or only whitespace.
+
+8. author (property setter)
+   - Calls: self.__validate_author(author)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if author is not a string.
+     - InvalidValueError: Raised if author is empty, only whitespace, or <2 chars.
+
+9. year (property setter)
+   - Calls: self.__validate_year(year)
+   - Exceptions:
+     - InvalidDataTypeError: Raised if year is not an integer.
+     - InvalidValueError: Raised if year is not a positive non-zero integer.
+
+10. available (property setter)
+    - Exceptions:
+      - InvalidDataTypeError: Raised if available is not a bool.
+
+11. display_info(self) (abstract)
+    - Exceptions: None (abstract)
+
+12. check_availability(self) (abstract)
+    - Exceptions: None (abstract)
+
+13. __validate_title(self, title)
+    - Exceptions:
+      - InvalidDataTypeError: Raised if title is not a string.
+      - InvalidValueError: Raised if title is empty or only whitespace.
+
+14. __validate_author(self, author)
+    - Exceptions:
+      - InvalidDataTypeError: Raised if author is not a string.
+      - InvalidValueError: Raised if author is empty, only whitespace, or <2 chars.
+
+15. __validate_year(self, year)
+    - Exceptions:
+      - InvalidDataTypeError: Raised if year is not an integer.
+      - InvalidValueError: Raised if year is not a positive non-zero integer.
+
+16. _item_id(self)
+    - Calls: self.__author_initials()
+    - Exceptions: None
+
+17. __author_initials(self)
+    - Exceptions: None (but if author is too short, may return an incomplete string)
+
+Notes:
+------
+- All exception types are imported from exceptions.py.
+- Validation methods are called by setters and __init__, so their exceptions propagate up. 
