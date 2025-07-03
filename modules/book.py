@@ -1,12 +1,67 @@
+"""
+Book Management Module
+
+This module defines the Book class which represents books in the library system.
+Books are library items that can be borrowed and reserved by users.
+
+The Book class provides:
+- Book creation with genre information
+- Automatic ID generation following the B-Aa-YYYY-N format
+- Reservation functionality through the Reservable interface
+- Book-specific information display
+- Input validation for all book attributes
+
+Books inherit from LibraryItem and implement the Reservable interface,
+allowing them to be both borrowed and reserved by users.
+"""
+
 from library_item import LibraryItem
 from user import User
 from reservable import Reservable
 from exceptions import InvalidDataTypeError, InvalidValueError
 
 class Book(LibraryItem, Reservable):
+    """
+    Represents a book in the library system.
+    
+    Books are library items that can be borrowed and reserved by users.
+    Each book has a genre classification and can be reserved by a single user
+    at a time.
+    
+    Attributes:
+        id (str): Unique book identifier (auto-generated or custom)
+        title (str): The book's title
+        author (str): The book's author
+        year (int): Publication year
+        available (bool): Whether the book is available for borrowing
+        genre (str): The book's genre classification
+        reserved_by (User or None): User who has reserved the book, if any
+        
+    Class Attributes:
+        counter (int): Class-level counter for auto-generating book numbers
+    """
+    
     counter = 0  # counts every object created from this class
-    # FIXME: add reserved as an attribute and refactor all of the methods accordingly
+    
     def __init__(self, title, author, year, available, genre, custom_id=None):
+        """
+        Initialize a new book with all required attributes.
+        
+        All parameters are validated before assignment. The book ID can be
+        either auto-generated or provided as a custom ID.
+        
+        Args:
+            title (str): The book's title (non-empty string)
+            author (str): The book's author (at least 2 characters)
+            year (int): Publication year (positive integer)
+            available (bool): Whether the book is available for borrowing
+            genre (str): The book's genre (non-empty string)
+            custom_id (str, optional): Custom book ID. If None, auto-generates ID
+            
+        Raises:
+            InvalidDataTypeError: If any parameter has the wrong data type
+            InvalidValueError: If any parameter has an invalid value
+        """
         super().__init__(title, author, year, bool(available))
         self.__validate_genre(genre)
         self.__genre = genre
@@ -19,6 +74,8 @@ class Book(LibraryItem, Reservable):
     def __validate_genre(self, genre):
         """
         Validate the genre parameter for a book.
+        
+        Ensures the genre is a non-empty string with actual content.
         
         Args:
             genre: The genre to validate
@@ -35,25 +92,54 @@ class Book(LibraryItem, Reservable):
 
     def _item_id(self):
         """
-        Auto generation of item IDs based on the item's type
-        Format: T-Aa-YYYY-N
-            T: Item's type -> B: book
+        Auto-generate a book ID following the standard format.
+        
+        Format: B-Aa-YYYY-N
+            B: Book identifier (always 'B')
             Aa: Author's initials (first character of each word)
-            YYYY: Publish year
-            N: Item number
+            YYYY: Publication year
+            N: Book number (sequential counter)
+            
+        Returns:
+            str: Auto-generated book ID
         """
         return f"B-{super()._item_id()}-{self.__book_num}"
 
     @property
     def genre(self):
+        """
+        Get the book's genre.
+        
+        Returns:
+            str: The book's genre classification
+        """
         return self.__genre
 
     @genre.setter
     def genre(self, genre):
+        """
+        Set the book's genre with validation.
+        
+        Args:
+            genre (str): The new genre (non-empty string)
+            
+        Raises:
+            InvalidDataTypeError: If genre is not a string
+            InvalidValueError: If genre is empty or contains only whitespace
+        """
         self.__validate_genre(genre)
         self.__genre = genre
 
     def display_info(self):
+        """
+        Display formatted information about the book.
+        
+        Returns a multi-line string containing all book information
+        including ID, type, title, author, year, availability, and genre.
+        
+        Returns:
+            str: Formatted string containing book information
+        """
         return (
             f"Item ID: {self.id}\n"
             f"Item type: Book\n"
@@ -65,12 +151,34 @@ class Book(LibraryItem, Reservable):
         )
 
     def check_availability(self):
+        """
+        Check if the book is available for borrowing.
+        
+        Returns the current availability status of the book.
+        
+        Returns:
+            bool: True if the book is available, False otherwise
+        """
         return self.available
 
     @property
     def reserved_by(self) -> User | None:
+        """
+        Get the user who has reserved this book.
+        
+        Returns:
+            User or None: The user who has reserved the book, or None if not reserved
+        """
         return self.__reserved
 
     def reserve(self, user: User) -> None:
-        """Mark the book as reserved by ``user``."""
+        """
+        Reserve the book for a specific user.
+        
+        Marks the book as reserved by the specified user. Only one user
+        can reserve a book at a time.
+        
+        Args:
+            user (User): The user who is reserving the book
+        """
         self.__reserved = user

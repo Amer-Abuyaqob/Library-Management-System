@@ -1,3 +1,34 @@
+"""
+Library Management System Main Application Module
+
+This module contains the main application logic and user interface for the
+Library Management System. It provides a comprehensive command-line interface
+for managing library operations including item and user management, borrowing,
+and returning.
+
+The module consists of:
+- Utility functions for input validation and user interaction
+- The Main class that orchestrates the user interface
+- Comprehensive menu system with multiple levels
+- Input validation and error handling for all user inputs
+
+Key Features:
+- Interactive menu-driven interface
+- Comprehensive input validation
+- Error handling with user-friendly messages
+- Data persistence through the Library class
+- Support for all library operations
+
+Menu Structure:
+- Main Menu: Items, Users, Borrow/Return, Exit
+- Items Menu: View, Add, Remove, Update
+- Users Menu: View, Add, Remove, Update
+- Borrow/Return Menu: Borrow Item, Return Item
+
+All user inputs are validated and sanitized to ensure data integrity
+and prevent system errors.
+"""
+
 from library import Library
 from book import Book
 from dvd import DVD
@@ -21,7 +52,14 @@ import os
 
 # IMPORTANT
 def print_menu_header(title: str) -> None:
-    """Print a formatted menu header."""
+    """
+    Print a formatted menu header with consistent styling.
+    
+    Creates a visually appealing header with separator lines and centered text.
+    
+    Args:
+        title (str): The title to display in the header
+    """
     print()
     separator = "=" * 40
     print(separator)
@@ -30,12 +68,31 @@ def print_menu_header(title: str) -> None:
 
 # IMPORTANT
 def print_menu_options(options: list[str]) -> None:
-    """Print menu options using a consistent style."""
+    """
+    Print menu options using a consistent style.
+    
+    Displays numbered options with proper indentation for easy reading.
+    
+    Args:
+        options (list[str]): List of menu options to display
+    """
     for option in options:
         print(f"  {option}")
 
 
 def insure_decision():
+    """
+    Get a yes/no decision from the user with validation.
+    
+    Prompts the user for a yes/no decision and validates the input.
+    Accepts various forms of yes/no responses (yes, y, no, n).
+    
+    Returns:
+        bool: True for yes, False for no
+        
+    Raises:
+        InvalidValueError: If the input is not a valid yes/no response
+    """
     while True:
         try:
             decision = input("  Yes or No? ").strip()
@@ -53,6 +110,22 @@ def insure_decision():
 
 # IMPORTANT
 def validate_choice(choice, num_options):
+    """
+    Validate a menu choice input.
+    
+    Ensures the choice is a valid integer within the range of available options.
+    
+    Args:
+        choice: The user's choice input
+        num_options (int): The number of available options
+        
+    Returns:
+        int: The validated choice as an integer
+        
+    Raises:
+        InvalidDataTypeError: If choice is not a valid integer
+        InvalidValueError: If choice is outside the valid range
+    """
     if not choice.isdigit():
         raise InvalidDataTypeError("integer", type(choice).__name__)
     choice = int(choice)
@@ -62,6 +135,18 @@ def validate_choice(choice, num_options):
 
 # IMPORTANT    
 def validate_type(kind):
+    """
+    Validate an item type input.
+    
+    Ensures the type is one of the supported item types.
+    
+    Args:
+        kind: The item type to validate
+        
+    Raises:
+        InvalidDataTypeError: If kind is not a string
+        InvalidValueError: If kind is not a supported item type
+    """
     if not isinstance(kind, str):
         raise InvalidDataTypeError("string", type(kind).__name__)
     if kind not in ["Book", "DVD", "Magazine"]:
@@ -69,6 +154,18 @@ def validate_type(kind):
 
 # IMPORTANT
 def validate_author(author):
+    """
+    Validate an author name input.
+    
+    Ensures the author name is a non-empty string with at least 2 characters.
+    
+    Args:
+        author: The author name to validate
+        
+    Raises:
+        InvalidDataTypeError: If author is not a string
+        InvalidValueError: If author is empty or too short
+    """
     if not isinstance(author, str):
         raise InvalidDataTypeError("string", type(author).__name__)
     if len(author.strip()) < 2:
@@ -76,6 +173,18 @@ def validate_author(author):
 
 # IMPORTANT
 def validate_title(title):
+    """
+    Validate a title input.
+    
+    Ensures the title is a non-empty string.
+    
+    Args:
+        title: The title to validate
+        
+    Raises:
+        InvalidDataTypeError: If title is not a string
+        InvalidValueError: If title is empty
+    """
     if not isinstance(title, str):
         raise InvalidDataTypeError("string", type(title).__name__)
     if not title:
@@ -83,6 +192,21 @@ def validate_title(title):
     
 # IMPORTANT
 def validate_available(available):
+    """
+    Validate an availability input.
+    
+    Converts various forms of yes/no responses to boolean values.
+    
+    Args:
+        available: The availability input to validate
+        
+    Returns:
+        bool: True for available, False for not available
+        
+    Raises:
+        InvalidDataTypeError: If available is not a string
+        InvalidValueError: If available is not a valid yes/no response
+    """
     if not isinstance(available, str):
         raise InvalidDataTypeError("string", type(available).__name__)
     if available in {"true", "t", "yes", "y", "1"}:
@@ -94,6 +218,21 @@ def validate_available(available):
 
 # IMPORTANT
 def validate_year(year):
+    """
+    Validate a year input.
+    
+    Ensures the year is a positive integer.
+    
+    Args:
+        year: The year to validate
+        
+    Returns:
+        int: The validated year as an integer
+        
+    Raises:
+        InvalidDataTypeError: If year is not a valid integer
+        InvalidValueError: If year is not positive
+    """
     if not year.isdigit():
         raise InvalidDataTypeError("integer", type(year).__name__)
     year = int(year)
@@ -103,6 +242,18 @@ def validate_year(year):
 
 # IMPORTANT
 def validate_genre(genre):
+    """
+    Validate a genre input.
+    
+    Ensures the genre is a non-empty string.
+    
+    Args:
+        genre: The genre to validate
+        
+    Raises:
+        InvalidDataTypeError: If genre is not a string
+        InvalidValueError: If genre is empty
+    """
     if not isinstance(genre, str):
         raise InvalidDataTypeError("string", type(genre).__name__)
     if not genre:
@@ -110,6 +261,21 @@ def validate_genre(genre):
 
 # IMPORTANT
 def validate_duration(duration):
+    """
+    Validate a duration input.
+    
+    Ensures the duration is a positive integer.
+    
+    Args:
+        duration: The duration to validate
+        
+    Returns:
+        int: The validated duration as an integer
+        
+    Raises:
+        InvalidDataTypeError: If duration is not a valid integer
+        InvalidValueError: If duration is not positive
+    """
     if not duration.isdigit():
         raise InvalidDataTypeError("integer", type(duration).__name__)
     duration = int(duration)
@@ -119,6 +285,21 @@ def validate_duration(duration):
 
 # IMPORTANT
 def validate_item_id(item_id):
+    """
+    Validate an item ID format.
+    
+    Ensures the item ID follows the required format: T-Aa-YYYY-N
+    Where T is the item type (B/D/M), Aa are author initials,
+    YYYY is the publication year, and N is a sequential number.
+    
+    Args:
+        item_id: The item ID to validate
+        
+    Raises:
+        InvalidDataTypeError: If item_id is not a string
+        InvalidValueError: If item_id is empty or has invalid format
+        InvalidItemIDFormatError: If item_id doesn't follow the required format
+    """
     if not isinstance(item_id, str):
         raise InvalidDataTypeError("string", type(item_id).__name__)
     if not item_id:
@@ -142,6 +323,19 @@ def validate_item_id(item_id):
 
 # IMPORTANT
 def validate_user_name(name, kind):
+    """
+    Validate a user name input.
+    
+    Ensures the name is a non-empty string with at least 2 characters.
+    
+    Args:
+        name: The name to validate
+        kind: The type of name (e.g., "first", "last") for error messages
+        
+    Raises:
+        InvalidDataTypeError: If name is not a string
+        InvalidValueError: If name is empty or too short
+    """
     if not isinstance(name, str):
         raise InvalidDataTypeError("string", type(name).__name__)
     if len(name.strip()) < 2:
@@ -149,6 +343,21 @@ def validate_user_name(name, kind):
 
 # IMPORTANT
 def validate_user_id(user_id):
+    """
+    Validate a user ID format.
+    
+    Ensures the user ID follows the required format: U-Ff-Ll-N
+    Where U is the user identifier, Ff are first name initials,
+    Ll are last name initials, and N is a sequential number.
+    
+    Args:
+        user_id: The user ID to validate
+        
+    Raises:
+        InvalidDataTypeError: If user_id is not a string
+        InvalidValueError: If user_id is empty or has invalid format
+        InvalidUserIDFormatError: If user_id doesn't follow the required format
+    """
     if not isinstance(user_id, str):
         raise InvalidDataTypeError("string", type(user_id).__name__)
     if not user_id:
@@ -172,6 +381,18 @@ def validate_user_id(user_id):
 
 # IMPORTANT
 def take_choice(num_options):
+    """
+    Get a validated menu choice from the user.
+    
+    Prompts the user for input and validates it against the available options.
+    Continues prompting until a valid choice is provided.
+    
+    Args:
+        num_options (int): The number of available menu options
+        
+    Returns:
+        int: The validated user choice
+    """
     while True:
         try:
             choice = input("  Enter choice: ")
@@ -187,6 +408,15 @@ def take_choice(num_options):
 
 # IMPORTANT
 def take_type():
+    """
+    Get a validated item type from the user.
+    
+    Prompts the user for an item type and validates it against supported types.
+    Continues prompting until a valid type is provided.
+    
+    Returns:
+        str: The validated item type (Book, DVD, or Magazine)
+    """
     while True:
         try:
             kind = input("  Enter the item's type (Book/DVD/Magazine): ").strip()
@@ -401,6 +631,24 @@ def create_user():
 
 # ===================== INIT & DATA LOADING =====================
 class Main:
+    """
+    Main application controller class.
+    
+    This class orchestrates the entire user interface and manages the interaction
+    between the user and the library system. It provides a comprehensive menu
+    system with multiple levels of navigation and handles all user interactions.
+    
+    The Main class is responsible for:
+    - Displaying menus and handling user navigation
+    - Collecting and validating user input
+    - Coordinating with the Library class for all operations
+    - Providing user-friendly error messages
+    - Managing the application lifecycle
+    
+    Attributes:
+        library (Library): The main library instance that manages all data
+    """
+    
     def __init__(self):
         try:
             self.library = Library()

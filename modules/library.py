@@ -1,3 +1,35 @@
+"""
+Library Management System Core Module
+
+This module contains the Library class, which is the central controller
+for the entire library management system. It orchestrates all operations
+including item management, user management, borrowing/returning, and data persistence.
+
+The Library class provides:
+- Item management (add, remove, update, search)
+- User management (add, remove, update, search)
+- Borrowing and returning operations
+- Data persistence (load/save from JSON files)
+- Input validation and error handling
+- Automatic ID generation and validation
+
+The class serves as the main interface between the user interface (main.py)
+and the underlying data models (Book, DVD, Magazine, User). It ensures
+data integrity through comprehensive validation and maintains consistency
+between items and users.
+
+Data Storage:
+- Items are stored in data/items.json
+- Users are stored in data/users.json
+- Both files are automatically created if they don't exist
+- Data is loaded on initialization and saved when requested
+
+Error Handling:
+- Comprehensive exception handling for all operations
+- Custom exceptions for specific error conditions
+- Descriptive error messages for debugging
+"""
+
 import json
 import os
 
@@ -19,8 +51,40 @@ from exceptions import (
 )
 
 class Library:
+    """
+    Main controller class for the library management system.
+    
+    This class serves as the central hub for all library operations,
+    managing both items (books, DVDs, magazines) and users. It provides
+    a complete interface for library management including data persistence,
+    validation, and business logic enforcement.
+    
+    The Library class maintains two main collections:
+    - Items: All library items (books, DVDs, magazines)
+    - Users: All registered library users
+    
+    Key Features:
+    - Automatic data loading and saving
+    - Comprehensive input validation
+    - Duplicate prevention
+    - Borrowing/returning tracking
+    - Error handling with custom exceptions
+    
+    Attributes:
+        items (list): List of all library items
+        users (list): List of all registered users
+        __items_file (str): Path to items JSON file
+        __users_file (str): Path to users JSON file
+    """
+    
     # ===================== INIT & FILE PATHS =====================
     def __init__(self):
+        """
+        Initialize the library system.
+        
+        Sets up file paths for data storage and loads existing data
+        from JSON files. Creates data directories if they don't exist.
+        """
         self.__items_file = os.path.join("data", "items.json")
         self.__users_file = os.path.join("data", "users.json")
         self.__items = []
@@ -30,19 +94,50 @@ class Library:
     # ===================== PROPERTY GETTERS =====================
     @property
     def items(self):
+        """
+        Get all library items.
+        
+        Returns:
+            list: List of all library items (books, DVDs, magazines)
+        """
         return self.__items
     
     @property
     def users(self):
+        """
+        Get all registered users.
+        
+        Returns:
+            list: List of all registered library users
+        """
         return self.__users
 
     # ===================== VALIDATION METHODS =====================
     def __isItem(self, item):
+        """
+        Validate that an object is a valid library item.
+        
+        Args:
+            item: Object to validate
+            
+        Raises:
+            InvalidDataTypeError: If item is not a Book, DVD, or Magazine
+        """
         if not isinstance(item, (Book, DVD, Magazine)):
             raise InvalidDataTypeError("Book/DVD/Magazine", type(item).__name__)
     
     def __item_exists(self, item):
-        # FIXME: might need to check id as well
+        """
+        Check if an item already exists in the library.
+        
+        Compares items based on title, author, and year to prevent duplicates.
+        
+        Args:
+            item: Item to check for existence
+            
+        Returns:
+            bool: True if item exists, False otherwise
+        """
         for existing_item in self.__items:
             if (existing_item.title == item.title and
                 existing_item.author == item.author and
@@ -51,11 +146,30 @@ class Library:
         return False
 
     def __isUser(self, user):
+        """
+        Validate that an object is a valid user.
+        
+        Args:
+            user: Object to validate
+            
+        Raises:
+            InvalidDataTypeError: If user is not a User instance
+        """
         if not isinstance(user, User):
             raise InvalidDataTypeError("User", type(user).__name__)
     
     def __user_exists(self, user):
-        # FIXME: might need to check id as well
+        """
+        Check if a user already exists in the library.
+        
+        Compares users based on first and last name to prevent duplicates.
+        
+        Args:
+            user: User to check for existence
+            
+        Returns:
+            bool: True if user exists, False otherwise
+        """
         for existing_user in self.__users:
             if (existing_user.first_name == user.first_name and
                 existing_user.last_name == user.last_name):
@@ -63,12 +177,30 @@ class Library:
         return False
 
     def get_item(self, item_id):
+        """
+        Get an item by its ID.
+        
+        Args:
+            item_id (str): The ID of the item to find
+            
+        Returns:
+            LibraryItem or None: The item if found, None otherwise
+        """
         for item in self.__items:
             if item.id == item_id:
                 return item
         return None
     
     def get_user(self, user_id):
+        """
+        Get a user by their ID.
+        
+        Args:
+            user_id (str): The ID of the user to find
+            
+        Returns:
+            User or None: The user if found, None otherwise
+        """
         for user in self.__users:
             if user.id == user_id:
                 return user
