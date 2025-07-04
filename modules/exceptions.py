@@ -237,3 +237,50 @@ class InvalidUserIDFormatError(LibraryError):
             user_id (str): The invalid user ID that was provided
         """
         super().__init__(f"Expected ID format: U-Ff-Ll-N (e.g., U-Jo-Sm-1), but got: {user_id}")
+
+
+class ItemNotAvailableForOperationError(LibraryError):
+    """
+    Raised when trying to perform operations on an item that is currently borrowed.
+    
+    This exception prevents operations like removal or updates on items
+    that are currently borrowed by users.
+    
+    Attributes:
+        item_id (str): The ID of the item that is not available
+        operation (str): The operation being attempted
+    """
+    def __init__(self, item_id, operation):
+        """
+        Initialize the exception with item ID and operation.
+        
+        Args:
+            item_id (str): The ID of the item that is not available
+            operation (str): The operation being attempted (e.g., "removed", "updated")
+        """
+        super().__init__(f"The item [{item_id}] is currently borrowed and cannot be {operation}.")
+
+
+class UserHasBorrowedItemsError(LibraryError):
+    """
+    Raised when trying to perform operations on a user who has borrowed items.
+    
+    This exception prevents operations like removal or updates on users
+    who currently have borrowed items.
+    
+    Attributes:
+        user_id (str): The ID of the user who has borrowed items
+        operation (str): The operation being attempted
+        borrowed_items (list): List of item IDs currently borrowed by the user
+    """
+    def __init__(self, user_id, operation, borrowed_items):
+        """
+        Initialize the exception with user ID, operation, and borrowed items.
+        
+        Args:
+            user_id (str): The ID of the user who has borrowed items
+            operation (str): The operation being attempted (e.g., "removed", "updated")
+            borrowed_items (list): List of item IDs currently borrowed by the user
+        """
+        items_list = ", ".join(borrowed_items)
+        super().__init__(f"The user [{user_id}] has {len(borrowed_items)} borrowed item(s) [{items_list}] and cannot be {operation}.")

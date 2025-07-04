@@ -46,6 +46,8 @@ from exceptions import (
     ItemNotBorrowedError,
     InvalidItemIDFormatError,
     InvalidUserIDFormatError,
+    ItemNotAvailableForOperationError,
+    UserHasBorrowedItemsError,
 )
 import json
 import os
@@ -906,7 +908,6 @@ class Main:
                 break
         print()
 
-    # FIXME: item should be available to be removed
     def items_remove_menu(self):
         print_menu_header("Removing an Item")
         while True:
@@ -917,7 +918,12 @@ class Main:
                     print(f"  Item '{item_id}' info:")
                     print(item.display_info())
                     print()
-                    print(f"  Are sure you wnat to remove item '{item_id}'? ")
+                    
+                    # Check if item is available (not borrowed)
+                    if not item.available:
+                        raise ItemNotAvailableForOperationError(item_id, "removed")
+                    
+                    print(f"  Are sure you want to remove item '{item_id}'? ")
                     if insure_decision():
                         if self.library.remove_item(item):
                             print(f"  ✓ Item '{item_id}' has been removed successfully.")
@@ -942,6 +948,11 @@ class Main:
                 print(f"  ✗ Item '{item_id}' has NOT been removed.")
                 print()
                 break
+            except ItemNotAvailableForOperationError as e:
+                print(f"  ✗ Error: {e}")
+                print(f"  ✗ Item '{item_id}' has NOT been removed.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
                 print(f"  ✗ Item '{item_id}' has NOT been removed.")
@@ -949,7 +960,6 @@ class Main:
                 break
         print()
 
-    # FIXME: item should be available to be updated
     def items_update_menu(self):
         print_menu_header("Updating an Item")
         while True:
@@ -960,7 +970,12 @@ class Main:
                     print(f"  Current item '{item_id}' info:")
                     print(item.display_info())
                     print()
-                    print(f"  Are sure you wnat to update item '{item_id}'? ")
+                    
+                    # Check if item is available (not borrowed)
+                    if not item.available:
+                        raise ItemNotAvailableForOperationError(item_id, "updated")
+                    
+                    print(f"  Are sure you want to update item '{item_id}'? ")
                     if insure_decision():
                         print("  Input the updated item data:")
                         new_item = create_item()
@@ -989,6 +1004,11 @@ class Main:
                 print()
                 break
             except ItemAlreadyExistsError as e:
+                print(f"  ✗ Error: {e}")
+                print(f"  ✗ Item '{item_id}' has NOT been updated.")
+                print()
+                break
+            except ItemNotAvailableForOperationError as e:
                 print(f"  ✗ Error: {e}")
                 print(f"  ✗ Item '{item_id}' has NOT been updated.")
                 print()
@@ -1033,7 +1053,6 @@ class Main:
                 break
         print()
 
-    # FIXME: user shouldn't borrowing items be removed
     def users_remove_menu(self):
         print_menu_header("Removing a User")
         while True:
@@ -1044,7 +1063,12 @@ class Main:
                     print(f"  User '{user_id}' info:")
                     print(user.display_info())
                     print()
-                    print(f"  Are sure you wnat to remove user '{user_id}'? ")
+                    
+                    # Check if user has borrowed items
+                    if user.borrowed_items:
+                        raise UserHasBorrowedItemsError(user_id, "removed", user.borrowed_items)
+                    
+                    print(f"  Are sure you want to remove user '{user_id}'? ")
                     if insure_decision():
                         if self.library.remove_user(user):
                             print(f"  ✓ User '{user_id}' has been removed successfully.")
@@ -1069,6 +1093,11 @@ class Main:
                 print(f"  ✗ User '{user_id}' has NOT been removed.")
                 print()
                 break
+            except UserHasBorrowedItemsError as e:
+                print(f"  ✗ Error: {e}")
+                print(f"  ✗ User '{user_id}' has NOT been removed.")
+                print()
+                break
             except Exception as e:
                 print(f"  ✗ Unexpected error: {e}")
                 print(f"  ✗ User '{user_id}' has NOT been removed.")
@@ -1076,7 +1105,6 @@ class Main:
                 break
         print()
 
-    # FIXME: user shouldn't borrowing items be updated
     def users_update_menu(self):
         print_menu_header("Updating a User")
         while True:
@@ -1087,7 +1115,12 @@ class Main:
                     print(f"  Current user '{user_id}' info:")
                     print(user.display_info())
                     print()
-                    print(f"  Are sure you wnat to update user '{user_id}'? ")
+                    
+                    # Check if user has borrowed items
+                    if user.borrowed_items:
+                        raise UserHasBorrowedItemsError(user_id, "updated", user.borrowed_items)
+                    
+                    print(f"  Are sure you want to update user '{user_id}'? ")
                     if insure_decision():
                         print("  Input the updated user data:")
                         new_user = create_user()
@@ -1116,6 +1149,11 @@ class Main:
                 print()
                 break
             except UserAlreadyExistsError as e:
+                print(f"  ✗ Error: {e}")
+                print(f"  ✗ User '{user_id}' has NOT been updated.")
+                print()
+                break
+            except UserHasBorrowedItemsError as e:
                 print(f"  ✗ Error: {e}")
                 print(f"  ✗ User '{user_id}' has NOT been updated.")
                 print()
@@ -1465,31 +1503,30 @@ class Main:
         print("  Welcome to Library Management System (LMS)")
         print()
         self.main_menu()
-        # FIXME: implement the saving feature
 
-        # while True:
-        #     try:
-        #         self.library.save_data()
-        #         print("  ✓ Library data saved successfully.")
-        #         break
-        #     except OSError as e:
-        #         print(f"  ✗ Error creating directories: {e}")
-        #         print("  Please check directory permissions and try again.")
-        #         retry = input("  Retry saving? (y/n): ").strip().lower()
-        #         if retry not in ['y', 'yes']:
-        #             break
-        #     except IOError as e:
-        #         print(f"  ✗ Error saving library data: {e}")
-        #         print("  Please check file permissions and try again.")
-        #         retry = input("  Retry saving? (y/n): ").strip().lower()
-        #         if retry not in ['y', 'yes']:
-        #             break
-        #     except Exception as e:
-        #         print(f"  ✗ Unexpected error while saving: {e}")
-        #         print("  Please try again.")
-        #         retry = input("  Retry saving? (y/n): ").strip().lower()
-        #         if retry not in ['y', 'yes']:
-        #             break
+        while True:
+            try:
+                self.library.save_data()
+                print("  ✓ Library data saved successfully.")
+                break
+            except OSError as e:
+                print(f"  ✗ Error creating directories: {e}")
+                print("  Please check directory permissions and try again.")
+                retry = input("  Retry saving? (y/n): ").strip().lower()
+                if retry not in ['y', 'yes']:
+                    break
+            except IOError as e:
+                print(f"  ✗ Error saving library data: {e}")
+                print("  Please check file permissions and try again.")
+                retry = input("  Retry saving? (y/n): ").strip().lower()
+                if retry not in ['y', 'yes']:
+                    break
+            except Exception as e:
+                print(f"  ✗ Unexpected error while saving: {e}")
+                print("  Please try again.")
+                retry = input("  Retry saving? (y/n): ").strip().lower()
+                if retry not in ['y', 'yes']:
+                    break
         print("  Thank you for using LMS!")
 
 # IMPORTANT
