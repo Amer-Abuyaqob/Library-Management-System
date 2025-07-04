@@ -1510,12 +1510,6 @@ class Main:
                 print("  ✓ Library data saved successfully.")
                 break
             except OSError as e:
-                print(f"  ✗ Error creating directories: {e}")
-                print("  Please check directory permissions and try again.")
-                retry = input("  Retry saving? (y/n): ").strip().lower()
-                if retry not in ['y', 'yes']:
-                    break
-            except IOError as e:
                 print(f"  ✗ Error saving library data: {e}")
                 print("  Please check file permissions and try again.")
                 retry = input("  Retry saving? (y/n): ").strip().lower()
