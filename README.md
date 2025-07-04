@@ -19,6 +19,10 @@ A comprehensive command-line library management system built in Python that allo
 
 ## 🏗️ Architecture
 
+### System Flow Chart
+
+For a visual representation of the system architecture and data flow, view our [System Flow Chart on Miro](https://miro.com/app/board/uXjVIpKg5V4=/?embedMode=view_only_without_ui&moveToViewport=1565%2C921%2C4256%2C1926&embedId=371523897622).
+
 ### Core Classes
 
 - **`Library`**: Main controller class managing items and users
