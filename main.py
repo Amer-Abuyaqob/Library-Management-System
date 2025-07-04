@@ -29,12 +29,12 @@ All user inputs are validated and sanitized to ensure data integrity
 and prevent system errors.
 """
 
-from library import Library
-from book import Book
-from dvd import DVD
-from magazine import Magazine
-from user import User
-from exceptions import (
+from modules.library import Library
+from modules.book import Book
+from modules.dvd import DVD
+from modules.magazine import Magazine
+from modules.user import User
+from modules.exceptions import (
     ItemNotAvailableError,
     ItemNotFoundError,
     UserNotFoundError,

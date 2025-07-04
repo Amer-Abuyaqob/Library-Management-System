@@ -33,12 +33,12 @@ Error Handling:
 import json
 import os
 
-from user import User
-from book import Book
-from magazine import Magazine
-from dvd import DVD
+from modules.user import User
+from modules.book import Book
+from modules.magazine import Magazine
+from modules.dvd import DVD
 
-from exceptions import (
+from modules.exceptions import (
     InvalidDataTypeError,
     MissingFieldError,
     ItemNotFoundError,

@@ -18,7 +18,7 @@ display_info() and check_availability().
 
 from abc import ABC, abstractmethod
 
-from exceptions import InvalidDataTypeError, InvalidValueError
+from modules.exceptions import InvalidDataTypeError, InvalidValueError
 
 class LibraryItem(ABC):
     """

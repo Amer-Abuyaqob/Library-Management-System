@@ -14,8 +14,8 @@ Magazines inherit from LibraryItem and provide a simpler interface compared to
 books and DVDs, as they cannot be reserved.
 """
 
-from library_item import LibraryItem
-from exceptions import InvalidDataTypeError, InvalidValueError
+from modules.library_item import LibraryItem
+from modules.exceptions import InvalidDataTypeError, InvalidValueError
 
 class Magazine(LibraryItem):
     """

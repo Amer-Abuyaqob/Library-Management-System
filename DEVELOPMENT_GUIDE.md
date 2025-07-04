@@ -36,7 +36,7 @@ This guide provides comprehensive information for developers working on the Libr
 
 3. **Run the application**
    ```bash
-   python modules/main.py
+   python main.py
    ```
 
 ### Project Structure

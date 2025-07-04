@@ -15,10 +15,10 @@ Books inherit from LibraryItem and implement the Reservable interface,
 allowing them to be both borrowed and reserved by users.
 """
 
-from library_item import LibraryItem
-from user import User
-from reservable import Reservable
-from exceptions import InvalidDataTypeError, InvalidValueError
+from modules.library_item import LibraryItem
+from modules.user import User
+from modules.reservable import Reservable
+from modules.exceptions import InvalidDataTypeError, InvalidValueError
 
 class Book(LibraryItem, Reservable):
     """

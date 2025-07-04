@@ -64,7 +64,7 @@ Where:
 cd "Library Management System"
 
 # Run the main application
-python modules/main.py
+python main.py
 ```
 
 ### Basic Usage

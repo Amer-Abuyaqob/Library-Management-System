@@ -15,7 +15,7 @@ Users are essential for the borrowing system and are referenced by items
 when they are borrowed or reserved.
 """
 
-from exceptions import InvalidDataTypeError, InvalidValueError
+from modules.exceptions import InvalidDataTypeError, InvalidValueError
 
 class User:
     """
